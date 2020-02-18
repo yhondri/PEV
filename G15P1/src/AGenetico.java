@@ -1,13 +1,12 @@
 
 public class AGenetico {
 
-	private Cromosoma[] pob; // población de individuos
-	private int  tam_pob; // tamaño población
-	private int  num_max_gen; // número máximo de generaciones
+	private Cromosoma[] pob; // poblaciï¿½n de individuos
+	private int  tam_pob; // tamaï¿½o poblaciï¿½n
+	private int  num_max_gen; // nï¿½mero mï¿½ximo de generaciones
 	private Cromosoma elMejor; // mejor individuo
-	private int  pos_mejor; // posición del mejor cromosoma
+	private int  pos_mejor; // posiciï¿½n del mejor cromosoma
 	private double prob_cruce; // probabilidad de cruce
-	private double prob_mut; // probabilidad de mutación
+	private double prob_mut; // probabilidad de mutaciï¿½n
 	private double tol;
-	
 }
