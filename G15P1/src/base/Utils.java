@@ -15,15 +15,18 @@ public class Utils {
         return (int) Math.ceil(log2);
     }
 
-    public static double decodeGene(boolean[] chromosome) {
-        int decimalValue = binaryToDecimal(chromosome);
-        return decimalValue;
+    public static int decodeGene(boolean[] chromosome, int start, int end, boolean isChromosomeA) {
+        if (isChromosomeA) {
+            return binaryToDecimal(chromosome, start, end);
+        } else {
+            return binaryToDecimalB(chromosome, start, end);
+        }
     }
 
     // Function to convert binary to decimal
-    public static int binaryToDecimal(boolean[] chromosome) {
+    public static int binaryToDecimal(boolean[] chromosome, int start, int end) {
         int decimal = 0;
-        for(int i=chromosome.length-1, j=0; i>=0; i--, j++) {
+        for(int i = end, j = start; i >= start; i--, j++) {
             int value = chromosome[i] ? 1 : 0;
             decimal  += value*Math.pow(2, j);
         }
@@ -31,4 +34,14 @@ public class Utils {
         return decimal;
     }
 
+    // Function to convert binary to decimal
+    public static int binaryToDecimalB(boolean[] chromosome, int start, int end) {
+        int decimal = 0;
+        for(int i = end, j = 0; i >= start; i--, j++) {
+            int value = chromosome[i] ? 1 : 0;
+            decimal  += value*Math.pow(2, j);
+        }
+
+        return decimal;
+    }
 }

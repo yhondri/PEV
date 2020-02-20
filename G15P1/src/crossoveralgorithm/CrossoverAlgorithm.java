@@ -1,8 +1,7 @@
 package crossoveralgorithm;
 import base.*;
+import entities.Chromosome;
 
 public interface CrossoverAlgorithm {
-    Pair<boolean[], boolean[]>crossOver(boolean[] chromosomeA, boolean[] chromosomeB, double crossOverProbability);
-
-
+    Pair<Chromosome, Chromosome>crossOver(Chromosome chromosomeA, Chromosome chromosomeB, double crossOverProbability);
 }

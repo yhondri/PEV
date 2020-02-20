@@ -1,5 +1,8 @@
 package problems;
 
+import entities.Chromosome;
+
 public interface GenericProblem {
-    public double evaluate(boolean[] genesA, boolean[] genesB);
+    public double getFitness(Chromosome chromosome);
+    Chromosome getRandomChromosome();
 }

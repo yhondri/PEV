@@ -1,5 +1,6 @@
 package crossoveralgorithm;
 import base.*;
+import entities.Chromosome;
 
 import java.util.Random;
 
@@ -11,38 +12,38 @@ public class SinglePointCrossover implements CrossoverAlgorithm {
     }
 
     @Override
-    public Pair<boolean[], boolean[]> crossOver(boolean[] chromosomeA, boolean[] chromosomeB, double crossOverProbability) {
+    public Pair<Chromosome, Chromosome> crossOver(Chromosome chromosomeA, Chromosome chromosomeB, double crossOverProbability) {
         double randomCrossover = Math.random();
         if (randomCrossover >= crossOverProbability) { //No se produce cruce si el número obtenido es mayor a la probabilidad de cruce.
             return new Pair<>(chromosomeA, chromosomeB);
         }
 
-        int chromosomeSize = Math.max(chromosomeA.length, chromosomeB.length);
+        int chromosomeSize = Math.max(chromosomeA.getGenesLength(), chromosomeB.getGenesLength());
         int crossoverPoint = random.nextInt( chromosomeSize);
 
-        boolean[] chromosomeANew = new boolean[chromosomeB.length];
-        boolean[] chromosomeBNew = new boolean[chromosomeA.length];
+        boolean[] chromosomeANew = new boolean[chromosomeB.getGenesLength()];
+        boolean[] chromosomeBNew = new boolean[chromosomeA.getGenesLength()];
 
         for (int i = 0; i < crossoverPoint; i++) {
-            if (i < chromosomeANew.length && i < chromosomeA.length) {
-                chromosomeANew[i] = chromosomeA[i];
+            if (i < chromosomeANew.length && i < chromosomeA.getGenesLength()) {
+                chromosomeANew[i] = chromosomeA.getGenes()[i];
             }
 
-            if (i < chromosomeBNew.length && i < chromosomeB.length) {
-                chromosomeBNew[i] = chromosomeB[i];
+            if (i < chromosomeBNew.length && i < chromosomeB.getGenesLength()) {
+                chromosomeBNew[i] = chromosomeB.getGenes()[i];
             }
         }
 
         for (int i = crossoverPoint; i < chromosomeSize; i++) {
-            if (i < chromosomeANew.length && i < chromosomeB.length) {
-                chromosomeANew[i] = chromosomeB[i];
+            if (i < chromosomeANew.length && i < chromosomeB.getGenesLength()) {
+                chromosomeANew[i] = chromosomeB.getGenes()[i];
             }
 
-            if (i < chromosomeBNew.length && i < chromosomeA.length) {
-                chromosomeBNew[i] = chromosomeA[i];
+            if (i < chromosomeBNew.length && i < chromosomeA.getGenesLength()) {
+                chromosomeBNew[i] = chromosomeA.getGenes()[i];
             }
         }
 
-        return new Pair<>(chromosomeANew, chromosomeBNew);
+        return new Pair<>(new Chromosome(chromosomeANew), new Chromosome(chromosomeBNew));
     }
 }

@@ -1,5 +1,9 @@
 package selection;
 
+import entities.Chromosome;
+
+import java.util.List;
+
 public interface SelectionAlgorithm {
-    public double selectPopulation(boolean[] chromosomeA, boolean[] chromosomeB);
+    public List<Chromosome> selectPopulation(List<Chromosome> population);
 }
