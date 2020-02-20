@@ -12,7 +12,7 @@ public class SinglePointCrossover implements CrossoverAlgorithm {
     }
 
     @Override
-    public Pair<Chromosome, Chromosome> crossOver(Chromosome chromosomeA, Chromosome chromosomeB, double crossOverProbability) {
+    public Pair<Chromosome, Chromosome> crossOver(Chromosome chromosomeA, Chromosome chromosomeB) {
         int chromosomeSize = Math.max(chromosomeA.getGenesLength(), chromosomeB.getGenesLength());
 
         int crossoverPoint = random.nextInt(chromosomeA.getGenesLength());

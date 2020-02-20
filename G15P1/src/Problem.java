@@ -20,6 +20,7 @@ public class Problem {
     private int numGenerations = 100;
     private int populationSize = 100;
     private double mutationProbability = 0.05;
+    private double crossoverProbability = 0.6;
     private Random rand = new Random();
     private GenericProblem problem;
     private CrossoverAlgorithm crossoverAlgorithm;
@@ -97,8 +98,16 @@ public class Problem {
     private void crossPopulation(List<Chromosome> population) {
         for (int i = 0; i < populationSize; i+=2) {
             Chromosome chromosomeA = population.get(i);
-            Chromosome chromosomeB = population.get(i+1);
-            Pair<Chromosome, Chromosome> result = crossoverAlgorithm.crossOver(chromosomeA, chromosomeB, mutationProbability);
+            Chromosome chromosomeB = population.get(i + 1);
+            Pair<Chromosome, Chromosome> result;
+            double crossoverResult = rand.nextDouble();
+
+            if (crossoverResult < crossoverProbability) {
+                result = crossoverAlgorithm.crossOver(chromosomeA, chromosomeB);
+            } else {
+                result = new Pair<>(chromosomeA, chromosomeB);
+            }
+
             population.set(i, result.getElement0());
             population.set(i+1, result.getElement1());
         }
