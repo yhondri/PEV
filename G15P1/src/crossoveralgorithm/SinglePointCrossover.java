@@ -13,13 +13,9 @@ public class SinglePointCrossover implements CrossoverAlgorithm {
 
     @Override
     public Pair<Chromosome, Chromosome> crossOver(Chromosome chromosomeA, Chromosome chromosomeB, double crossOverProbability) {
-        double randomCrossover = Math.random();
-        if (randomCrossover >= crossOverProbability) { //No se produce cruce si el número obtenido es mayor a la probabilidad de cruce.
-            return new Pair<>(chromosomeA, chromosomeB);
-        }
-
         int chromosomeSize = Math.max(chromosomeA.getGenesLength(), chromosomeB.getGenesLength());
-        int crossoverPoint = random.nextInt( chromosomeSize);
+
+        int crossoverPoint = random.nextInt(chromosomeA.getGenesLength());
 
         boolean[] chromosomeANew = new boolean[chromosomeB.getGenesLength()];
         boolean[] chromosomeBNew = new boolean[chromosomeA.getGenesLength()];
