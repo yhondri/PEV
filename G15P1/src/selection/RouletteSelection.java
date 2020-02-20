@@ -20,11 +20,11 @@ public class RouletteSelection implements SelectionAlgorithm {
         return selectedPopulation;
     }
 
+    //Tenemos que recorrer desde el final hacía el inicio de la lista.
     private Chromosome getChromosomeFromPopulation(List<Chromosome> population, double trial) {
-        int index = 0;
-        int maxIndex = population.size()-1;
-        while (index < maxIndex && trial > population.get(index).getAcumulatedFitness()) {
-            index++;
+        int index = population.size()-1;
+        while (index >= 0 && trial > population.get(index).getAcumulatedFitness()) {
+            index--;
         }
         return population.get(index);
     }

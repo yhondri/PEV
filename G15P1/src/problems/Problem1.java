@@ -14,6 +14,9 @@ public class Problem1 implements GenericProblem {
     public double getFitness(Chromosome chromosome) {
         double phenotypeA = getPhenotype(chromosome.getGenes(),0,geneALength-1, geneALength, minX1, maxX1, true);
         double phenotypeB = getPhenotype(chromosome.getGenes(), geneALength, (geneALength+geneBLength-1), geneBLength, minX2, maxX2, false);
+        //phenotypeA = 11.625;
+        //phenotypeB = 5.726;
+       // double result = 21.5 + phenotypeA * Math.sin(4 * Math.PI * phenotypeA) + phenotypeB * Math.sin(20 * Math.PI * phenotypeB);
         return 21.5 + phenotypeA * Math.sin(4 * Math.PI * phenotypeA) + phenotypeB * Math.sin(20 * Math.PI * phenotypeB);
     }
 
