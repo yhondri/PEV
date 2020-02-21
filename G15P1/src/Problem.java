@@ -21,7 +21,7 @@ public class Problem {
     private int populationSize = 100;
     private double mutationProbability = 0.05;
     private double crossoverProbability = 0.6;
-    private double elitePercent = 0.05;
+    private double elitePercent = 0.02; //2%
     private Random rand = new Random();
     private GenericProblem problem;
     private CrossoverAlgorithm crossoverAlgorithm;
@@ -130,8 +130,9 @@ public class Problem {
             return null;
         }
 
+        Collections.sort(population);
         List<Chromosome> eliteList = new ArrayList<>(eliteLength);
-        for (int i = (population.size() - 1), j = 0; i > 0 &&  j <= eliteLength ; i--, j++) {
+        for (int i = (population.size() - 1), j = 0; i >= 0 &&  j < eliteLength ; i--, j++) {
             Chromosome newCopy = population.get(i).getCopy();
             eliteList.add(newCopy);
         }
