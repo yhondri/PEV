@@ -1,5 +1,6 @@
+import java.util.Random;
 
-public class Cromosoma {
+public abstract class Cromosoma {
 
 	private boolean[] genes;
 	private double fenotipo;
@@ -7,7 +8,40 @@ public class Cromosoma {
 	private double puntuacion;
 	private double puntuacionAcc;
 	private int longitud;
+	private double max;
+	private double min;
+	private boolean maximize;
 	
+	// Formula de longitud 60 del tema 3
+	public void calculaLongitud(double prec) {
+		longitud = (int) Math.ceil(Math.log(1 + (max - min)/prec)/Math.log(2));
+	}
+	
+	public abstract void calcFitness();
+	
+	public void mutaBit(int bit) {
+		genes[bit] = !genes[bit];
+	}
+	
+	public abstract Cromosoma[] cruce( Cromosoma padre2, int ptoCruce);
+	
+	public int compare(Cromosoma rhs) {
+		if(rhs == null)return 1;
+		int ret;
+		if(this.fitness > rhs.fitness)
+			ret = 1;
+		else if(this.fitness < rhs.fitness)
+			ret = -1;
+		else 
+			ret = 0;
+		return ret;
+	}
+	
+	public void randomize(Random rd) {
+		for(int i = 0; i < longitud; i++) {
+			genes[i] = rd.nextBoolean();
+		}
+	}
 	
 	public double getPuntuacion() {
 		return puntuacion;
@@ -44,5 +78,25 @@ public class Cromosoma {
 	}
 	public void setLongitud(int longitud) {
 		this.longitud = longitud;
+	}
+	public double getMax() {
+		return max;
+	}
+	public void setMax(double max) {
+		this.max = max;
+	}
+	public double getMin() {
+		return min;
+	}
+	public void setMin(double min) {
+		this.min = min;
+	}
+
+	public boolean isMaximize() {
+		return maximize;
+	}
+
+	public void setMaximize(boolean maximize) {
+		this.maximize = maximize;
 	}
 }
