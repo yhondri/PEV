@@ -31,7 +31,7 @@ public class AGenetico {
 		while(i < numMaxGen) {
 			selRuleta();
 			reproducir();
-			mutaci�n();
+			mutacion();
 			pob = sigPob;
 			evaluate();
 			i++;
@@ -125,7 +125,7 @@ public class AGenetico {
 		}
 	}
 
-	public void mutaci�n() {
+	public void mutacion() {
 		boolean mutado;
 		int longitud = sigPob[0].getLongitud();
 		Random rng = new Random();
