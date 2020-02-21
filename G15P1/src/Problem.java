@@ -21,6 +21,7 @@ public class Problem {
     private int populationSize = 100;
     private double mutationProbability = 0.05;
     private double crossoverProbability = 0.6;
+    private double elitePercent = 0.05;
     private Random rand = new Random();
     private GenericProblem problem;
     private CrossoverAlgorithm crossoverAlgorithm;
@@ -38,10 +39,12 @@ public class Problem {
         solutions.add(solution);
 
         for (int i = 1; i < numGenerations; i++) {
+            List<Chromosome> eliteList = getElite(population);
+
             population = selectionAlgorithm.selectPopulation(population);
             crossPopulation(population);
             mutatePopulation(population);
-
+            addElite(population, eliteList);
             solution = evaluatePopulation(population);
             solutions.add(solution);
         }
@@ -119,5 +122,29 @@ public class Problem {
             mutationAlgorithm.mutate(chromosome, mutationProbability);
             population.set(i, chromosome);
         }
+    }
+
+    private List<Chromosome> getElite(List<Chromosome> population) {
+        int eliteLength = (int)Math.ceil(population.size() * elitePercent);
+        if (eliteLength == 0) {
+            return null;
+        }
+
+        List<Chromosome> eliteList = new ArrayList<>(eliteLength);
+        for (int i = (population.size() - 1), j = 0; i > 0 &&  j <= eliteLength ; i--, j++) {
+            Chromosome newCopy = population.get(i).getCopy();
+            eliteList.add(newCopy);
+        }
+
+        return eliteList;
+    }
+
+    private void addElite(List<Chromosome> population, List<Chromosome> eliteList) {
+        if (eliteList == null) {
+            return;
+        }
+
+        population.subList(0, eliteList.size()).clear();
+        population.addAll(eliteList);
     }
 }

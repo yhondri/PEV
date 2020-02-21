@@ -85,4 +85,14 @@ public class Chromosome implements Comparable<Chromosome> {
     public int compareTo(Chromosome obj) {
         return Double.compare(this.getFitness(), obj.getFitness());
     }
+
+    public Chromosome getCopy() {
+        Chromosome chromosome = new Chromosome();
+        boolean[] genesCopy = new boolean[genes.length];
+        for (int i = 0; i < genes.length; i++) {
+            genesCopy[i] = genes[i];
+        }
+        chromosome.genes = genesCopy;
+        return chromosome;
+    }
 }
