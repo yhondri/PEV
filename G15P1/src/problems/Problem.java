@@ -132,7 +132,7 @@ public abstract class Problem extends Thread {
     private void mutatePopulation(List<Chromosome> population) {
         for (int i = 0; i < configuration.getPopulationSize(); i++) {
             Chromosome chromosome = population.get(i);
-            mutationAlgorithm.mutate(chromosome, configuration.getMutationAlgorithmValue());
+            mutationAlgorithm.mutate(chromosome, configuration.getMutationValue());
             population.set(i, chromosome);
         }
     }
