@@ -6,22 +6,34 @@ import base.Utils;
 import entities.Chromosome;
 import utils.ByteOps;
 
-public class Problem2 implements GenericProblem {
+public class Problem3 implements GenericProblem {
 
 	private int longitud;
 	private double max;
 	private double min;
 	private double tolerance = 0.001;
-	
-	public Problem2() {
+	private final int SUM_ITERATIONS = 5;
+
+	public Problem3() {
 		min = -10;
 		max = 10;
 		longitud = Utils.getGenotypeLength(min, max, tolerance) * 2;
 	}
-	
+
+	private double calcSchubert(double x1, double x2) {
+		double lhs = 0, rhs = 0;
+		for (int i = 1; i <= SUM_ITERATIONS; i++) {
+			lhs += i * (Math.cos((i + 1) * x1 + i));
+		}
+		for (int i = 1; i <= SUM_ITERATIONS; i++) {
+			rhs += i * (Math.cos((i + 1) * x2 + i));
+		}
+		return lhs * rhs;
+	}
+
 	@Override
-	 public Chromosome getRandomChromosome() {
-        Chromosome chromosome = new Chromosome();
+	public Chromosome getRandomChromosome() {
+		Chromosome chromosome = new Chromosome();
         boolean[] chromosomeArray = new boolean[longitud];
         Random random = new Random();
 
@@ -32,12 +44,14 @@ public class Problem2 implements GenericProblem {
         chromosome.setGenes(chromosomeArray);
 
         return chromosome;
-    }
+	}
+
+
 
 	@Override
 	public double getFitness(Chromosome chromosome) {
 		double parsedVal[] = decode(chromosome), fenotipo;
-		fenotipo = calcHolder(parsedVal[0], parsedVal[1]);
+		fenotipo = calcSchubert(parsedVal[0], parsedVal[1]);
 		return -fenotipo;
 	}
 	
@@ -45,19 +59,7 @@ public class Problem2 implements GenericProblem {
 	public double[] decode(Chromosome chromosome) {
 		boolean spl[][] = ByteOps.splitBitStream(chromosome.getGenes());
 		return new double[]{
-				ByteOps.parseBitStream(spl[0], min, max, getLongitud()/2),
-				ByteOps.parseBitStream(spl[1], min, max, getLongitud()/2)};
+				ByteOps.parseBitStream(spl[0], min, max, longitud/2),
+				ByteOps.parseBitStream(spl[1], min, max, longitud/2)};
 	}
-	
-	public static double calcHolder(double x, double y) {
-		return -Math.abs(Math.sin(x)
-				*Math.cos(y)
-				*Math.exp(Math.abs(1 - (Math.sqrt(x*x + y*y)/Math.PI))));
-	}
-	
-	
-	private int getLongitud() {
-		return longitud;
-	}
-
 }

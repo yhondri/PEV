@@ -27,8 +27,8 @@ public class Problem {
 	private CrossoverAlgorithm crossoverAlgorithm;
 	private MutationAlgorithm mutationAlgorithm;
 
-	void run() {
-		problem = new Problem1();
+	void run(GenericProblem problem) {
+		this.problem = problem;
 		SelectionAlgorithm selectionAlgorithm = new RouletteSelection();
 		crossoverAlgorithm = new SinglePointCrossover(rand);
 		mutationAlgorithm = new BasicMutation();
