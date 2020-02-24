@@ -1,16 +1,25 @@
 package problems;
 
 import base.Utils;
+import crossoveralgorithm.CrossoverAlgorithm;
 import entities.Chromosome;
+import entities.Configuration;
+import mutationalgorithm.MutationAlgorithm;
+import selection.SelectionAlgorithm;
 
 import java.util.Random;
 
-public class Problem1 implements GenericProblem {
+public class Problem1 extends Problem {
 
     double minX1 = -3.0, minX2 = 4.1, maxX1 = 12.1, maxX2 = 5.8, tolerance = 0.001;
     private final int geneALength = Utils.getGenotypeLength(minX1, maxX1, tolerance);
     private final int geneBLength = Utils.getGenotypeLength(minX2, maxX2, tolerance);
 
+    public Problem1(Configuration configuration, SelectionAlgorithm selectionAlgorithm, CrossoverAlgorithm crossoverAlgorithm, MutationAlgorithm mutationAlgorithm, Delegate delegate) {
+        super(configuration, selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, delegate);
+    }
+
+    @Override
     public double getFitness(Chromosome chromosome) {
         double phenotypeA = getPhenotype(chromosome.getGenes(),0,geneALength-1, geneALength, minX1, maxX1, true);
         double phenotypeB = getPhenotype(chromosome.getGenes(), geneALength, (geneALength+geneBLength-1), geneBLength, minX2, maxX2, false);

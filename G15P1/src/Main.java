@@ -1,6 +1,4 @@
-import java.lang.reflect.Array;
-import java.util.List;
-import java.util.Random;
+import problems.Problem;
 
 public class Main {
 
@@ -8,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Hello World !!");
-        new Problem().run();
+       // new Problem().run();
        // new AGenetico().start();
     }
 }
