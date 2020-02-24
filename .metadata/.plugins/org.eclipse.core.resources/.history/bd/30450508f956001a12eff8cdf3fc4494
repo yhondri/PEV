@@ -1,0 +1,39 @@
+package problems;
+
+import entities.Chromosome;
+
+public class Problem2 implements GenericProblem {
+
+	private boolean[] genes;
+	private double fenotipo;
+	private double fitness;
+	private double puntuacion;
+	private double puntuacionAcc;
+	private int longitud;
+	private double max;
+	private double min;
+	private boolean maximize;
+	
+	public Problem2(double prec) {
+		setMin(-10);
+		setMax(10);
+		setMaximize(false);
+		super.calculaLongitud(prec);
+		setLongitud(getLongitud()*2);
+		setGenes(new boolean[getLongitud()]);
+	}
+	
+	
+	@Override
+	public double getFitness(Chromosome chromosome) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Chromosome getRandomChromosome() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

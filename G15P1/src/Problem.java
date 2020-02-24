@@ -17,135 +17,132 @@ import java.util.Random;
 
 public class Problem {
 
-    private int numGenerations = 100;
-    private int populationSize = 100;
-    private double mutationProbability = 0.05;
-    private double crossoverProbability = 0.6;
-    private double elitePercent = 0.02; //2%
-    private Random rand = new Random();
-    private GenericProblem problem;
-    private CrossoverAlgorithm crossoverAlgorithm;
-    private MutationAlgorithm mutationAlgorithm;
+	private int numGenerations = 100;
+	private int populationSize = 100;
+	private double mutationProbability = 0.05;
+	private double crossoverProbability = 0.6;
+	private double elitePercent = 0.02; // 2%
+	private Random rand = new Random();
+	private GenericProblem problem;
+	private CrossoverAlgorithm crossoverAlgorithm;
+	private MutationAlgorithm mutationAlgorithm;
 
-    void run() {
-        problem = new Problem1();
-        SelectionAlgorithm selectionAlgorithm = new RouletteSelection();
-        crossoverAlgorithm = new SinglePointCrossover(rand);
-        mutationAlgorithm = new BasicMutation();
+	void run() {
+		problem = new Problem1();
+		SelectionAlgorithm selectionAlgorithm = new RouletteSelection();
+		crossoverAlgorithm = new SinglePointCrossover(rand);
+		mutationAlgorithm = new BasicMutation();
 
-        List<Chromosome> population = getInitialPopulation();
-        List<Solution> solutions = new ArrayList<>();
-        Solution solution = evaluatePopulation(population);
-        solutions.add(solution);
+		List<Chromosome> population = getInitialPopulation();
+		List<Solution> solutions = new ArrayList<>();
+		Solution solution = evaluatePopulation(population);
+		solutions.add(solution);
 
-        for (int i = 1; i < numGenerations; i++) {
-            List<Chromosome> eliteList = getElite(population);
+		for (int i = 1; i < numGenerations; i++) {
+			List<Chromosome> eliteList = getElite(population);
 
-            population = selectionAlgorithm.selectPopulation(population);
-            crossPopulation(population);
-            mutatePopulation(population);
-            addElite(population, eliteList);
-            solution = evaluatePopulation(population);
-            solutions.add(solution);
-        }
+			population = selectionAlgorithm.selectPopulation(population);
+			crossPopulation(population);
+			mutatePopulation(population);
+			addElite(population, eliteList);
+			solution = evaluatePopulation(population);
+			solutions.add(solution);
+		}
 
-        Collections.sort(solutions);
+		Collections.sort(solutions);
+	}
 
-        int parada = 0;
-        parada += 1;
-    }
+	private List<Chromosome> getInitialPopulation() {
+		List<Chromosome> chromosomeList = new ArrayList<>();
+		for (int i = 0; i < populationSize; i++) {
+			Chromosome newChromosome = problem.getRandomChromosome();
+			chromosomeList.add(newChromosome);
+		}
+		return chromosomeList;
+	}
 
-    private List<Chromosome>  getInitialPopulation() {
-        List<Chromosome> chromosomeList = new ArrayList<>();
-        for (int i = 0; i < populationSize; i++) {
-            Chromosome newChromosome = problem.getRandomChromosome();
-            chromosomeList.add(newChromosome);
-        }
-        return chromosomeList;
-    }
+	private Solution evaluatePopulation(List<Chromosome> population) {
+		Solution solution = new Solution();
 
-    private Solution evaluatePopulation(List<Chromosome> population) {
-        Solution solution = new Solution();
+		if (population.size() == 0) {
+			return solution;
+		}
 
-        if (population.size() == 0) {
-            return solution;
-        }
+		double totalFitness = 0;
 
-        double totalFitness = 0;
+		for (Chromosome chromosome : population) {
+			double fitness = problem.getFitness(chromosome);
+			chromosome.setFitness(fitness);
 
-        for (Chromosome chromosome : population) {
-            double fitness = problem.getFitness(chromosome);
-            chromosome.setFitness(fitness);
+			totalFitness += fitness;
+		}
 
-            totalFitness += fitness;
-        }
+		Collections.sort(population);
+		population.size();
+		Chromosome bestChromosome = population.get(population.size() - 1);
+		solution.setAverageFitness(totalFitness / populationSize);
+		solution.setBestFitness(bestChromosome.getFitness());
+		solution.setWorstFitness(population.get(0).getFitness());
 
-        Collections.sort(population);
-        int index = population.size()-1;
-        Chromosome bestChromosome = population.get(population.size()-1);
-        solution.setAverageFitness(totalFitness/populationSize);
-        solution.setBestFitness(bestChromosome.getFitness());
-        solution.setWorstFitness(population.get(0).getFitness());
+		double acumulatedFitness = 0;
+		// Calculamos el fitness acumulado - Muestreo estocástico - Tema02 - Pág 36
+		// Puede cambiar para mínimos :s
+		for (int i = population.size() - 1; i >= 0; i--) {
+			acumulatedFitness += population.get(i).getFitness() / totalFitness;
+			population.get(i).setAcumulatedFitness(acumulatedFitness);
+		}
 
-        double acumulatedFitness = 0;
-        //Calculamos el fitness acumulado - Muestreo estocástico - Tema02 - Pág 36
-        //Puede cambiar para mínimos :s
-        for (int i = population.size()-1; i >= 0; i--) {
-            acumulatedFitness += population.get(i).getFitness()/totalFitness;
-            population.get(i).setAcumulatedFitness(acumulatedFitness);
-        }
+		return solution;
+	}
 
-        return solution;
-    }
+	private void crossPopulation(List<Chromosome> population) {
+		for (int i = 0; i < populationSize; i += 2) {
+			Chromosome chromosomeA = population.get(i);
+			Chromosome chromosomeB = population.get(i + 1);
+			Pair<Chromosome, Chromosome> result;
+			double crossoverResult = rand.nextDouble();
 
-    private void crossPopulation(List<Chromosome> population) {
-        for (int i = 0; i < populationSize; i+=2) {
-            Chromosome chromosomeA = population.get(i);
-            Chromosome chromosomeB = population.get(i + 1);
-            Pair<Chromosome, Chromosome> result;
-            double crossoverResult = rand.nextDouble();
+			if (crossoverResult < crossoverProbability) {
+				result = crossoverAlgorithm.crossOver(chromosomeA, chromosomeB);
+			} else {
+				result = new Pair<>(chromosomeA, chromosomeB);
+			}
 
-            if (crossoverResult < crossoverProbability) {
-                result = crossoverAlgorithm.crossOver(chromosomeA, chromosomeB);
-            } else {
-                result = new Pair<>(chromosomeA, chromosomeB);
-            }
+			population.set(i, result.getElement0());
+			population.set(i + 1, result.getElement1());
+		}
+	}
 
-            population.set(i, result.getElement0());
-            population.set(i+1, result.getElement1());
-        }
-    }
+	private void mutatePopulation(List<Chromosome> population) {
+		for (int i = 0; i < populationSize; i++) {
+			Chromosome chromosome = population.get(i);
+			mutationAlgorithm.mutate(chromosome, mutationProbability);
+			population.set(i, chromosome);
+		}
+	}
 
-    private void mutatePopulation(List<Chromosome> population) {
-        for (int i = 0; i < populationSize; i++) {
-            Chromosome chromosome = population.get(i);
-            mutationAlgorithm.mutate(chromosome, mutationProbability);
-            population.set(i, chromosome);
-        }
-    }
+	private List<Chromosome> getElite(List<Chromosome> population) {
+		int eliteLength = (int) Math.ceil(population.size() * elitePercent);
+		if (eliteLength == 0) {
+			return null;
+		}
 
-    private List<Chromosome> getElite(List<Chromosome> population) {
-        int eliteLength = (int)Math.ceil(population.size() * elitePercent);
-        if (eliteLength == 0) {
-            return null;
-        }
+		Collections.sort(population);
+		List<Chromosome> eliteList = new ArrayList<>(eliteLength);
+		for (int i = (population.size() - 1), j = 0; i >= 0 && j < eliteLength; i--, j++) {
+			Chromosome newCopy = population.get(i).getCopy();
+			eliteList.add(newCopy);
+		}
 
-        Collections.sort(population);
-        List<Chromosome> eliteList = new ArrayList<>(eliteLength);
-        for (int i = (population.size() - 1), j = 0; i >= 0 &&  j < eliteLength ; i--, j++) {
-            Chromosome newCopy = population.get(i).getCopy();
-            eliteList.add(newCopy);
-        }
+		return eliteList;
+	}
 
-        return eliteList;
-    }
+	private void addElite(List<Chromosome> population, List<Chromosome> eliteList) {
+		if (eliteList == null) {
+			return;
+		}
 
-    private void addElite(List<Chromosome> population, List<Chromosome> eliteList) {
-        if (eliteList == null) {
-            return;
-        }
-
-        population.subList(0, eliteList.size()).clear();
-        population.addAll(eliteList);
-    }
+		population.subList(0, eliteList.size()).clear();
+		population.addAll(eliteList);
+	}
 }

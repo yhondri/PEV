@@ -1,6 +1,3 @@
-import java.lang.reflect.Array;
-import java.util.List;
-import java.util.Random;
 
 public class Main {
 
@@ -8,8 +5,16 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Hello World !!");
-        new Problem().run();
-       // new AGenetico().start();
+        switch (args[0]) {
+		case "1":
+			new Problem().run();
+			break;
+		case "2":    
+        new ProblemHolder().run();
+			break;
+		default:
+			break;
+		}
     }
 }
 

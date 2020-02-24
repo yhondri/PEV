@@ -39,4 +39,9 @@ public class Problem1 implements GenericProblem {
 
         return chromosome;
     }
+
+    @Override
+	public boolean isMaximize() {
+		return true;
+	}
 }
