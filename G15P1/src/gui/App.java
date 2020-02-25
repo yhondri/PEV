@@ -12,6 +12,7 @@ import org.math.plot.Plot2DPanel;
 import org.math.plot.plots.LinePlot;
 import problems.Problem;
 import problems.Problem1;
+import problems.Problem4;
 import selection.RouletteSelection;
 import selection.SelectionAlgorithm;
 
@@ -42,6 +43,7 @@ public class App implements Problem.Delegate {
     private JSpinner mutationPercentSpinner;
     private JSpinner eliteSpinner;
     private JComboBox problemComboBox;
+    private JSpinner nValueSpinner;
 
     private Plot2DPanel plot2DPanel;
     private LinePlot bestLinePlot;
@@ -68,6 +70,7 @@ public class App implements Problem.Delegate {
     public App() {
         setupView();
         initChartPanel();
+        setupListeners();
     }
 
     private void setupView() {
@@ -109,13 +112,20 @@ public class App implements Problem.Delegate {
         eliteSpinnerTextField.setEditable(false);
         eliteSpinnerTextField.setBackground(Color.white);
 
-        String[] problems = new String[] {"Problema 1"};
+        String[] problems = new String[] {"Problema 1", "Problema 2", "Problema 3", "Problema 4"};
         DefaultComboBoxModel problemsModel = new DefaultComboBoxModel(problems);
         problemComboBox.setModel(problemsModel);
+
+        SpinnerNumberModel nValueSpinnerDataModel = new SpinnerNumberModel(1, 1, 7, 1);
+        nValueSpinner.setModel(nValueSpinnerDataModel);
+        JFormattedTextField nValueSpinnerTextField = ((JSpinner.DefaultEditor) nValueSpinner.getEditor()).getTextField();
+        nValueSpinnerTextField.setEditable(false);
+        nValueSpinnerTextField.setBackground(Color.white);
+        nValueSpinner.setEnabled(false);
     }
 
     private void initChartPanel() {
-        configuration = new Configuration(100, 100, 0.6,0.05, 0.02);
+        configuration = new Configuration(100, 100, 0.6,0.05, 0.02, 1);
         bestArrayList = new ArrayList<>(configuration.getNumberOfGenerations());
         bestLinePlot = new LinePlot("Best", Color.red, new double[][]{{0, 0}});
         averageArrayList = new ArrayList<>(configuration.getNumberOfGenerations());
@@ -140,6 +150,17 @@ public class App implements Problem.Delegate {
         gridBagConstraints.gridwidth = GridBagConstraints.REMAINDER;
         gridBagConstraints.weightx = 1;
         chartPanel.add(plot2DPanel, SwingConstants.CENTER);
+    }
+
+    private void setupListeners() {
+        problemComboBox.addActionListener (e -> {
+            boolean enabled = (problemComboBox.getSelectedIndex() == 3);
+            nValueSpinner.setEnabled(enabled);
+
+            if (!enabled) {
+                nValueSpinner.setValue(1);
+            }
+        });
 
         runButton.addActionListener(e -> {
             this.setupAlgorithm();
@@ -152,6 +173,7 @@ public class App implements Problem.Delegate {
         double crossoverValue = (double) crossoverValueSpinner.getValue();
         double mutationValue = (double) mutationPercentSpinner.getValue();
         double eliteValue = (double) eliteSpinner.getValue();
+        int nValue = (int) nValueSpinner.getValue();
 
         SelectionAlgorithm selectionAlgorithm = null;
         switch (selectionAlgorithmComboBox.getSelectedIndex()) {
@@ -175,7 +197,6 @@ public class App implements Problem.Delegate {
                 crossoverAlgorithm = new SinglePointCrossover(random);
             case 3:
                 crossoverAlgorithm = new SinglePointCrossover(random);
-
             default:
                 break;
         }
@@ -188,13 +209,15 @@ public class App implements Problem.Delegate {
                 break;
         }
 
-        Configuration configuration = new Configuration(populationSize, numberOfGenerations, crossoverValue, mutationValue, eliteValue);
+        Configuration configuration = new Configuration(populationSize, numberOfGenerations, crossoverValue, mutationValue, eliteValue, nValue);
 
         Problem problem = null;
         switch (problemComboBox.getSelectedIndex()) {
             case 0:
                 problem = new Problem1(configuration,selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
+                break;
             default:
+                problem = new Problem4(configuration, selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
                 break;
         }
 

@@ -15,7 +15,7 @@ public class Utils {
         return (int) Math.ceil(log2);
     }
 
-    public static int decodeGene(boolean[] chromosome, int start, int end, boolean isChromosomeA) {
+    public static double decodeGene(boolean[] chromosome, int start, int end, boolean isChromosomeA) {
         if (isChromosomeA) {
             return binaryToDecimal(chromosome, start, end);
         } else {
@@ -24,8 +24,8 @@ public class Utils {
     }
 
     // Function to convert binary to decimal
-    public static int binaryToDecimal(boolean[] chromosome, int start, int end) {
-        int decimal = 0;
+    public static double binaryToDecimal(boolean[] chromosome, int start, int end) {
+        double decimal = 0;
         for(int i = end, j = start; i >= start; i--, j++) {
             int value = chromosome[i] ? 1 : 0;
             decimal  += value*Math.pow(2, j);
@@ -35,8 +35,8 @@ public class Utils {
     }
 
     // Function to convert binary to decimal
-    public static int binaryToDecimalB(boolean[] chromosome, int start, int end) {
-        int decimal = 0;
+    public static double binaryToDecimalB(boolean[] chromosome, int start, int end) {
+        double decimal = 0;
         for(int i = end, j = 0; i >= start; i--, j++) {
             int value = chromosome[i] ? 1 : 0;
             decimal  += value*Math.pow(2, j);

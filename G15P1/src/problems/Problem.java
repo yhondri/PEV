@@ -24,7 +24,7 @@ public abstract class Problem extends Thread {
     private Random rand = new Random();
     private CrossoverAlgorithm crossoverAlgorithm;
     private MutationAlgorithm mutationAlgorithm;
-    private Configuration configuration;
+    protected final Configuration configuration;
     private SelectionAlgorithm selectionAlgorithm;
     private Delegate delegate;
 

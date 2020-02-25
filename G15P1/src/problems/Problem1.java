@@ -11,9 +11,9 @@ import java.util.Random;
 
 public class Problem1 extends Problem {
 
-    double minX1 = -3.0, minX2 = 4.1, maxX1 = 12.1, maxX2 = 5.8, tolerance = 0.001;
-    private final int geneALength = Utils.getGenotypeLength(minX1, maxX1, tolerance);
-    private final int geneBLength = Utils.getGenotypeLength(minX2, maxX2, tolerance);
+    double minX1 = -3.0, minX2 = 4.1, maxX1 = 12.1, maxX2 = 5.8;
+    private final int geneALength = Utils.getGenotypeLength(minX1, maxX1, configuration.getTolerance());
+    private final int geneBLength = Utils.getGenotypeLength(minX2, maxX2, configuration.getTolerance());
 
     public Problem1(Configuration configuration, SelectionAlgorithm selectionAlgorithm, CrossoverAlgorithm crossoverAlgorithm, MutationAlgorithm mutationAlgorithm, Delegate delegate) {
         super(configuration, selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, delegate);
@@ -30,7 +30,7 @@ public class Problem1 extends Problem {
     }
 
     double getPhenotype(boolean[] chromosome, int start, int end, int chromosomeSize, double xmin, double xmax, boolean isChromosomeA) {
-        int decimalValue = Utils.decodeGene(chromosome, start, end, isChromosomeA);
+        double decimalValue = Utils.decodeGene(chromosome, start, end, isChromosomeA);
         return xmin + (decimalValue * ((xmax - xmin)/(Math.pow(2, chromosomeSize) - 1)));
     }
 

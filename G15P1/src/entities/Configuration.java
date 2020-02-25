@@ -10,13 +10,16 @@ public class Configuration {
     private double crossoverValue;
     private double mutationValue;
     private double eliteValue;
+    private final double tolerance = 0.001;
+    private int nValue;
 
-    public Configuration(int populationSize, int numberOfGenerations, double crossoverValue, double mutationValue, double eliteValue) {
+    public Configuration(int populationSize, int numberOfGenerations, double crossoverValue, double mutationValue, double eliteValue, int nValue) {
         this.populationSize = populationSize;
         this.numberOfGenerations = numberOfGenerations;
         this.crossoverValue = crossoverValue;
         this.mutationValue = mutationValue;
         this.eliteValue = eliteValue;
+        this.nValue = nValue;
     }
 
     public int getPopulationSize() {
@@ -57,5 +60,13 @@ public class Configuration {
 
     public void setEliteValue(double eliteValue) {
         this.eliteValue = eliteValue;
+    }
+
+    public double getTolerance() {
+        return tolerance;
+    }
+
+    public int getnValue() {
+        return nValue;
     }
 }
