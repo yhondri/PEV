@@ -65,7 +65,6 @@ public class App implements Problem.Delegate {
         frame.setVisible(true);
     }
 
-
     public App() {
         setupView();
         initChartPanel();

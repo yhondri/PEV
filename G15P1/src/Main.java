@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
         System.out.println("Hello World !!");
-        switch (args[0]) {
+      /**  switch (args[0]) {
 		case "1":
 			new Problem().run(new Problem1());
 			break;
@@ -21,6 +21,7 @@ public class Main {
 		default:
 			break;
 		}
+	   */
     }
 }
 
