@@ -157,6 +157,10 @@ public class App implements Problem.Delegate {
         switch (selectionAlgorithmComboBox.getSelectedIndex()) {
             case 0:
                 selectionAlgorithm = new RouletteSelection();
+            case 1:
+                selectionAlgorithm = new RouletteSelection();
+            case 2:
+                selectionAlgorithm = new RouletteSelection();
             default:
                 break;
         }
@@ -165,10 +169,16 @@ public class App implements Problem.Delegate {
         switch (crossoverAlgorithmComboBox.getSelectedIndex()) {
             case 0:
                 crossoverAlgorithm = new SinglePointCrossover(random);
+            case 1:
+                crossoverAlgorithm = new SinglePointCrossover(random);
+            case 2:
+                crossoverAlgorithm = new SinglePointCrossover(random);
+            case 3:
+                crossoverAlgorithm = new SinglePointCrossover(random);
+
             default:
                 break;
         }
-
 
         MutationAlgorithm mutationAlgorithm = null;
         switch (mutationComboBox.getSelectedIndex()) {
@@ -179,7 +189,6 @@ public class App implements Problem.Delegate {
         }
 
         Configuration configuration = new Configuration(populationSize, numberOfGenerations, crossoverValue, mutationValue, eliteValue);
-
 
         Problem problem = null;
         switch (problemComboBox.getSelectedIndex()) {
