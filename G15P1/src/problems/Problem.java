@@ -58,10 +58,13 @@ public abstract class Problem extends Thread {
             solution = evaluatePopulation(population);
             solutions.add(solution);
 
-            Collections.sort(solutions);
+           // Collections.sort(solutions, Collections.reverseOrder());
 
             delegate.didEvaluateGeneration(i, solution);
         }
+
+        int i = 0;
+
     }
 
     abstract protected Chromosome getRandomChromosome();

@@ -50,7 +50,7 @@ public class Problem4 extends Problem {
     private List<Double> getPhenotype(boolean[] chromosome) {
         List<Double> phenotype = new ArrayList<>(configuration.getnValue());
         for (int i = 0; i < configuration.getnValue(); i++) {
-            double gene = Utils.decodeGene(chromosome, geneLength*i, geneLength, true);
+            double gene = Utils.decodeGene(chromosome, geneLength*i,geneLength-1, true);
             phenotype.add(gene);
         }
         return phenotype;
