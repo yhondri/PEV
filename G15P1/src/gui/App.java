@@ -13,8 +13,7 @@ import org.math.plot.plots.LinePlot;
 import problems.Problem;
 import problems.Problem1;
 import problems.Problem3;
-import selection.RouletteSelection;
-import selection.SelectionAlgorithm;
+import selection.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -83,7 +82,7 @@ public class App implements Problem.Delegate {
         numberOfGenerationsSpinnerTextField.setEditable(false);
         numberOfGenerationsSpinnerTextField.setBackground(Color.white);
 
-        String[] selectionAlgorithms = new String[] {"Ruleta"};
+        String[] selectionAlgorithms = new String[] {"Ruleta", "Est. Universal", "Torneo", "Truncamiento"};
         DefaultComboBoxModel selectionModel = new DefaultComboBoxModel(selectionAlgorithms);
         selectionAlgorithmComboBox.setModel(selectionModel);
         String[] crossoverAlgorithms = new String[] {"Monopunto"};
@@ -158,10 +157,16 @@ public class App implements Problem.Delegate {
         switch (selectionAlgorithmComboBox.getSelectedIndex()) {
             case 0:
                 selectionAlgorithm = new RouletteSelection();
+                break;
             case 1:
-                selectionAlgorithm = new RouletteSelection();
+                selectionAlgorithm = new UniversalStochastic();
+                break;
             case 2:
-                selectionAlgorithm = new RouletteSelection();
+                selectionAlgorithm = new TournamentSelection();
+                break;
+            case 3:
+                selectionAlgorithm = new TruncationSelection();
+                break;
             default:
                 break;
         }
@@ -170,12 +175,16 @@ public class App implements Problem.Delegate {
         switch (crossoverAlgorithmComboBox.getSelectedIndex()) {
             case 0:
                 crossoverAlgorithm = new SinglePointCrossover(random);
+                break;
             case 1:
                 crossoverAlgorithm = new SinglePointCrossover(random);
+                break;
             case 2:
                 crossoverAlgorithm = new SinglePointCrossover(random);
+                break;
             case 3:
                 crossoverAlgorithm = new SinglePointCrossover(random);
+                break;
 
             default:
                 break;
