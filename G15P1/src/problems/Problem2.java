@@ -10,7 +10,7 @@ import mutationalgorithm.MutationAlgorithm;
 import selection.SelectionAlgorithm;
 import utils.ByteOps;
 
-public class Problem2 extends Problem {
+public class Problem2 extends MinimizationProblem {
 
 	private double tolerance = 0.001;
 	private double min = -10;
@@ -40,7 +40,7 @@ public class Problem2 extends Problem {
 	public double getFitness(Chromosome chromosome) {
 		double parsedVal[] = decode(chromosome), fenotipo;
 		fenotipo = calcHolder(parsedVal[0], parsedVal[1]);
-		return -fenotipo;
+		return fenotipo;
 	}
 	
 	

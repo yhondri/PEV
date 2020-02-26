@@ -57,8 +57,7 @@ public abstract class Problem extends Thread {
             mutatePopulation(population);
             addElite(population, eliteList);
             solution = evaluatePopulation(population);
-            if (solution.getBestFitness() > absBest)
-                absBest = solution.getBestFitness();
+            absBest = compareBest(solution, absBest);
             bests[i] = absBest;
             solution.setAbsoluteBest(absBest);
             solutions.add(solution);
@@ -69,10 +68,17 @@ public abstract class Problem extends Thread {
         int i = 0;
     }
 
+    public double compareBest(Solution solution, double absBest) {
+        if (solution.getBestFitness() > absBest)
+            return solution.getBestFitness();
+        return absBest;
+    }
+
     abstract protected Chromosome getRandomChromosome();
+
     abstract protected double getFitness(Chromosome chromosome);
 
-    private List<Chromosome>  getInitialPopulation() {
+    private List<Chromosome> getInitialPopulation() {
         List<Chromosome> chromosomeList = new ArrayList<>();
         for (int i = 0; i < configuration.getPopulationSize(); i++) {
             Chromosome newChromosome = getRandomChromosome();
@@ -80,7 +86,6 @@ public abstract class Problem extends Thread {
         }
         return chromosomeList;
     }
-
 
     public Solution evaluatePopulation(List<Chromosome> population) {
         Solution solution = new Solution();
