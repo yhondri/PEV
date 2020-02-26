@@ -4,6 +4,7 @@ public class Solution implements Comparable<Solution> {
     private double bestFitness;
     private double worstFitness;
     private double averageFitness;
+    private double absoluteBest;
 
     public double getBestFitness() {
         return bestFitness;
@@ -35,4 +36,11 @@ public class Solution implements Comparable<Solution> {
         return Double.compare(this.getBestFitness(), obj.getBestFitness());
     }
 
+    public double getAbsoluteBest() {
+        return absoluteBest;
+    }
+
+    public void setAbsoluteBest(double absoluteBest) {
+        this.absoluteBest = absoluteBest;
+    }
 }

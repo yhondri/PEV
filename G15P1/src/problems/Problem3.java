@@ -3,21 +3,23 @@ package problems;
 import java.util.Random;
 
 import base.Utils;
+import crossoveralgorithm.CrossoverAlgorithm;
 import entities.Chromosome;
+import entities.Configuration;
+import mutationalgorithm.MutationAlgorithm;
+import selection.SelectionAlgorithm;
 import utils.ByteOps;
 
-public class Problem3 implements GenericProblem {
+public class Problem3 extends Problem {
 
-	private int longitud;
-	private double max;
-	private double min;
-	private double tolerance = 0.001;
 	private final int SUM_ITERATIONS = 5;
+	private double tolerance = 0.001;
+	private double min = -10;
+	private double max = 10;
+	private int longitud = Utils.getGenotypeLength(min, max, tolerance) * 2;
 
-	public Problem3() {
-		min = -10;
-		max = 10;
-		longitud = Utils.getGenotypeLength(min, max, tolerance) * 2;
+	public Problem3(Configuration configuration, SelectionAlgorithm selectionAlgorithm, CrossoverAlgorithm crossoverAlgorithm, MutationAlgorithm mutationAlgorithm, Delegate delegate) {
+		super(configuration, selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, delegate);
 	}
 
 	private double calcSchubert(double x1, double x2) {
