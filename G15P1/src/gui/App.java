@@ -10,12 +10,9 @@ import mutationalgorithm.BasicMutation;
 import mutationalgorithm.MutationAlgorithm;
 import org.math.plot.Plot2DPanel;
 import org.math.plot.plots.LinePlot;
-import problems.Problem;
-import problems.Problem1;
-import problems.Problem4;
+import problems.*;
 import selection.RouletteSelection;
 import selection.SelectionAlgorithm;
-import problems.Problem3;
 import selection.*;
 
 import javax.swing.*;
@@ -203,13 +200,6 @@ public class App implements Problem.Delegate {
             case 1:
                 crossoverAlgorithm = new SinglePointCrossover(random);
                 break;
-            case 2:
-                crossoverAlgorithm = new SinglePointCrossover(random);
-                break;
-            case 3:
-                crossoverAlgorithm = new SinglePointCrossover(random);
-                break;
-
             default:
                 break;
         }
@@ -229,8 +219,17 @@ public class App implements Problem.Delegate {
             case 0:
                 problem = new Problem1(configuration,selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
             break;
-            default:
+            case 1:
+                problem = new Problem2(configuration,selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
+                break;
+            case 2:
                 problem = new Problem3(configuration,selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
+                break;
+            case 3:
+                problem = new Problem4(configuration,selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
+                break;
+            default:
+                //problem = new Problem3(configuration,selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
                 break;
         }
 
