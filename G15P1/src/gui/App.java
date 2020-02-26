@@ -166,6 +166,11 @@ public class App implements Problem.Delegate {
         runButton.addActionListener(e -> {
             this.setupAlgorithm();
         });
+
+        resetButton.addActionListener(e -> {
+            this.initChartPanel();
+            this.plot2DPanel.doLayout();
+        });
     }
 
     private void setupAlgorithm() {
