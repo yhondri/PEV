@@ -225,16 +225,17 @@ public class App implements Problem.Delegate {
                 problem = new Problem2(configuration,selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
                 break;
             case 2:
-                problem = new Problem3(configuration,selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
+                problem = new Problem3(configuration, selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
                 break;
             case 3:
-                problem = new Problem4(configuration,selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
+                problem = new Problem4(configuration, selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
                 break;
             default:
                 //problem = new Problem3(configuration,selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
                 break;
         }
-
+        initChartPanel();
+        plot2DPanel.layout();
         problem.start();
     }
 
