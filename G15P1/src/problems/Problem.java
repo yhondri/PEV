@@ -45,26 +45,28 @@ public abstract class Problem extends Thread {
         List<Chromosome> population = getInitialPopulation();
         List<Solution> solutions = new ArrayList<>();
         Solution solution = evaluatePopulation(population);
+        solution.setAbsoluteBest(solution.getBestFitness());
         solutions.add(solution);
         delegate.didEvaluateGeneration(0, solution);
-
+        double absBest = solution.getAbsoluteBest();
+        double[] bests = new double[100];
         for (int i = 1; i < configuration.getNumberOfGenerations(); i++) {
             List<Chromosome> eliteList = getElite(population);
-
             population = selectionAlgorithm.selectPopulation(population);
             crossPopulation(population);
             mutatePopulation(population);
             addElite(population, eliteList);
             solution = evaluatePopulation(population);
+            if (solution.getBestFitness() > absBest)
+                absBest = solution.getBestFitness();
+            bests[i] = absBest;
+            solution.setAbsoluteBest(absBest);
             solutions.add(solution);
-
-           // Collections.sort(solutions, Collections.reverseOrder());
 
             delegate.didEvaluateGeneration(i, solution);
         }
 
         int i = 0;
-
     }
 
     abstract protected Chromosome getRandomChromosome();
@@ -88,11 +90,9 @@ public abstract class Problem extends Thread {
         }
 
         double totalFitness = 0;
-
         for (Chromosome chromosome : population) {
             double fitness = getFitness(chromosome);
             chromosome.setFitness(fitness);
-
             totalFitness += fitness;
         }
 

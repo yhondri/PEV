@@ -2,6 +2,7 @@ package gui;
 
 import crossoveralgorithm.CrossoverAlgorithm;
 import crossoveralgorithm.SinglePointCrossover;
+import crossoveralgorithm.UniformCrossover;
 import entities.Configuration;
 import entities.CrossoverAlgorithmType;
 import entities.MutationAlgorithmType;
@@ -22,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
+@SuppressWarnings("ALL")
 public class App implements Problem.Delegate {
     private JButton resetButton;
     private JPanel panelMain;
@@ -87,7 +89,7 @@ public class App implements Problem.Delegate {
         String[] selectionAlgorithms = new String[] {"Ruleta", "Est. Universal", "Torneo", "Truncamiento"};
         DefaultComboBoxModel selectionModel = new DefaultComboBoxModel(selectionAlgorithms);
         selectionAlgorithmComboBox.setModel(selectionModel);
-        String[] crossoverAlgorithms = new String[] {"Monopunto"};
+        String[] crossoverAlgorithms = new String[]{"Monopunto", "Uniforme"};
         DefaultComboBoxModel crossoverModel = new DefaultComboBoxModel(crossoverAlgorithms);
         crossoverAlgorithmComboBox.setModel(crossoverModel);
         SpinnerNumberModel crossoverSpinnerDataModel = new SpinnerNumberModel(0.6, 0.0, 100.0, 0.01);
@@ -198,7 +200,7 @@ public class App implements Problem.Delegate {
                 crossoverAlgorithm = new SinglePointCrossover(random);
                 break;
             case 1:
-                crossoverAlgorithm = new SinglePointCrossover(random);
+                crossoverAlgorithm = new UniformCrossover(0.5);
                 break;
             default:
                 break;
@@ -218,7 +220,7 @@ public class App implements Problem.Delegate {
         switch (problemComboBox.getSelectedIndex()) {
             case 0:
                 problem = new Problem1(configuration,selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
-            break;
+                break;
             case 1:
                 problem = new Problem2(configuration,selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
                 break;
@@ -241,13 +243,13 @@ public class App implements Problem.Delegate {
         SwingUtilities.invokeLater(() -> {
             bestArrayList.add(new double[] {generation, solution.getBestFitness()});
             averageArrayList.add(new double[] {generation, solution.getAverageFitness()});
-            worseArrayList.add(new double[] {generation, solution.getWorstFitness()});
-            //absoluteBestArrayList.add(new double[] {generation, solution.geta()});
+            worseArrayList.add(new double[]{generation, solution.getWorstFitness()});
+            absoluteBestArrayList.add(new double[]{generation, solution.getAbsoluteBest()});
 
             plot2DPanel.changePlotData(0, bestArrayList.toArray(new double[generation+1][]));
             plot2DPanel.changePlotData(1, averageArrayList.toArray(new double[generation+1][]));
-            plot2DPanel.changePlotData(2, worseArrayList.toArray(new double[generation+1][]));
-           // plot2DPanel.changePlotData(3, bestArrayList.toArray(new double[generation+1][]));
+            plot2DPanel.changePlotData(2, worseArrayList.toArray(new double[generation + 1][]));
+            plot2DPanel.changePlotData(3, absoluteBestArrayList.toArray(new double[generation + 1][]));
             plot2DPanel.setFixedBounds(0, 0, generation);
         });
     }
