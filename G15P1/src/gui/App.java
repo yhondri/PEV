@@ -12,6 +12,7 @@ import org.math.plot.Plot2DPanel;
 import org.math.plot.plots.LinePlot;
 import problems.Problem;
 import problems.Problem1;
+import problems.Problem3;
 import selection.RouletteSelection;
 import selection.SelectionAlgorithm;
 
@@ -109,7 +110,7 @@ public class App implements Problem.Delegate {
         eliteSpinnerTextField.setEditable(false);
         eliteSpinnerTextField.setBackground(Color.white);
 
-        String[] problems = new String[] {"Problema 1"};
+        String[] problems = new String[] {"Problema 1", "Problema 3"};
         DefaultComboBoxModel problemsModel = new DefaultComboBoxModel(problems);
         problemComboBox.setModel(problemsModel);
     }
@@ -194,7 +195,9 @@ public class App implements Problem.Delegate {
         switch (problemComboBox.getSelectedIndex()) {
             case 0:
                 problem = new Problem1(configuration,selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
+            break;
             default:
+                problem = new Problem3(configuration,selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
                 break;
         }
 
