@@ -49,7 +49,6 @@ public abstract class Problem extends Thread {
         solutions.add(solution);
         delegate.didEvaluateGeneration(0, solution);
         double absBest = solution.getAbsoluteBest();
-        double[] bests = new double[100];
         for (int i = 1; i < configuration.getNumberOfGenerations(); i++) {
             List<Chromosome> eliteList = getElite(population);
             population = selectionAlgorithm.selectPopulation(population);
@@ -58,20 +57,15 @@ public abstract class Problem extends Thread {
             addElite(population, eliteList);
             solution = evaluatePopulation(population);
             absBest = compareBest(solution, absBest);
-            bests[i] = absBest;
             solution.setAbsoluteBest(absBest);
             solutions.add(solution);
 
             delegate.didEvaluateGeneration(i, solution);
         }
-
-        int i = 0;
     }
 
     public double compareBest(Solution solution, double absBest) {
-        if (solution.getBestFitness() > absBest)
-            return solution.getBestFitness();
-        return absBest;
+        return Math.max(solution.getBestFitness(), absBest);
     }
 
     abstract protected Chromosome getRandomChromosome();

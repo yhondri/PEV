@@ -21,9 +21,7 @@ public abstract class MinimizationProblem extends Problem {
 
     @Override
     public double compareBest(Solution solution, double absBest) {
-        if (solution.getBestFitness() < absBest)
-            return solution.getBestFitness();
-        return absBest;
+        return Math.min(solution.getBestFitness(), absBest);
     }
 
     @Override
