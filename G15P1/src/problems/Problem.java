@@ -64,13 +64,10 @@ public abstract class Problem extends Thread {
         }
     }
 
-    public double compareBest(Solution solution, double absBest) {
-        return Math.max(solution.getBestFitness(), absBest);
-    }
-
     abstract protected Chromosome getRandomChromosome();
-
+    abstract protected void sortPopulation(List<Chromosome> population);
     abstract protected double getFitness(Chromosome chromosome);
+    abstract protected double compareBest(Solution solution, double absBest);
 
     private List<Chromosome> getInitialPopulation() {
         List<Chromosome> chromosomeList = new ArrayList<>();
@@ -95,8 +92,7 @@ public abstract class Problem extends Thread {
             totalFitness += fitness;
         }
 
-        Collections.sort(population);
-        int index = population.size()-1;
+        sortPopulation(population);
         Chromosome bestChromosome = population.get(population.size()-1);
         solution.setAverageFitness(totalFitness/configuration.getPopulationSize());
         solution.setBestFitness(bestChromosome.getFitness());
@@ -114,20 +110,29 @@ public abstract class Problem extends Thread {
     }
 
     private void crossPopulation(List<Chromosome> population) {
-        for (int i = 0; i < configuration.getPopulationSize(); i+=2) {
-            Chromosome chromosomeA = population.get(i);
-            Chromosome chromosomeB = population.get(i + 1);
-            Pair<Chromosome, Chromosome> result;
+        List<Integer> selectedForCrossoverList = new ArrayList<>();
+
+        for (int i = 0; i < configuration.getPopulationSize(); i++) {
             double crossoverResult = rand.nextDouble();
-
             if (crossoverResult < configuration.getCrossoverValue()) {
-                result = crossoverAlgorithm.crossOver(chromosomeA, chromosomeB);
-            } else {
-                result = new Pair<>(chromosomeA, chromosomeB);
+                selectedForCrossoverList.add(i);
             }
+        }
 
-            population.set(i, result.getElement0());
-            population.set(i+1, result.getElement1());
+        if (selectedForCrossoverList.size()%2 == 1) {
+            int randomPosition = rand.nextInt(selectedForCrossoverList.size());
+            selectedForCrossoverList.remove(randomPosition);
+        }
+
+        for (int i = 0; i < selectedForCrossoverList.size(); i += 2) {
+            int position1 = selectedForCrossoverList.get(i);
+            int position2 = selectedForCrossoverList.get(i+1);
+
+            Chromosome chromosomeA = population.get(position1);
+            Chromosome chromosomeB =  population.get(position2);
+            Pair<Chromosome, Chromosome> result = crossoverAlgorithm.crossOver(chromosomeA, chromosomeB);
+            population.set(position1, result.getElement0());
+            population.set(position2, result.getElement1());
         }
     }
 
@@ -145,7 +150,7 @@ public abstract class Problem extends Thread {
             return null;
         }
 
-        Collections.sort(population);
+        sortPopulation(population);
         List<Chromosome> eliteList = new ArrayList<>(eliteLength);
         for (int i = (population.size() - 1), j = 0; i >= 0 &&  j < eliteLength ; i--, j++) {
             Chromosome newCopy = population.get(i).getCopy();

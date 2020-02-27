@@ -1,11 +1,14 @@
 package problems;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import base.Utils;
 import crossoveralgorithm.CrossoverAlgorithm;
 import entities.Chromosome;
 import entities.Configuration;
+import entities.Solution;
 import mutationalgorithm.MutationAlgorithm;
 import selection.SelectionAlgorithm;
 import utils.ByteOps;
@@ -35,6 +38,15 @@ public class Problem2 extends MinimizationProblem {
 
         return chromosome;
     }
+
+	@Override
+	protected void sortPopulation(List<Chromosome> population) {
+		Collections.sort(population, Collections.reverseOrder());
+	}
+
+	public double compareBest(Solution solution, double absBest) {
+		return Math.max(solution.getBestFitness(), absBest);
+	}
 
 	@Override
 	public double getFitness(Chromosome chromosome) {

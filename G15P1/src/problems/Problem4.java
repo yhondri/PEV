@@ -4,10 +4,11 @@ import base.Utils;
 import crossoveralgorithm.CrossoverAlgorithm;
 import entities.Chromosome;
 import entities.Configuration;
+import entities.Solution;
 import mutationalgorithm.MutationAlgorithm;
 import selection.SelectionAlgorithm;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -35,6 +36,15 @@ public class Problem4 extends Problem {
     }
 
     @Override
+    protected void sortPopulation(List<Chromosome> population) {
+        Collections.sort(population, Collections.reverseOrder());
+    }
+
+    public double compareBest(Solution solution, double absBest) {
+        return Math.min(solution.getBestFitness(), absBest);
+    }
+
+    @Override
     protected double getFitness(Chromosome chromosome) {
         List<Double> phenotypeList = getPhenotype(chromosome.getGenes());
         double result = 0;
@@ -50,7 +60,14 @@ public class Problem4 extends Problem {
     private List<Double> getPhenotype(boolean[] chromosome) {
         List<Double> phenotype = new ArrayList<>(configuration.getnValue());
         for (int i = 0; i < configuration.getnValue(); i++) {
-            double gene = Utils.decodeGene(chromosome, geneLength*i,geneLength-1, true);
+            double gene;
+
+            if (i == 0) {
+                gene = Utils.decodeGene(chromosome, geneLength*i,geneLength-1, true);
+            } else {
+                gene = Utils.decodeGene(chromosome, ((geneLength*i)-geneLength),geneLength*i, false);
+            }
+
             phenotype.add(gene);
         }
         return phenotype;

@@ -10,7 +10,7 @@ public class Configuration {
     private double crossoverValue;
     private double mutationValue;
     private double eliteValue;
-    private final double tolerance = 0.001;
+    private final double tolerance = 0.0001;
     private int nValue;
 
     public Configuration(int populationSize, int numberOfGenerations, double crossoverValue, double mutationValue, double eliteValue, int nValue) {

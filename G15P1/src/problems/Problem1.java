@@ -4,9 +4,12 @@ import base.Utils;
 import crossoveralgorithm.CrossoverAlgorithm;
 import entities.Chromosome;
 import entities.Configuration;
+import entities.Solution;
 import mutationalgorithm.MutationAlgorithm;
 import selection.SelectionAlgorithm;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public class Problem1 extends Problem {
@@ -47,5 +50,14 @@ public class Problem1 extends Problem {
         chromosome.setGenes(chromosomeArray);
 
         return chromosome;
+    }
+
+    @Override
+    protected void sortPopulation(List<Chromosome> population) {
+        Collections.sort(population);
+    }
+
+    public double compareBest(Solution solution, double absBest) {
+        return Math.max(solution.getBestFitness(), absBest);
     }
 }
