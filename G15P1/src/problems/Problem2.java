@@ -45,7 +45,7 @@ public class Problem2 extends MinimizationProblem {
 	}
 
 	public double compareBest(Solution solution, double absBest) {
-		return Math.max(solution.getBestFitness(), absBest);
+		return Math.min(solution.getBestFitness(), absBest);
 	}
 
 	@Override

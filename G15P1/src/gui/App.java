@@ -77,14 +77,8 @@ public class App implements Problem.Delegate {
     private void setupView() {
         SpinnerNumberModel populationSpinnerDataModel = new SpinnerNumberModel(100, 20, 1000, 1);
         populationSizeSpinner.setModel(populationSpinnerDataModel);
-        JFormattedTextField tf = ((JSpinner.DefaultEditor) populationSizeSpinner.getEditor()).getTextField();
-        tf.setEditable(false);
-        tf.setBackground(Color.white);
-
-        numberOfGenerationsSpinner.setModel(populationSpinnerDataModel);
-        JFormattedTextField numberOfGenerationsSpinnerTextField = ((JSpinner.DefaultEditor) numberOfGenerationsSpinner.getEditor()).getTextField();
-        numberOfGenerationsSpinnerTextField.setEditable(false);
-        numberOfGenerationsSpinnerTextField.setBackground(Color.white);
+        SpinnerNumberModel numberOfGenerationsSpinnerDataModel = new SpinnerNumberModel(100, 20, 1000, 1);
+        numberOfGenerationsSpinner.setModel(numberOfGenerationsSpinnerDataModel);
 
         String[] selectionAlgorithms = new String[] {"Ruleta", "Est. Universal", "Torneo", "Truncamiento"};
         DefaultComboBoxModel selectionModel = new DefaultComboBoxModel(selectionAlgorithms);
