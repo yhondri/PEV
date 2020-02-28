@@ -45,6 +45,7 @@ public class App implements Problem.Delegate {
     private JSpinner eliteSpinner;
     private JComboBox problemComboBox;
     private JSpinner nValueSpinner;
+    private JTextPane absoluteBestJTextPane;
 
     private Plot2DPanel plot2DPanel;
     private LinePlot bestLinePlot;
@@ -241,6 +242,7 @@ public class App implements Problem.Delegate {
     @Override
     public void didEvaluateGeneration(int generation, Solution solution) {
         SwingUtilities.invokeLater(() -> {
+            absoluteBestJTextPane.setText(solution.getAbsoluteBestRepresentation());
             bestArrayList.add(new double[] {generation, solution.getBestFitness()});
             averageArrayList.add(new double[] {generation, solution.getAverageFitness()});
             worseArrayList.add(new double[]{generation, solution.getWorstFitness()});

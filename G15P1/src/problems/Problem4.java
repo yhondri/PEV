@@ -57,6 +57,14 @@ public class Problem4 extends Problem {
         return -result;
     }
 
+
+
+    @Override
+    public String getPhenotypeRepresentation(Chromosome chromosome) {
+        List<Double> phenotypeList = getPhenotype(chromosome.getGenes());
+        return phenotypeList.toString();
+    }
+
     private List<Double> getPhenotype(boolean[] chromosome) {
         List<Double> phenotype = new ArrayList<>(configuration.getnValue());
         for (int i = 0; i < configuration.getnValue(); i++) {

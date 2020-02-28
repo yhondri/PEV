@@ -38,6 +38,13 @@ public class Problem1 extends Problem {
     }
 
     @Override
+    public String getPhenotypeRepresentation(Chromosome chromosome) {
+        double phenotypeA = getPhenotype(chromosome.getGenes(),0,geneALength-1, geneALength, minX1, maxX1, true);
+        double phenotypeB = getPhenotype(chromosome.getGenes(), geneALength, (geneALength+geneBLength-1), geneBLength, minX2, maxX2, false);
+        return String.format("[%.4f, %.4f]", phenotypeA, phenotypeB);
+    }
+
+    @Override
     public Chromosome getRandomChromosome() {
         Chromosome chromosome = new Chromosome();
         boolean[] chromosomeArray = new boolean[geneALength + geneBLength];

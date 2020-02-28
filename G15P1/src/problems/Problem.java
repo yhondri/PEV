@@ -56,8 +56,6 @@ public abstract class Problem extends Thread {
             mutatePopulation(population);
             addElite(population, eliteList);
             solution = evaluatePopulation(population);
-            absBest = compareBest(solution, absBest);
-            solution.setAbsoluteBest(absBest);
             solutions.add(solution);
 
             delegate.didEvaluateGeneration(i, solution);
@@ -67,7 +65,7 @@ public abstract class Problem extends Thread {
     abstract protected Chromosome getRandomChromosome();
     abstract protected void sortPopulation(List<Chromosome> population);
     abstract protected double getFitness(Chromosome chromosome);
-    abstract protected double compareBest(Solution solution, double absBest);
+    abstract protected String getPhenotypeRepresentation(Chromosome chromosome);
 
     private List<Chromosome> getInitialPopulation() {
         List<Chromosome> chromosomeList = new ArrayList<>();
@@ -97,6 +95,10 @@ public abstract class Problem extends Thread {
         solution.setAverageFitness(totalFitness/configuration.getPopulationSize());
         solution.setBestFitness(bestChromosome.getFitness());
         solution.setWorstFitness(population.get(0).getFitness());
+        solution.setAbsoluteBest(bestChromosome.getFitness());
+
+        String absoluteBestRepresentation = String.format("f(X) = %s \n Fitness = %.4f", getPhenotypeRepresentation(bestChromosome), bestChromosome.getFitness());
+        solution.setAbsoluteBestRepresentation(absoluteBestRepresentation);
 
         double acumulatedFitness = 0;
         //Calculamos el fitness acumulado - Muestreo estocástico - Tema02 - Pág 36

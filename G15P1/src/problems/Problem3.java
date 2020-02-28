@@ -13,7 +13,7 @@ import mutationalgorithm.MutationAlgorithm;
 import selection.SelectionAlgorithm;
 import utils.ByteOps;
 
-public class Problem3 extends MinimizationProblem {
+public class Problem3 extends Problem {
 
 	private final int SUM_ITERATIONS = 5;
 	private double tolerance = 0.001;
@@ -66,7 +66,12 @@ public class Problem3 extends MinimizationProblem {
 		fenotipo = calcSchubert(parsedVal[0], parsedVal[1]);
 		return fenotipo;
 	}
-	
+
+	@Override
+	public String getPhenotypeRepresentation(Chromosome chromosome) {
+		double parsedVal[] = decode(chromosome);
+		return String.format("[x: %.4f, y: %.4f]", parsedVal[0], parsedVal[1]);
+	}
 	
 	public double[] decode(Chromosome chromosome) {
 		boolean spl[][] = ByteOps.splitBitStream(chromosome.getGenes());
