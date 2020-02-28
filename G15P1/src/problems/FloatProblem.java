@@ -1,29 +1,31 @@
 package problems;
 
 import base.Pair;
-import crossoveralgorithm.CrossoverAlgorithm;
-import entities.Chromosome;
+import crossoveralgorithm.binaryCrossover.BinaryCrossoverAlgorithm;
+import crossoveralgorithm.floatCrossover.FloatCrossoverAlgorithm;
+import entities.FloatChromosome;
 import entities.Configuration;
 import entities.Solution;
-import mutationalgorithm.MutationAlgorithm;
+import mutationalgorithm.binaryMutation.BinaryMutationAlgorithm;
+import mutationalgorithm.floatMutation.FloatMutationAlgorithm;
 import selection.SelectionAlgorithm;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public abstract class Problem extends Thread {
-/**
-    private int numGenerations = 100;
-    private int populationSize = 100;
-    private double mutationProbability = 0.05;
-    private double crossoverProbability = 0.6;
-    private double elitePercent = 0.02; //2%
-    */
+public abstract class FloatProblem extends Thread {
+    /**
+     * private int numGenerations = 100;
+     * private int populationSize = 100;
+     * private double mutationProbability = 0.05;
+     * private double crossoverProbability = 0.6;
+     * private double elitePercent = 0.02; //2%
+     */
 
     private Random rand = new Random();
-    private CrossoverAlgorithm crossoverAlgorithm;
-    private MutationAlgorithm mutationAlgorithm;
+    private FloatCrossoverAlgorithm crossoverAlgorithm;
+    private FloatMutationAlgorithm mutationAlgorithm;
     protected final Configuration configuration;
     private SelectionAlgorithm selectionAlgorithm;
     private Delegate delegate;
@@ -32,7 +34,7 @@ public abstract class Problem extends Thread {
         void didEvaluateGeneration(int generation, Solution solution);
     }
 
-    public Problem(Configuration configuration, SelectionAlgorithm selectionAlgorithm, CrossoverAlgorithm crossoverAlgorithm, MutationAlgorithm mutationAlgorithm, Delegate delegate) {
+    public FloatProblem(Configuration configuration, SelectionAlgorithm selectionAlgorithm, FloatCrossoverAlgorithm crossoverAlgorithm, FloatMutationAlgorithm mutationAlgorithm, Delegate delegate) {
         this.configuration = configuration;
         this.selectionAlgorithm = selectionAlgorithm;
         this.crossoverAlgorithm = crossoverAlgorithm;
@@ -42,7 +44,7 @@ public abstract class Problem extends Thread {
 
     @Override
     public void run() {
-        List<Chromosome> population = getInitialPopulation();
+        List<FloatChromosome> population = getInitialPopulation();
         List<Solution> solutions = new ArrayList<>();
         Solution solution = evaluatePopulation(population);
         solution.setAbsoluteBest(solution.getBestFitness());
@@ -50,33 +52,42 @@ public abstract class Problem extends Thread {
         delegate.didEvaluateGeneration(0, solution);
         double absBest = solution.getAbsoluteBest();
         for (int i = 1; i < configuration.getNumberOfGenerations(); i++) {
-            List<Chromosome> eliteList = getElite(population);
+            List<FloatChromosome> eliteList = getElite(population);
             population = selectionAlgorithm.selectPopulation(population);
             crossPopulation(population);
             mutatePopulation(population);
             addElite(population, eliteList);
             solution = evaluatePopulation(population);
+            if (!isBetterFitness(solution.getAbsoluteBest(), absBest)) {
+                solution.setAbsoluteBest(absBest);
+            }
+            absBest = solution.getAbsoluteBest();
             solutions.add(solution);
 
             delegate.didEvaluateGeneration(i, solution);
         }
     }
 
-    abstract protected Chromosome getRandomChromosome();
-    abstract protected void sortPopulation(List<Chromosome> population);
-    abstract protected double getFitness(Chromosome chromosome);
-    abstract protected String getPhenotypeRepresentation(Chromosome chromosome);
+    protected abstract boolean isBetterFitness(double absoluteBest, double absBest);
 
-    private List<Chromosome> getInitialPopulation() {
-        List<Chromosome> chromosomeList = new ArrayList<>();
+    abstract protected FloatChromosome getRandomChromosome();
+
+    abstract protected void sortPopulation(List<FloatChromosome> population);
+
+    abstract protected double getFitness(FloatChromosome chromosome);
+
+    abstract protected String getPhenotypeRepresentation(FloatChromosome chromosome);
+
+    private List<FloatChromosome> getInitialPopulation() {
+        List<FloatChromosome> chromosomeList = new ArrayList<>();
         for (int i = 0; i < configuration.getPopulationSize(); i++) {
-            Chromosome newChromosome = getRandomChromosome();
+            FloatChromosome newChromosome = getRandomChromosome();
             chromosomeList.add(newChromosome);
         }
         return chromosomeList;
     }
 
-    public Solution evaluatePopulation(List<Chromosome> population) {
+    public Solution evaluatePopulation(List<FloatChromosome> population) {
         Solution solution = new Solution();
 
         if (population.size() == 0) {
@@ -84,15 +95,15 @@ public abstract class Problem extends Thread {
         }
 
         double totalFitness = 0;
-        for (Chromosome chromosome : population) {
+        for (FloatChromosome chromosome : population) {
             double fitness = getFitness(chromosome);
             chromosome.setFitness(fitness);
             totalFitness += fitness;
         }
 
         sortPopulation(population);
-        Chromosome bestChromosome = population.get(population.size()-1);
-        solution.setAverageFitness(totalFitness/configuration.getPopulationSize());
+        FloatChromosome bestChromosome = population.get(population.size() - 1);
+        solution.setAverageFitness(totalFitness / configuration.getPopulationSize());
         solution.setBestFitness(bestChromosome.getFitness());
         solution.setWorstFitness(population.get(0).getFitness());
         solution.setAbsoluteBest(bestChromosome.getFitness());
@@ -103,15 +114,15 @@ public abstract class Problem extends Thread {
         double acumulatedFitness = 0;
         //Calculamos el fitness acumulado - Muestreo estocástico - Tema02 - Pág 36
         //Puede cambiar para mínimos :s
-        for (int i = population.size()-1; i >= 0; i--) {
-            acumulatedFitness += population.get(i).getFitness()/totalFitness;
+        for (int i = population.size() - 1; i >= 0; i--) {
+            acumulatedFitness += population.get(i).getFitness() / totalFitness;
             population.get(i).setAcumulatedFitness(acumulatedFitness);
         }
 
         return solution;
     }
 
-    private void crossPopulation(List<Chromosome> population) {
+    private void crossPopulation(List<FloatChromosome> population) {
         List<Integer> selectedForCrossoverList = new ArrayList<>();
 
         for (int i = 0; i < configuration.getPopulationSize(); i++) {
@@ -121,48 +132,48 @@ public abstract class Problem extends Thread {
             }
         }
 
-        if (selectedForCrossoverList.size()%2 == 1) {
+        if (selectedForCrossoverList.size() % 2 == 1) {
             int randomPosition = rand.nextInt(selectedForCrossoverList.size());
             selectedForCrossoverList.remove(randomPosition);
         }
 
         for (int i = 0; i < selectedForCrossoverList.size(); i += 2) {
             int position1 = selectedForCrossoverList.get(i);
-            int position2 = selectedForCrossoverList.get(i+1);
+            int position2 = selectedForCrossoverList.get(i + 1);
 
-            Chromosome chromosomeA = population.get(position1);
-            Chromosome chromosomeB =  population.get(position2);
-            Pair<Chromosome, Chromosome> result = crossoverAlgorithm.crossOver(chromosomeA, chromosomeB);
+            FloatChromosome chromosomeA = population.get(position1);
+            FloatChromosome chromosomeB = population.get(position2);
+            Pair<FloatChromosome, FloatChromosome> result = crossoverAlgorithm.crossOver(chromosomeA, chromosomeB);
             population.set(position1, result.getElement0());
             population.set(position2, result.getElement1());
         }
     }
 
-    private void mutatePopulation(List<Chromosome> population) {
+    private void mutatePopulation(List<FloatChromosome> population) {
         for (int i = 0; i < configuration.getPopulationSize(); i++) {
-            Chromosome chromosome = population.get(i);
-            mutationAlgorithm.mutate(chromosome, configuration.getMutationValue());
+            FloatChromosome chromosome = population.get(i);
+            mutationAlgorithm.mutate(chromosome, configuration.getMutationValue(), getMin(), getMax());
             population.set(i, chromosome);
         }
     }
 
-    private List<Chromosome> getElite(List<Chromosome> population) {
-        int eliteLength = (int)Math.ceil(population.size() * configuration.getEliteValue());
+    private List<FloatChromosome> getElite(List<FloatChromosome> population) {
+        int eliteLength = (int) Math.ceil(population.size() * configuration.getEliteValue());
         if (eliteLength == 0) {
             return null;
         }
 
         sortPopulation(population);
-        List<Chromosome> eliteList = new ArrayList<>(eliteLength);
-        for (int i = (population.size() - 1), j = 0; i >= 0 &&  j < eliteLength ; i--, j++) {
-            Chromosome newCopy = population.get(i).getCopy();
+        List<FloatChromosome> eliteList = new ArrayList<>(eliteLength);
+        for (int i = (population.size() - 1), j = 0; i >= 0 && j < eliteLength; i--, j++) {
+            FloatChromosome newCopy = population.get(i).getCopy();
             eliteList.add(newCopy);
         }
 
         return eliteList;
     }
 
-    private void addElite(List<Chromosome> population, List<Chromosome> eliteList) {
+    private void addElite(List<FloatChromosome> population, List<FloatChromosome> eliteList) {
         if (eliteList == null) {
             return;
         }
@@ -170,4 +181,8 @@ public abstract class Problem extends Thread {
         population.subList(0, eliteList.size()).clear();
         population.addAll(eliteList);
     }
+
+    protected abstract double getMin();
+
+    protected abstract double getMax();
 }

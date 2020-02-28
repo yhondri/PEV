@@ -1,31 +1,33 @@
-package problems;
+package problems.binaryProblems;
 
 import base.Utils;
-import crossoveralgorithm.CrossoverAlgorithm;
-import entities.Chromosome;
+import crossoveralgorithm.binaryCrossover.BinaryCrossoverAlgorithm;
+import entities.BinaryChromosome;
 import entities.Configuration;
 import entities.Solution;
-import mutationalgorithm.MutationAlgorithm;
+import mutationalgorithm.binaryMutation.BinaryMutationAlgorithm;
+import problems.BinaryProblem;
 import selection.SelectionAlgorithm;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class Problem4 extends Problem {
+public class Problem4 extends BinaryProblem {
     double minX1 = 0;
     double maxX = Math.PI;
     private final int geneLength = Utils.getGenotypeLength(minX1, maxX, configuration.getTolerance());
 
-    public Problem4(Configuration configuration, SelectionAlgorithm selectionAlgorithm, CrossoverAlgorithm crossoverAlgorithm, MutationAlgorithm mutationAlgorithm, Delegate delegate) {
-        super(configuration, selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, delegate);
+    public Problem4(Configuration configuration, SelectionAlgorithm selectionAlgorithm, BinaryCrossoverAlgorithm binaryCrossoverAlgorithm, BinaryMutationAlgorithm mutationAlgorithm, Delegate delegate) {
+        super(configuration, selectionAlgorithm, binaryCrossoverAlgorithm, mutationAlgorithm, delegate);
     }
 
     @Override
-    protected Chromosome getRandomChromosome() {
+    protected BinaryChromosome getRandomChromosome() {
         Random random = new Random();
-        Chromosome chromosome = new Chromosome();
-        boolean[] chromosomeArray = new boolean[geneLength*configuration.getnValue()];
+        BinaryChromosome chromosome = new BinaryChromosome();
+        boolean[] chromosomeArray = new boolean[geneLength * configuration.getnValue()];
         for (int i = 0; i < chromosomeArray.length; i++) {
             chromosomeArray[i] = random.nextBoolean();
         }
@@ -35,8 +37,15 @@ public class Problem4 extends Problem {
         return chromosome;
     }
 
+
     @Override
-    protected void sortPopulation(List<Chromosome> population) {
+    protected boolean isBetterFitness(double absoluteBest, double absBest) {
+        return absoluteBest < absBest;
+    }
+
+
+    @Override
+    protected void sortPopulation(List<BinaryChromosome> population) {
         Collections.sort(population, Collections.reverseOrder());
     }
 
@@ -45,22 +54,21 @@ public class Problem4 extends Problem {
     }
 
     @Override
-    protected double getFitness(Chromosome chromosome) {
+    protected double getFitness(BinaryChromosome chromosome) {
         List<Double> phenotypeList = getPhenotype(chromosome.getGenes());
         double result = 0;
         for (int i = 1; i <= configuration.getnValue(); i++) {
-            double value = phenotypeList.get(i-1);
-            double parentesis = Math.sin(((i+1)*Math.pow(value, 2))/Math.PI);
-            result += Math.sin(value)*Math.pow(parentesis, 20);
+            double value = phenotypeList.get(i - 1);
+            double parentesis = Math.sin(((i + 1) * Math.pow(value, 2)) / Math.PI);
+            result += Math.sin(value) * Math.pow(parentesis, 20);
         }
 
         return -result;
     }
 
 
-
     @Override
-    public String getPhenotypeRepresentation(Chromosome chromosome) {
+    public String getPhenotypeRepresentation(BinaryChromosome chromosome) {
         List<Double> phenotypeList = getPhenotype(chromosome.getGenes());
         return phenotypeList.toString();
     }

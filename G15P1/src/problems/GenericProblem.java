@@ -1,8 +1,9 @@
 package problems;
 
-import entities.Chromosome;
+import entities.BinaryChromosome;
 
 public interface GenericProblem {
-    public double getFitness(Chromosome chromosome);
-    Chromosome getRandomChromosome();
+	public double getFitness(BinaryChromosome chromosome);
+
+	BinaryChromosome getRandomChromosome();
 }

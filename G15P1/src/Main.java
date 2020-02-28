@@ -1,7 +1,3 @@
-import problems.Problem1;
-import problems.Problem2;
-import problems.Problem3;
-
 public class Main {
 
     int numGenerations = 0;

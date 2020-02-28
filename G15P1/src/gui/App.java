@@ -1,30 +1,37 @@
 package gui;
 
-import crossoveralgorithm.CrossoverAlgorithm;
-import crossoveralgorithm.SinglePointCrossover;
-import crossoveralgorithm.UniformCrossover;
+import crossoveralgorithm.binaryCrossover.BinaryCrossoverAlgorithm;
+import crossoveralgorithm.binaryCrossover.SinglePointBinaryCrossover;
+import crossoveralgorithm.binaryCrossover.UniformBinaryCrossover;
+import crossoveralgorithm.floatCrossover.ArithmeticFloatCrossover;
+import crossoveralgorithm.floatCrossover.FloatCrossoverAlgorithm;
+import crossoveralgorithm.floatCrossover.SinglePointFloatCrossover;
+import crossoveralgorithm.floatCrossover.UniformFloatCrossover;
 import entities.Configuration;
-import entities.CrossoverAlgorithmType;
-import entities.MutationAlgorithmType;
 import entities.Solution;
-import mutationalgorithm.BasicMutation;
-import mutationalgorithm.MutationAlgorithm;
+import mutationalgorithm.binaryMutation.BasicBinaryMutation;
+import mutationalgorithm.binaryMutation.BinaryMutationAlgorithm;
+import mutationalgorithm.floatMutation.FloatMutationAlgorithm;
+import mutationalgorithm.floatMutation.UniformFloatMutation;
 import org.math.plot.Plot2DPanel;
 import org.math.plot.plots.LinePlot;
 import problems.*;
+import problems.binaryProblems.Problem1;
+import problems.binaryProblems.Problem2;
+import problems.binaryProblems.Problem3;
+import problems.binaryProblems.Problem4;
+import problems.floatProblems.Problem4Float;
 import selection.RouletteSelection;
 import selection.SelectionAlgorithm;
 import selection.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
 
 @SuppressWarnings("ALL")
-public class App implements Problem.Delegate {
+public class App implements BinaryProblem.Delegate, FloatProblem.Delegate {
     private JButton resetButton;
     private JPanel panelMain;
     private JLabel numberOfGenerationsLabel;
@@ -54,6 +61,7 @@ public class App implements Problem.Delegate {
     private LinePlot absoluteBestLinePlot;
 
     private Configuration configuration;
+    private boolean isFloatProblem = false;
     private ArrayList<double[]> bestArrayList;
     private ArrayList<double[]> averageArrayList;
     private ArrayList<double[]> worseArrayList;
@@ -108,7 +116,7 @@ public class App implements Problem.Delegate {
         eliteSpinnerTextField.setEditable(false);
         eliteSpinnerTextField.setBackground(Color.white);
 
-        String[] problems = new String[] {"Problema 1", "Problema 2", "Problema 3", "Problema 4"};
+        String[] problems = new String[]{"Problema 1", "Problema 2", "Problema 3", "Problema 4", "Problema 4 (R)"};
         DefaultComboBoxModel problemsModel = new DefaultComboBoxModel(problems);
         problemComboBox.setModel(problemsModel);
 
@@ -150,16 +158,31 @@ public class App implements Problem.Delegate {
 
     private void setupListeners() {
         problemComboBox.addActionListener (e -> {
-            boolean enabled = (problemComboBox.getSelectedIndex() == 3);
-            nValueSpinner.setEnabled(enabled);
+            isFloatProblem = problemComboBox.getSelectedIndex() == 4;
+            boolean nValueEnabled = (problemComboBox.getSelectedIndex() == 3 || isFloatProblem);
+            nValueSpinner.setEnabled(nValueEnabled);
 
-            if (!enabled) {
+            if (!nValueEnabled) {
                 nValueSpinner.setValue(1);
+            }
+            if (isFloatProblem) {
+                DefaultComboBoxModel floatCrossover = new DefaultComboBoxModel(new String[]{"Monopunto", "Discreto Uniforme", "Aritmético"});
+                crossoverAlgorithmComboBox.setModel(floatCrossover);
+                DefaultComboBoxModel floatMutation = new DefaultComboBoxModel(new String[]{"Uniforme"});
+                mutationComboBox.setModel(floatMutation);
+            } else {
+                DefaultComboBoxModel floatCrossover = new DefaultComboBoxModel(new String[]{"Monopunto", "Uniforme"});
+                crossoverAlgorithmComboBox.setModel(floatCrossover);
+                DefaultComboBoxModel floatMutation = new DefaultComboBoxModel(new String[]{"Basic mutation"});
+                mutationComboBox.setModel(floatMutation);
             }
         });
 
         runButton.addActionListener(e -> {
-            this.setupAlgorithm();
+            if (!isFloatProblem)
+                this.setupBinaryAlgorithm();
+            else
+                this.setupFloatAlgorithm();
         });
 
         resetButton.addActionListener(e -> {
@@ -168,7 +191,7 @@ public class App implements Problem.Delegate {
         });
     }
 
-    private void setupAlgorithm() {
+    private void setupBinaryAlgorithm() {
         int populationSize = (int) populationSizeSpinner.getValue();
         int numberOfGenerations = (int) numberOfGenerationsSpinner.getValue();
         double crossoverValue = (double) crossoverValueSpinner.getValue();
@@ -194,46 +217,102 @@ public class App implements Problem.Delegate {
                 break;
         }
 
-        CrossoverAlgorithm crossoverAlgorithm = null;
+        BinaryCrossoverAlgorithm binaryCrossoverAlgorithm = null;
         switch (crossoverAlgorithmComboBox.getSelectedIndex()) {
             case 0:
-                crossoverAlgorithm = new SinglePointCrossover(random);
+                binaryCrossoverAlgorithm = new SinglePointBinaryCrossover(random);
                 break;
             case 1:
-                crossoverAlgorithm = new UniformCrossover(0.5);
+                binaryCrossoverAlgorithm = new UniformBinaryCrossover(0.5);
                 break;
             default:
                 break;
         }
 
-        MutationAlgorithm mutationAlgorithm = null;
+        BinaryMutationAlgorithm mutationAlgorithm = null;
         switch (mutationComboBox.getSelectedIndex()) {
             case 0:
-                mutationAlgorithm = new BasicMutation();
+                mutationAlgorithm = new BasicBinaryMutation();
             default:
                 break;
         }
 
         Configuration configuration = new Configuration(populationSize, numberOfGenerations, crossoverValue, mutationValue, eliteValue, nValue);
 
-        Problem problem = null;
+        BinaryProblem problem = null;
         switch (problemComboBox.getSelectedIndex()) {
             case 0:
-                problem = new Problem1(configuration,selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
+                problem = new Problem1(configuration, selectionAlgorithm, binaryCrossoverAlgorithm, mutationAlgorithm, this);
                 break;
             case 1:
-                problem = new Problem2(configuration,selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
+                problem = new Problem2(configuration, selectionAlgorithm, binaryCrossoverAlgorithm, mutationAlgorithm, this);
                 break;
             case 2:
-                problem = new Problem3(configuration, selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
+                problem = new Problem3(configuration, selectionAlgorithm, binaryCrossoverAlgorithm, mutationAlgorithm, this);
                 break;
             case 3:
-                problem = new Problem4(configuration, selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
+                problem = new Problem4(configuration, selectionAlgorithm, binaryCrossoverAlgorithm, mutationAlgorithm, this);
                 break;
             default:
-                //problem = new Problem3(configuration,selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, this);
                 break;
         }
+        initChartPanel();
+        plot2DPanel.layout();
+        problem.start();
+    }
+
+    private void setupFloatAlgorithm() {
+        int populationSize = (int) populationSizeSpinner.getValue();
+        int numberOfGenerations = (int) numberOfGenerationsSpinner.getValue();
+        double crossoverValue = (double) crossoverValueSpinner.getValue();
+        double mutationValue = (double) mutationPercentSpinner.getValue();
+        double eliteValue = (double) eliteSpinner.getValue();
+        int nValue = (int) nValueSpinner.getValue();
+
+        SelectionAlgorithm selectionAlgorithm = null;
+        switch (selectionAlgorithmComboBox.getSelectedIndex()) {
+            case 0:
+                selectionAlgorithm = new RouletteSelection();
+                break;
+            case 1:
+                selectionAlgorithm = new UniversalStochastic();
+                break;
+            case 2:
+                selectionAlgorithm = new TournamentSelection();
+                break;
+            case 3:
+                selectionAlgorithm = new TruncationSelection();
+                break;
+            default:
+                break;
+        }
+
+        FloatCrossoverAlgorithm floatCrossoverAlgorithm = null;
+        switch (crossoverAlgorithmComboBox.getSelectedIndex()) {
+            case 0:
+                floatCrossoverAlgorithm = new SinglePointFloatCrossover(random);
+                break;
+            case 1:
+                floatCrossoverAlgorithm = new UniformFloatCrossover(0.5);
+                break;
+            case 2:
+                floatCrossoverAlgorithm = new ArithmeticFloatCrossover(0.5);
+                break;
+            default:
+                break;
+        }
+
+        FloatMutationAlgorithm mutationAlgorithm = null;
+        switch (mutationComboBox.getSelectedIndex()) {
+            case 0:
+                mutationAlgorithm = new UniformFloatMutation();
+            default:
+                break;
+        }
+
+        Configuration configuration = new Configuration(populationSize, numberOfGenerations, crossoverValue, mutationValue, eliteValue, nValue);
+
+        FloatProblem problem = new Problem4Float(configuration, selectionAlgorithm, floatCrossoverAlgorithm, mutationAlgorithm, this);
         initChartPanel();
         plot2DPanel.layout();
         problem.start();
@@ -243,8 +322,8 @@ public class App implements Problem.Delegate {
     public void didEvaluateGeneration(int generation, Solution solution) {
         SwingUtilities.invokeLater(() -> {
             absoluteBestJTextPane.setText(solution.getAbsoluteBestRepresentation());
-            bestArrayList.add(new double[] {generation, solution.getBestFitness()});
-            averageArrayList.add(new double[] {generation, solution.getAverageFitness()});
+            bestArrayList.add(new double[]{generation, solution.getBestFitness()});
+            averageArrayList.add(new double[]{generation, solution.getAverageFitness()});
             worseArrayList.add(new double[]{generation, solution.getWorstFitness()});
             absoluteBestArrayList.add(new double[]{generation, solution.getAbsoluteBest()});
 

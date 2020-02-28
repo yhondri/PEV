@@ -1,98 +1,71 @@
 package entities;
 
-public class Chromosome implements Comparable<Chromosome> {
-    private boolean[] genes;
-    private double phenotype;
-    private double fitness;
-    private double puntuation;
-    private int genesLength;
-    private double grade;
-    private double acumulatedGrade;
-    //Probabilidad de selección
-    private double acumulatedFitness;
+public abstract class Chromosome implements Comparable<Chromosome> {
+	private double phenotype;
+	private double fitness;
+	private double puntuation;
+	private int genesLength;
+	private double grade;
+	private double acumulatedGrade;
+	//Probabilidad de selección
+	private double acumulatedFitness;
 
-    public Chromosome() {}
+	public double getPhenotype() {
+		return phenotype;
+	}
 
-    public Chromosome(boolean[] genes) {
-        this.genes = genes;
-    }
+	public void setPhenotype(double phenotype) {
+		this.phenotype = phenotype;
+	}
 
-    public boolean[] getGenes() {
-        return genes;
-    }
+	public double getFitness() {
+		return fitness;
+	}
 
-    public void setGenes(boolean[] genes) {
-        this.genes = genes;
-    }
+	public void setFitness(double fitness) {
+		this.fitness = fitness;
+	}
 
-    public double getPhenotype() {
-        return phenotype;
-    }
+	public double getPuntuation() {
+		return puntuation;
+	}
 
-    public void setPhenotype(double phenotype) {
-        this.phenotype = phenotype;
-    }
+	public void setPuntuation(double puntuation) {
+		this.puntuation = puntuation;
+	}
 
-    public double getFitness() {
-        return fitness;
-    }
+	public abstract int getGenesLength();
 
-    public void setFitness(double fitness) {
-        this.fitness = fitness;
-    }
+	public void setGenesLength(int genesLength) {
+		this.genesLength = genesLength;
+	}
 
-    public double getPuntuation() {
-        return puntuation;
-    }
+	public double getGrade() {
+		return grade;
+	}
 
-    public void setPuntuation(double puntuation) {
-        this.puntuation = puntuation;
-    }
+	public void setGrade(double grade) {
+		this.grade = grade;
+	}
 
-    public int getGenesLength() {
-        return genes.length;
-    }
+	public double getAcumulatedGrade() {
+		return acumulatedGrade;
+	}
 
-    public void setGenesLength(int genesLength) {
-        this.genesLength = genesLength;
-    }
+	public void setAcumulatedGrade(double acumulatedGrade) {
+		this.acumulatedGrade = acumulatedGrade;
+	}
 
-    public double getGrade() {
-        return grade;
-    }
+	public double getAcumulatedFitness() {
+		return acumulatedFitness;
+	}
 
-    public void setGrade(double grade) {
-        this.grade = grade;
-    }
+	public void setAcumulatedFitness(double acumulatedFitness) {
+		this.acumulatedFitness = acumulatedFitness;
+	}
 
-    public double getAcumulatedGrade() {
-        return acumulatedGrade;
-    }
-
-    public void setAcumulatedGrade(double acumulatedGrade) {
-        this.acumulatedGrade = acumulatedGrade;
-    }
-
-    public double getAcumulatedFitness() {
-        return acumulatedFitness;
-    }
-
-    public void setAcumulatedFitness(double acumulatedFitness) {
-        this.acumulatedFitness = acumulatedFitness;
-    }
-
-    @Override
-    public int compareTo(Chromosome obj) {
-        return Double.compare(this.getFitness(), obj.getFitness());
-    }
-
-    public Chromosome getCopy() {
-        Chromosome chromosome = new Chromosome();
-        boolean[] genesCopy = new boolean[genes.length];
-        for (int i = 0; i < genes.length; i++) {
-            genesCopy[i] = genes[i];
-        }
-        chromosome.genes = genesCopy;
-        return chromosome;
-    }
+	@Override
+	public int compareTo(Chromosome obj) {
+		return Double.compare(this.getFitness(), obj.getFitness());
+	}
 }

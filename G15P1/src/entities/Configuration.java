@@ -1,9 +1,5 @@
 package entities;
 
-import crossoveralgorithm.CrossoverAlgorithm;
-import mutationalgorithm.MutationAlgorithm;
-import selection.SelectionAlgorithm;
-
 public class Configuration {
     private int populationSize;
     private int numberOfGenerations;

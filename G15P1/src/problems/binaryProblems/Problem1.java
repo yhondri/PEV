@@ -1,31 +1,37 @@
-package problems;
+package problems.binaryProblems;
 
 import base.Utils;
-import crossoveralgorithm.CrossoverAlgorithm;
-import entities.Chromosome;
+import crossoveralgorithm.binaryCrossover.BinaryCrossoverAlgorithm;
+import entities.BinaryChromosome;
 import entities.Configuration;
 import entities.Solution;
-import mutationalgorithm.MutationAlgorithm;
+import mutationalgorithm.binaryMutation.BinaryMutationAlgorithm;
+import problems.BinaryProblem;
 import selection.SelectionAlgorithm;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class Problem1 extends Problem {
+public class Problem1 extends BinaryProblem {
 
     double minX1 = -3.0, minX2 = 4.1, maxX1 = 12.1, maxX2 = 5.8;
     private final int geneALength = Utils.getGenotypeLength(minX1, maxX1, configuration.getTolerance());
     private final int geneBLength = Utils.getGenotypeLength(minX2, maxX2, configuration.getTolerance());
 
-    public Problem1(Configuration configuration, SelectionAlgorithm selectionAlgorithm, CrossoverAlgorithm crossoverAlgorithm, MutationAlgorithm mutationAlgorithm, Delegate delegate) {
-        super(configuration, selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, delegate);
+    public Problem1(Configuration configuration, SelectionAlgorithm selectionAlgorithm, BinaryCrossoverAlgorithm binaryCrossoverAlgorithm, BinaryMutationAlgorithm mutationAlgorithm, Delegate delegate) {
+        super(configuration, selectionAlgorithm, binaryCrossoverAlgorithm, mutationAlgorithm, delegate);
     }
 
     @Override
-    public double getFitness(Chromosome chromosome) {
-        double phenotypeA = getPhenotype(chromosome.getGenes(),0,geneALength-1, geneALength, minX1, maxX1, true);
-        double phenotypeB = getPhenotype(chromosome.getGenes(), geneALength, (geneALength+geneBLength-1), geneBLength, minX2, maxX2, false);
+    protected boolean isBetterFitness(double absoluteBest, double absBest) {
+        return absoluteBest > absBest;
+    }
+
+    @Override
+    public double getFitness(BinaryChromosome chromosome) {
+        double phenotypeA = getPhenotype(chromosome.getGenes(), 0, geneALength - 1, geneALength, minX1, maxX1, true);
+        double phenotypeB = getPhenotype(chromosome.getGenes(), geneALength, (geneALength + geneBLength - 1), geneBLength, minX2, maxX2, false);
         //phenotypeA = 11.625;
         //phenotypeB = 5.726;
         //double result = 21.5 + phenotypeA * Math.sin(4 * Math.PI * phenotypeA) + phenotypeB * Math.sin(20 * Math.PI * phenotypeB);
@@ -38,15 +44,15 @@ public class Problem1 extends Problem {
     }
 
     @Override
-    public String getPhenotypeRepresentation(Chromosome chromosome) {
-        double phenotypeA = getPhenotype(chromosome.getGenes(),0,geneALength-1, geneALength, minX1, maxX1, true);
-        double phenotypeB = getPhenotype(chromosome.getGenes(), geneALength, (geneALength+geneBLength-1), geneBLength, minX2, maxX2, false);
+    public String getPhenotypeRepresentation(BinaryChromosome chromosome) {
+        double phenotypeA = getPhenotype(chromosome.getGenes(), 0, geneALength - 1, geneALength, minX1, maxX1, true);
+        double phenotypeB = getPhenotype(chromosome.getGenes(), geneALength, (geneALength + geneBLength - 1), geneBLength, minX2, maxX2, false);
         return String.format("[%.4f, %.4f]", phenotypeA, phenotypeB);
     }
 
     @Override
-    public Chromosome getRandomChromosome() {
-        Chromosome chromosome = new Chromosome();
+    public BinaryChromosome getRandomChromosome() {
+        BinaryChromosome chromosome = new BinaryChromosome();
         boolean[] chromosomeArray = new boolean[geneALength + geneBLength];
         Random random = new Random();
 
@@ -60,7 +66,7 @@ public class Problem1 extends Problem {
     }
 
     @Override
-    protected void sortPopulation(List<Chromosome> population) {
+    protected void sortPopulation(List<BinaryChromosome> population) {
         Collections.sort(population);
     }
 
