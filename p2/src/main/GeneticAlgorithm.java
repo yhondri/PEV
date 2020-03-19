@@ -1,3 +1,5 @@
+package main;
+
 import crossover.CrossoverAlgorithm;
 import entities.Configuration;
 import entities.PathChromosome;
@@ -6,8 +8,6 @@ import helper.Pair;
 import mutation.MutationAlgorithm;
 import selection.SelectionAlgorithm;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class GeneticAlgorithm extends Thread  {
     private Configuration configuration;
@@ -17,14 +17,16 @@ public class GeneticAlgorithm extends Thread  {
     private final Random random = new Random();
     private int[][] flujoMatrix;
     private int[][] distanciaMatrix;
+    private final GeneticAlgorithmDelegate delegate;
 
-    public GeneticAlgorithm(Configuration configuration, SelectionAlgorithm selectionAlgorithm, CrossoverAlgorithm crossoverAlgorithm, MutationAlgorithm mutationAlgorithm, int[][] flujoMatrix, int[][] distanciaMatrix) {
+    public GeneticAlgorithm(Configuration configuration, SelectionAlgorithm selectionAlgorithm, CrossoverAlgorithm crossoverAlgorithm, MutationAlgorithm mutationAlgorithm, int[][] flujoMatrix, int[][] distanciaMatrix, GeneticAlgorithmDelegate delegate) {
         this.configuration = configuration;
         this.selectionAlgorithm = selectionAlgorithm;
         this.crossoverAlgorithm = crossoverAlgorithm;
         this.mutationAlgorithm = mutationAlgorithm;
         this.flujoMatrix = flujoMatrix;
         this.distanciaMatrix = distanciaMatrix;
+        this.delegate = delegate;
     }
 
 //    private void checkDuplicates(List<PathChromosome> population) {
@@ -45,7 +47,7 @@ public class GeneticAlgorithm extends Thread  {
         Solution solution = evaluatePopulation(population);
         solution.setAbsoluteBest(solution.getBestFitness());
         solutions.add(solution);
-//        delegate.didEvaluateGeneration(0, solution);
+        delegate.didEvaluateGeneration(0, solution);
         double absBest = solution.getAbsoluteBest();
         for (int i = 1; i < configuration.getNumberOfGenerations(); i++) {
             List<PathChromosome> eliteList = getElite(population);
@@ -60,11 +62,8 @@ public class GeneticAlgorithm extends Thread  {
             absBest = solution.getAbsoluteBest();
             solutions.add(solution);
 
-//            delegate.didEvaluateGeneration(i, solution);
+            delegate.didEvaluateGeneration(i, solution);
         }
-
-        int t = 2;
-        t += 2;
     }
 
     private List<PathChromosome> getInitialPopulation() {
@@ -106,7 +105,7 @@ public class GeneticAlgorithm extends Thread  {
         solution.setWorstFitness(population.get(0).getFitness());
         solution.setAbsoluteBest(bestChromosome.getFitness());
 
-        String absoluteBestRepresentation = String.format("Permutación %s", bestChromosome.getGenes().toString());
+        String absoluteBestRepresentation = String.format("Permutación: %s\nAptitud: %.2f", bestChromosome.getGenes().toString(), bestChromosome.getFitness());
         solution.setAbsoluteBestRepresentation(absoluteBestRepresentation);
 
         double acumulatedFitness = 0;
@@ -179,7 +178,7 @@ public class GeneticAlgorithm extends Thread  {
     }
 
     private boolean isBetterFitness(double absoluteBest, double absBest) {
-        return absoluteBest > absBest;
+        return absoluteBest < absBest;
     }
 
     private List<PathChromosome> getElite(List<PathChromosome> population) {
