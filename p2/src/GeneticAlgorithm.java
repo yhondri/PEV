@@ -18,13 +18,23 @@ public class GeneticAlgorithm extends Thread  {
     private int[][] flujoMatrix;
     private int[][] distanciaMatrix;
 
-    public GeneticAlgorithm(Configuration configuration, SelectionAlgorithm selectionAlgorithm, CrossoverAlgorithm crossoverAlgorithm, int[][] flujoMatrix, int[][] distanciaMatrix) {
+    public GeneticAlgorithm(Configuration configuration, SelectionAlgorithm selectionAlgorithm, CrossoverAlgorithm crossoverAlgorithm, MutationAlgorithm mutationAlgorithm, int[][] flujoMatrix, int[][] distanciaMatrix) {
         this.configuration = configuration;
         this.selectionAlgorithm = selectionAlgorithm;
         this.crossoverAlgorithm = crossoverAlgorithm;
+        this.mutationAlgorithm = mutationAlgorithm;
         this.flujoMatrix = flujoMatrix;
         this.distanciaMatrix = distanciaMatrix;
     }
+
+//    private void checkDuplicates(List<PathChromosome> population) {
+//        for (PathChromosome pathChromosome : population) {
+//            Set<Integer> set = new HashSet<>(pathChromosome.getGenes());
+//            if (set.size() < pathChromosome.getGenes().size()) {
+//                System.out.println("Stop, hay duplicados");
+//            }
+//        }
+//    }
 
     @Override
     public void run() {
@@ -41,7 +51,7 @@ public class GeneticAlgorithm extends Thread  {
             List<PathChromosome> eliteList = getElite(population);
             population = selectionAlgorithm.selectPopulation(population);
             crossPopulation(population);
-//            mutatePopulation(population);
+            mutatePopulation(population);
             addElite(population, eliteList);
             solution = evaluatePopulation(population);
             if (!isBetterFitness(solution.getAbsoluteBest(), absBest)) {
@@ -111,12 +121,18 @@ public class GeneticAlgorithm extends Thread  {
     }
 
     private void sortPopulation(List<PathChromosome> population) {
-        Collections.sort(population);
+        Collections.sort(population, Collections.reverseOrder());
     }
 
     private double getFitness(PathChromosome chromosome) {
         double fitnes = 0;
-
+//        List<Integer> fakeList = new ArrayList<>();
+//        fakeList.add(2);
+//        fakeList.add(3);
+//        fakeList.add(4);
+//        fakeList.add(0);
+//        fakeList.add(1);
+//        chromosome = new PathChromosome(fakeList);
         for (int i = 0; i < chromosome.getGenes().size(); i++) {
             for (int j = 0; j < chromosome.getGenes().size(); j++) {
                 fitnes += distanciaMatrix[i][j] * flujoMatrix[chromosome.getGenes().get(i)][chromosome.getGenes().get(j)];
@@ -155,15 +171,15 @@ public class GeneticAlgorithm extends Thread  {
 
 
     private void mutatePopulation(List<PathChromosome> population) {
-//        for (int i = 0; i < configuration.getPopulationSize(); i++) {
-//            PathChromosome chromosome = population.get(i);
-//            mutationAlgorithm.mutate(chromosome, configuration.getMutationValue());
-//            population.set(i, chromosome);
-//        }
+        for (int i = 0; i < configuration.getPopulationSize(); i++) {
+            PathChromosome chromosome = population.get(i);
+            mutationAlgorithm.mutate(chromosome, configuration.getMutationValue());
+            population.set(i, chromosome);
+        }
     }
 
     private boolean isBetterFitness(double absoluteBest, double absBest) {
-        return absoluteBest < absBest;
+        return absoluteBest > absBest;
     }
 
     private List<PathChromosome> getElite(List<PathChromosome> population) {
