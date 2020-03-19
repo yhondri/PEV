@@ -59,16 +59,6 @@ public class App implements GeneticAlgorithmDelegate {
         frame.setMinimumSize(new Dimension(800, 600));
         frame.pack();
         frame.setVisible(true);
-
-//        ReaderHelper readerHelper = new ReaderHelper();
-//        readerHelper.readFile("ajuste.txt");
-
-//        Configuration configuration = new Configuration("", readerHelper.getChromosomeSize(), 100, 100, 0.6, 0.05, 0.02);
-//        SelectionAlgorithm selectionAlgorithm = new RouletteSelection();
-//        CrossoverAlgorithm crossoverAlgorithm = new PMXCrossover();
-//        MutationAlgorithm mutationAlgorithm = new MutacionPorInversion();
-//        GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(configuration, selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, readerHelper.getFlujoMatrix(), readerHelper.getDistanciaMatrix());
-//        geneticAlgorithm.run();
     }
 
     public App() {
@@ -144,24 +134,6 @@ public class App implements GeneticAlgorithmDelegate {
     }
 
     private void setupListeners() {
-        problemComboBox.addActionListener (e -> {
-//            isFloatProblem = problemComboBox.getSelectedIndex() == 4;
-//            boolean nValueEnabled = (problemComboBox.getSelectedIndex() == 3 || isFloatProblem);
-//
-//
-//            if (isFloatProblem) {
-//                DefaultComboBoxModel floatCrossover = new DefaultComboBoxModel(new String[]{"Monopunto", "Discreto Uniforme", "Aritmético"});
-//                crossoverAlgorithmComboBox.setModel(floatCrossover);
-//                DefaultComboBoxModel floatMutation = new DefaultComboBoxModel(new String[]{"Uniforme"});
-//                mutationComboBox.setModel(floatMutation);
-//            } else {
-//                DefaultComboBoxModel floatCrossover = new DefaultComboBoxModel(new String[]{"Monopunto", "Uniforme"});
-//                crossoverAlgorithmComboBox.setModel(floatCrossover);
-//                DefaultComboBoxModel floatMutation = new DefaultComboBoxModel(new String[]{"Basic mutation"});
-//                mutationComboBox.setModel(floatMutation);
-//            }
-        });
-
         runButton.addActionListener(e -> {
             setupAlgorithm();
         });

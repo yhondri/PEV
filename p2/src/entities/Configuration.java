@@ -8,7 +8,6 @@ public class Configuration {
     private double crossoverValue;
     private double mutationValue;
     private double eliteValue;
-    private final double tolerance = 0.0001;
 
     public Configuration(String dataFileName, int chromosomeSize, int populationSize, int numberOfGenerations, double crossoverValue, double mutationValue, double eliteValue) {
         this.dataFileName = dataFileName;
@@ -18,10 +17,6 @@ public class Configuration {
         this.crossoverValue = crossoverValue;
         this.mutationValue = mutationValue;
         this.eliteValue = eliteValue;
-    }
-
-    public String getDataFileName() {
-        return dataFileName;
     }
 
     public int getChromosomeSize() {
