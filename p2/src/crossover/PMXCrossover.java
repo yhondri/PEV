@@ -9,7 +9,6 @@ public class PMXCrossover implements CrossoverAlgorithm {
     @Override
     public Pair<PathChromosome, PathChromosome> crossOver(PathChromosome chromosomeA, PathChromosome chromosomeB) {
         Random random = new Random();
-        Pair<PathChromosome, PathChromosome> descendants = new Pair<>(chromosomeA.getCopy(), chromosomeB.getCopy());
         List<Integer> genesA = new ArrayList<>(Collections.nCopies(chromosomeA.getGenes().size(), chromosomeA.getGenes().size()+1));
         List<Integer> genesB = new ArrayList<>(Collections.nCopies(chromosomeA.getGenes().size(), chromosomeA.getGenes().size()+1));
 
@@ -58,6 +57,6 @@ public class PMXCrossover implements CrossoverAlgorithm {
             }
         }
 
-        return descendants;
+        return new Pair<>(new PathChromosome(genesA), new PathChromosome(genesB));
     }
 }
