@@ -26,7 +26,15 @@ public class PathChromosome implements Comparable<PathChromosome> {
         this.genes = genes;
     }
 
-    public List<Integer> clonseGenes() {
+    /**
+     * Java es "pass by value" lo que quiere decir que cuando pasamos un
+     * elemento a un método estamos pasando la dirección de memoria.
+     * Es imprescindible utilizar este método si queremos crear un elemento nuevo (llamémoslo B)
+     * utilizando el genotipo de otro elemento (A) ya que de lo contrario si copiamos directamente el geenotipo (de A)
+     * al manipularlo en el nuevo objeto estaremos cambiádolo en el actual, es decir, lo que cambiemos en B cambiará en A.
+     * Imprescindible para Mutaciones
+     * */
+    public List<Integer> cloneGenotype() {
         return new ArrayList<>(genes);
     }
 

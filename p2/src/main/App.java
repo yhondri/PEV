@@ -5,6 +5,8 @@ import crossover.PMXCrossover;
 import entities.Configuration;
 import entities.Solution;
 import helper.ReaderHelper;
+import mutation.MutacionPorInsercion;
+import mutation.MutacionPorIntercambio;
 import mutation.MutacionPorInversion;
 import mutation.MutationAlgorithm;
 import org.math.plot.Plot2DPanel;
@@ -85,7 +87,7 @@ public class App implements GeneticAlgorithmDelegate {
         crossoverSpinnerTextField.setEditable(false);
         crossoverSpinnerTextField.setBackground(Color.white);
 
-        String[] mutationAlgorithms = new String[] {"Inserción"};
+        String[] mutationAlgorithms = new String[] {"Mutación por Inversión", "Mutación por Intercambio", "Mutación por inserción"};
         DefaultComboBoxModel mutationModel = new DefaultComboBoxModel(mutationAlgorithms);
         mutationComboBox.setModel(mutationModel);
         SpinnerNumberModel mutationSpinnerDataModel = new SpinnerNumberModel(0.05, 0.0, 100.0, 0.01);
@@ -164,6 +166,10 @@ public class App implements GeneticAlgorithmDelegate {
         switch (mutationComboBox.getSelectedIndex()) {
             case 0:
                 mutationAlgorithm = new MutacionPorInversion();
+            case 1:
+                mutationAlgorithm = new MutacionPorIntercambio();
+            case 2:
+                mutationAlgorithm = new MutacionPorInsercion();
             default:
                 break;
         }
