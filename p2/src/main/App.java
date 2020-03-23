@@ -1,9 +1,6 @@
 package main;
 
-import crossover.CrossoverAlgorithm;
-import crossover.CrucePorCiclosCX;
-import crossover.CrucePorOrdenOX;
-import crossover.PMXCrossover;
+import crossover.*;
 import entities.Configuration;
 import entities.Solution;
 import helper.ReaderHelper;
@@ -80,7 +77,7 @@ public class App implements GeneticAlgorithmDelegate {
         String[] selectionAlgorithms = new String[] {"Ruleta"};
         DefaultComboBoxModel selectionModel = new DefaultComboBoxModel(selectionAlgorithms);
         selectionAlgorithmComboBox.setModel(selectionModel);
-        String[] crossoverAlgorithms = new String[]{"PMX", "Cruce por orden (OX)", "Cruce por ciclos (CX)"};
+        String[] crossoverAlgorithms = new String[]{"PMX", "Cruce por orden (OX)", "Cruce por ciclos (CX)", "Cruce por recombinacion de rutas"};
         DefaultComboBoxModel crossoverModel = new DefaultComboBoxModel(crossoverAlgorithms);
         crossoverAlgorithmComboBox.setModel(crossoverModel);
         SpinnerNumberModel crossoverSpinnerDataModel = new SpinnerNumberModel(0.6, 0.0, 100.0, 0.01);
@@ -187,6 +184,8 @@ public class App implements GeneticAlgorithmDelegate {
             case 2:
                 crossoverAlgorithm = new CrucePorCiclosCX();
                 break;
+            case 3:
+                crossoverAlgorithm = new CrucePorRecombinacionDeRutas();
             default:
                 break;
         }
