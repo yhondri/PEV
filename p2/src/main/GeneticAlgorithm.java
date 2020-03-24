@@ -9,23 +9,21 @@ import mutation.MutationAlgorithm;
 import selection.SelectionAlgorithm;
 import java.util.*;
 
-public class GeneticAlgorithm extends Thread  {
+public class GeneticAlgorithm extends Thread {
     private Configuration configuration;
     private SelectionAlgorithm selectionAlgorithm;
     private CrossoverAlgorithm crossoverAlgorithm;
     private MutationAlgorithm mutationAlgorithm;
     private final Random random = new Random();
-    private int[][] flujoMatrix;
-    private int[][] distanciaMatrix;
+    private FitnessCalculator fitnessCalculator;
     private final GeneticAlgorithmDelegate delegate;
 
-    public GeneticAlgorithm(Configuration configuration, SelectionAlgorithm selectionAlgorithm, CrossoverAlgorithm crossoverAlgorithm, MutationAlgorithm mutationAlgorithm, int[][] flujoMatrix, int[][] distanciaMatrix, GeneticAlgorithmDelegate delegate) {
+    public GeneticAlgorithm(Configuration configuration, SelectionAlgorithm selectionAlgorithm, CrossoverAlgorithm crossoverAlgorithm, MutationAlgorithm mutationAlgorithm, FitnessCalculator fitnessCalculator, GeneticAlgorithmDelegate delegate) {
         this.configuration = configuration;
         this.selectionAlgorithm = selectionAlgorithm;
         this.crossoverAlgorithm = crossoverAlgorithm;
         this.mutationAlgorithm = mutationAlgorithm;
-        this.flujoMatrix = flujoMatrix;
-        this.distanciaMatrix = distanciaMatrix;
+        this.fitnessCalculator = fitnessCalculator;
         this.delegate = delegate;
     }
 
@@ -93,12 +91,12 @@ public class GeneticAlgorithm extends Thread  {
 
         double totalFitness = 0;
         for (PathChromosome chromosome : population) {
-            double fitness = getFitness(chromosome);
+            double fitness = fitnessCalculator.getFitness(chromosome);
             chromosome.setFitness(fitness);
             totalFitness += fitness;
         }
 
-        sortPopulation(population);
+        sortPopulation(population);  //TODO Probablemente no funcione esto.
         PathChromosome bestChromosome = population.get(population.size()-1);
         solution.setAverageFitness(totalFitness/configuration.getPopulationSize());
         solution.setBestFitness(bestChromosome.getFitness());
@@ -123,23 +121,6 @@ public class GeneticAlgorithm extends Thread  {
         Collections.sort(population, Collections.reverseOrder());
     }
 
-    private double getFitness(PathChromosome chromosome) {
-        double fitnes = 0;
-//        List<Integer> fakeList = new ArrayList<>();
-//        fakeList.add(2);
-//        fakeList.add(3);
-//        fakeList.add(4);
-//        fakeList.add(0);
-//        fakeList.add(1);
-//        chromosome = new PathChromosome(fakeList);
-        for (int i = 0; i < chromosome.getGenes().size(); i++) {
-            for (int j = 0; j < chromosome.getGenes().size(); j++) {
-                fitnes += distanciaMatrix[i][j] * flujoMatrix[chromosome.getGenes().get(i)][chromosome.getGenes().get(j)];
-            }
-        }
-
-        return fitnes;
-    }
 
     private void crossPopulation(List<PathChromosome> population) {
         List<Integer> selectedForCrossoverList = new ArrayList<>();

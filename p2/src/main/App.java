@@ -4,10 +4,7 @@ import crossover.*;
 import entities.Configuration;
 import entities.Solution;
 import helper.ReaderHelper;
-import mutation.MutacionPorInsercion;
-import mutation.MutacionPorIntercambio;
-import mutation.MutacionPorInversion;
-import mutation.MutationAlgorithm;
+import mutation.*;
 import org.math.plot.Plot2DPanel;
 import org.math.plot.plots.LinePlot;
 import selection.RouletteSelection;
@@ -86,7 +83,7 @@ public class App implements GeneticAlgorithmDelegate {
         crossoverSpinnerTextField.setEditable(false);
         crossoverSpinnerTextField.setBackground(Color.white);
 
-        String[] mutationAlgorithms = new String[] {"Mutación por Inversión", "Mutación por Intercambio", "Mutación por inserción"};
+        String[] mutationAlgorithms = new String[] {"Mutación por Inversión", "Mutación por Intercambio", "Mutación por inserción", "Mutación heurística"};
         DefaultComboBoxModel mutationModel = new DefaultComboBoxModel(mutationAlgorithms);
         mutationComboBox.setModel(mutationModel);
         SpinnerNumberModel mutationSpinnerDataModel = new SpinnerNumberModel(0.05, 0.0, 100.0, 0.01);
@@ -169,6 +166,8 @@ public class App implements GeneticAlgorithmDelegate {
                 mutationAlgorithm = new MutacionPorIntercambio();
             case 2:
                 mutationAlgorithm = new MutacionPorInsercion();
+            case 3:
+                mutationAlgorithm = new MutacionHeuristica();
             default:
                 break;
         }
@@ -217,8 +216,13 @@ public class App implements GeneticAlgorithmDelegate {
         }
 
         readerHelper.readFile(problemFileName);
+        FitnessCalculator fitnessCalculator = new FitnessCalculator(readerHelper.getFlujoMatrix(), readerHelper.getDistanciaMatrix());
+        if (mutationAlgorithm instanceof MutacionHeuristica) {
+           ((MutacionHeuristica)mutationAlgorithm).setFitnessCalculator(fitnessCalculator);
+        }
+
         configuration = new Configuration(problemFileName, readerHelper.getChromosomeSize(), populationSize, numberOfGenerations, crossoverValue, mutationValue, eliteValue);
-        GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(configuration, selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, readerHelper.getFlujoMatrix(), readerHelper.getDistanciaMatrix(), this);
+        GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(configuration, selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, fitnessCalculator, this);
 
         initChartPanel();
         geneticAlgorithm.start();
