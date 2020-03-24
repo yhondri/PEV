@@ -9,6 +9,8 @@ import org.math.plot.Plot2DPanel;
 import org.math.plot.plots.LinePlot;
 import selection.RouletteSelection;
 import selection.SelectionAlgorithm;
+import selection.TournamentSelection;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -71,7 +73,7 @@ public class App implements GeneticAlgorithmDelegate {
         SpinnerNumberModel numberOfGenerationsSpinnerDataModel = new SpinnerNumberModel(100, 20, 1000, 1);
         numberOfGenerationsSpinner.setModel(numberOfGenerationsSpinnerDataModel);
 
-        String[] selectionAlgorithms = new String[] {"Ruleta"};
+        String[] selectionAlgorithms = new String[] {"Ruleta", "Torneo"};
         DefaultComboBoxModel selectionModel = new DefaultComboBoxModel(selectionAlgorithms);
         selectionAlgorithmComboBox.setModel(selectionModel);
         String[] crossoverAlgorithms = new String[]{"PMX", "Cruce por orden (OX)", "Cruce por ciclos (CX)", "Cruce por recombinacion de rutas", "Cruce por codificación ordinal"};
@@ -154,6 +156,9 @@ public class App implements GeneticAlgorithmDelegate {
             case 0:
                 selectionAlgorithm = new RouletteSelection();
                 break;
+            case 1:
+                selectionAlgorithm = new TournamentSelection();
+                break;
             default:
                 break;
         }
@@ -162,12 +167,16 @@ public class App implements GeneticAlgorithmDelegate {
         switch (mutationComboBox.getSelectedIndex()) {
             case 0:
                 mutationAlgorithm = new MutacionPorInversion();
+                break;
             case 1:
                 mutationAlgorithm = new MutacionPorIntercambio();
+                break;
             case 2:
                 mutationAlgorithm = new MutacionPorInsercion();
+                break;
             case 3:
                 mutationAlgorithm = new MutacionHeuristica();
+                break;
             default:
                 break;
         }
@@ -185,8 +194,10 @@ public class App implements GeneticAlgorithmDelegate {
                 break;
             case 3:
                 crossoverAlgorithm = new CrucePorRecombinacionDeRutas();
+                break;
             case 4:
                 crossoverAlgorithm = new CrucePorCodificacionOrdinal();
+                break;
             default:
                 break;
         }

@@ -36,6 +36,14 @@ public class GeneticAlgorithm extends Thread {
 //        }
 //    }
 
+//        private void containsSix(List<PathChromosome> population) {
+//        for (PathChromosome pathChromosome : population) {
+//            if (pathChromosome.getGenes().contains(6)) {
+//                System.out.println("Stop, contiene 6");
+//            }
+//        }
+//    }
+
     @Override
     public void run() {
         super.run();
@@ -59,7 +67,6 @@ public class GeneticAlgorithm extends Thread {
             }
             absBest = solution.getAbsoluteBest();
             solutions.add(solution);
-
             delegate.didEvaluateGeneration(i, solution);
         }
     }
@@ -96,7 +103,7 @@ public class GeneticAlgorithm extends Thread {
             totalFitness += fitness;
         }
 
-        sortPopulation(population);  //TODO Probablemente no funcione esto.
+        population = sortPopulation(population);
         PathChromosome bestChromosome = population.get(population.size()-1);
         solution.setAverageFitness(totalFitness/configuration.getPopulationSize());
         solution.setBestFitness(bestChromosome.getFitness());
@@ -117,8 +124,9 @@ public class GeneticAlgorithm extends Thread {
         return solution;
     }
 
-    private void sortPopulation(List<PathChromosome> population) {
+    private List<PathChromosome> sortPopulation(List<PathChromosome> population) {
         Collections.sort(population, Collections.reverseOrder());
+        return population;
     }
 
 
@@ -144,6 +152,7 @@ public class GeneticAlgorithm extends Thread {
             PathChromosome chromosomeA = population.get(position1);
             PathChromosome chromosomeB = population.get(position2);
             Pair<PathChromosome, PathChromosome> result = crossoverAlgorithm.crossOver(chromosomeA, chromosomeB);
+
             population.set(position1, result.getElement0());
             population.set(position2, result.getElement1());
         }
@@ -152,14 +161,13 @@ public class GeneticAlgorithm extends Thread {
 
     private void mutatePopulation(List<PathChromosome> population) {
         for (int i = 0; i < configuration.getPopulationSize(); i++) {
-            PathChromosome chromosome = population.get(i);
-            mutationAlgorithm.mutate(chromosome, configuration.getMutationValue());
+            PathChromosome chromosome = mutationAlgorithm.mutate(population.get(i), configuration.getMutationValue());
             population.set(i, chromosome);
         }
     }
 
     private boolean isBetterFitness(double absoluteBest, double absBest) {
-        return absoluteBest < absBest;
+        return absoluteBest <= absBest;
     }
 
     private List<PathChromosome> getElite(List<PathChromosome> population) {
@@ -168,7 +176,7 @@ public class GeneticAlgorithm extends Thread {
             return null;
         }
 
-        sortPopulation(population);
+        population = sortPopulation(population);
         List<PathChromosome> eliteList = new ArrayList<>(eliteLength);
         for (int i = (population.size() - 1), j = 0; i >= 0 && j < eliteLength; i--, j++) {
             PathChromosome newCopy = population.get(i).getCopy();

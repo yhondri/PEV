@@ -1,9 +1,9 @@
 package mutation;
 
 import entities.PathChromosome;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import helper.Pair;
+import helper.Utils;
+import java.util.*;
 
 /**
  * Elegimos 2 puntos al azar e intercambiamos los elemenos que hay en el segmento entre los dos puntos.
@@ -19,13 +19,9 @@ public class MutacionPorInversion implements MutationAlgorithm {
 
         List<Integer> newGenes = chromosome.cloneGenotype();
 
-        int initialPoint = 0;
-        int endPoint = 0;
-
-        while (initialPoint >= endPoint) {
-            initialPoint = random.nextInt(chromosome.getGenes().size()-1);
-            endPoint = random.nextInt(chromosome.getGenes().size()-1);
-        }
+        Pair<Integer, Integer> maxMinPair = Utils.getMaxMinPosition(chromosome.getGenes().size()-1);
+        int initialPoint = maxMinPair.getElement0();
+        int endPoint = maxMinPair.getElement1();
 
         for (int i = initialPoint, j = endPoint; i < endPoint; i++, j--) {
             Collections.swap(newGenes, i, j);

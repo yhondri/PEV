@@ -64,6 +64,6 @@ public class PathChromosome implements Comparable<PathChromosome> {
 
     @Override
     public int compareTo(PathChromosome obj) {
-        return Double.compare(this.getFitness(), obj.getFitness());
+        return Double.compare(this.fitness, obj.getFitness());
     }
 }
