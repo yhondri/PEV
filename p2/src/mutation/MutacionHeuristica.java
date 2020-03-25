@@ -14,7 +14,6 @@ public class MutacionHeuristica implements MutationAlgorithm {
 
     @Override
     public PathChromosome mutate(PathChromosome chromosome, double mutationProbability) {
-        int firstPosition = 0, secondPosition = 0, thirdPosition = 0;
         List<Integer> permutations = new ArrayList<>();
 
         /* Obtenemos los 3 valorres a permutar */
@@ -28,12 +27,12 @@ public class MutacionHeuristica implements MutationAlgorithm {
         Permutation.permutation(new int[]{permutations.remove(0), permutations.remove(0), permutations.remove(0)}, 0, permutationList);
         List<PathChromosome> chromosomeList = new ArrayList<>();
 
-        /* Creamos los nuevos individuos con las permutaciones íncluidas */
+        /* Creamos los nuevos individuos con las permutaciones íncluidas (3! = 6) */
         for (int i = 0; i < 6; i++) {
             List<Integer> newGenes = new ArrayList<>();
             int index = 0;
             for (int j = 0; j < chromosome.getGenes().size(); j++) {
-                if (j == firstPosition || j == secondPosition || j == thirdPosition) {
+                if (permutationList.contains(j)) {
                     Integer value = permutationList.get(i)[index];
                     newGenes.add(value);
                     index++;

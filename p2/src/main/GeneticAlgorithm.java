@@ -44,6 +44,17 @@ public class GeneticAlgorithm extends Thread {
 //        }
 //    }
 
+//    private void checkNulls(List<PathChromosome> population) {
+//        for (PathChromosome pathChromosome: population) {
+//            for (Integer value: pathChromosome.getGenes()) {
+//                if (value == null) {
+//                    System.out.println("Stop");
+//                }
+//            }
+//        }
+//    }
+
+
     @Override
     public void run() {
         super.run();
@@ -54,6 +65,7 @@ public class GeneticAlgorithm extends Thread {
         solution.setAbsoluteBest(solution.getBestFitness());
         solutions.add(solution);
         delegate.didEvaluateGeneration(0, solution);
+
         double absBest = solution.getAbsoluteBest();
         for (int i = 1; i < configuration.getNumberOfGenerations(); i++) {
             List<PathChromosome> eliteList = getElite(population);
@@ -132,7 +144,6 @@ public class GeneticAlgorithm extends Thread {
 
     private void crossPopulation(List<PathChromosome> population) {
         List<Integer> selectedForCrossoverList = new ArrayList<>();
-
         for (int i = 0; i < configuration.getPopulationSize(); i++) {
             double crossoverResult = random.nextDouble();
             if (crossoverResult < configuration.getCrossoverValue()) {
@@ -151,13 +162,17 @@ public class GeneticAlgorithm extends Thread {
 
             PathChromosome chromosomeA = population.get(position1);
             PathChromosome chromosomeB = population.get(position2);
+
+            if (chromosomeA.getGenes().contains(null) || chromosomeB.getGenes().contains(null)) {
+                System.out.println("Stop");
+            }
+
             Pair<PathChromosome, PathChromosome> result = crossoverAlgorithm.crossOver(chromosomeA, chromosomeB);
 
             population.set(position1, result.getElement0());
             population.set(position2, result.getElement1());
         }
     }
-
 
     private void mutatePopulation(List<PathChromosome> population) {
         for (int i = 0; i < configuration.getPopulationSize(); i++) {
