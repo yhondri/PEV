@@ -86,7 +86,8 @@ public class GeneticAlgorithm extends Thread {
 
             population.add(new PathChromosome(genes));
         }
-        return  population;
+
+        return population;
     }
 
     private Solution evaluatePopulation(List<PathChromosome> population) {
@@ -128,7 +129,6 @@ public class GeneticAlgorithm extends Thread {
         Collections.sort(population, Collections.reverseOrder());
         return population;
     }
-
 
     private void crossPopulation(List<PathChromosome> population) {
         List<Integer> selectedForCrossoverList = new ArrayList<>();

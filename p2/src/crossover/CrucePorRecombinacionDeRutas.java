@@ -12,28 +12,35 @@ public class CrucePorRecombinacionDeRutas implements CrossoverAlgorithm {
             ciudadesVecinas.put(i, new ArrayList<>());
         }
 
-        ciudadesVecinas = createMatrizDeVecions(chromosomeA.getGenes(), ciudadesVecinas);
-        ciudadesVecinas = createMatrizDeVecions(chromosomeB.getGenes(), ciudadesVecinas);
+        ciudadesVecinas = createMatrizDeVecinos(chromosomeA.getGenes(), ciudadesVecinas);
+        ciudadesVecinas = createMatrizDeVecinos(chromosomeB.getGenes(), ciudadesVecinas);
 
-        List<Integer> genesA = getGenes(ciudadesVecinas, chromosomeA.getGenes(), chromosomeB.getGenes());
-        List<Integer> genesB = getGenes(ciudadesVecinas, chromosomeB.getGenes(), chromosomeA.getGenes());
+        /*En caso de no encontrar una solución válida, devolvemos los cromosomas con los genes del padre.*/
+        List<Integer> genesA = getGenes(ciudadesVecinas, chromosomeB.getGenes(), chromosomeA.getGenes());
+        if (genesA.size() != chromosomeA.getGenes().size()) {
+            genesA = chromosomeA.getGenes();
+        }
+
+        List<Integer> genesB = getGenes(ciudadesVecinas, chromosomeA.getGenes(), chromosomeB.getGenes());
+        if (genesB.size() != chromosomeB.getGenes().size()) {
+            genesB = chromosomeB.getGenes();
+        }
 
         return new Pair<>(new PathChromosome(genesA), new PathChromosome(genesB));
     }
 
-    private Map<Integer, List<Integer>> createMatrizDeVecions(List<Integer> genes,  Map<Integer, List<Integer>> ciudadesVecinas) {
+    private Map<Integer, List<Integer>> createMatrizDeVecinos(List<Integer> genes, Map<Integer, List<Integer>> ciudadesVecinas) {
         for (int i = 0; i < genes.size(); i++) {
-
             /* Caso especial, si i == 0, solo tenemos que mirar al siguiente. */
-            if (i == 0 && !ciudadesVecinas.get(genes.get(i)).contains(genes.get(i+1))) {
-                ciudadesVecinas.get(genes.get(i)).add(genes.get(i+1));
-            } else if (i != 0  && !ciudadesVecinas.get(genes.get(i)).contains(genes.get(i-1))) {
-                ciudadesVecinas.get(genes.get(i)).add(genes.get(i-1));
+            if (i == 0 && !ciudadesVecinas.get(genes.get(i)).contains(genes.get(i + 1))) {
+                ciudadesVecinas.get(genes.get(i)).add(genes.get(i + 1));
+            } else if (i != 0 && !ciudadesVecinas.get(genes.get(i)).contains(genes.get(i - 1))) {
+                ciudadesVecinas.get(genes.get(i)).add(genes.get(i - 1));
             }
 
             /* Caso especial, si i == genes.size(), solo tenemos que mirar al anterior. */
-            if (i+1 < genes.size() && !ciudadesVecinas.get(genes.get(i)).contains(genes.get(i+1))) {
-                ciudadesVecinas.get(genes.get(i)).add(genes.get(i+1));
+            if (i + 1 < genes.size() && !ciudadesVecinas.get(genes.get(i)).contains(genes.get(i + 1))) {
+                ciudadesVecinas.get(genes.get(i)).add(genes.get(i + 1));
             }
         }
 
@@ -104,7 +111,7 @@ public class CrucePorRecombinacionDeRutas implements CrossoverAlgorithm {
 
         @Override
         public int compareTo(Neighbor o) {
-            return Integer.compare(o.numbOfNeighbors, numbOfNeighbors);
+            return Integer.compare(numbOfNeighbors, o.numbOfNeighbors);
         }
     }
 }
