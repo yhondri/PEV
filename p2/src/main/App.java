@@ -7,9 +7,7 @@ import helper.ReaderHelper;
 import mutation.*;
 import org.math.plot.Plot2DPanel;
 import org.math.plot.plots.LinePlot;
-import selection.RouletteSelection;
-import selection.SelectionAlgorithm;
-import selection.TournamentSelection;
+import selection.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -73,7 +71,7 @@ public class App implements GeneticAlgorithmDelegate {
         SpinnerNumberModel numberOfGenerationsSpinnerDataModel = new SpinnerNumberModel(100, 20, 1000, 1);
         numberOfGenerationsSpinner.setModel(numberOfGenerationsSpinnerDataModel);
 
-        String[] selectionAlgorithms = new String[] {"Ruleta", "Torneo"};
+        String[] selectionAlgorithms = new String[]{"Ruleta", "Torneo", "E. Universal", "Truncamiento", "Restos"};
         DefaultComboBoxModel selectionModel = new DefaultComboBoxModel(selectionAlgorithms);
         selectionAlgorithmComboBox.setModel(selectionModel);
         String[] crossoverAlgorithms = new String[]{"PMX", "Cruce por orden (OX)", "Cruce por ciclos (CX)", "Cruce por recombinacion de rutas", "Cruce por codificación ordinal"};
@@ -158,6 +156,15 @@ public class App implements GeneticAlgorithmDelegate {
                 break;
             case 1:
                 selectionAlgorithm = new TournamentSelection();
+                break;
+            case 2:
+                selectionAlgorithm = new UniversalStochastic();
+                break;
+            case 3:
+                selectionAlgorithm = new TruncationSelection();
+                break;
+            case 4:
+                selectionAlgorithm = new RemainsSelection();
                 break;
             default:
                 break;
