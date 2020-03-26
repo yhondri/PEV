@@ -42,6 +42,14 @@ public class PathChromosome implements Comparable<PathChromosome> {
         this.acumulatedFitness = acumulatedFitness;
     }
 
+    public double getGrade() {
+        return grade;
+    }
+
+    public void setGrade(double grade) {
+        this.grade = grade;
+    }
+
     public double getAcumulatedFitness() {
         return acumulatedFitness;
     }
