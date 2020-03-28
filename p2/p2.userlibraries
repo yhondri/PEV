@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="jama-1.0.3-sources">
+    <archive path="C:/Users/Ignacio/Documents/g15p1/p2/lib/jama-1.0.3.jar" />
+    <archive path="C:/Users/Ignacio/Documents/g15p1/p2/lib/JMathArray-1.0.jar" />
+    <archive path="C:/Users/Ignacio/Documents/g15p1/p2/lib/JMathIO-1.0.jar" />
+    <archive path="C:/Users/Ignacio/Documents/g15p1/p2/lib/JMathPlot-1.0.1.jar" />
+  </library>
+</eclipse-userlibraries>
+
