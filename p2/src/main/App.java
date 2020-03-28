@@ -249,9 +249,15 @@ public class App implements GeneticAlgorithmDelegate {
     }
 
     @Override
+    public void onStarSearch() {
+        SwingUtilities.invokeLater(() -> {
+            absoluteBestJTextPane.setText("Cargando...");
+        });
+    }
+
+    @Override
     public void didEvaluateGeneration(int generation, Solution solution) {
         SwingUtilities.invokeLater(() -> {
-            absoluteBestJTextPane.setText(solution.getAbsoluteBestRepresentation());
             bestArrayList.add(new double[]{generation, solution.getBestFitness()});
             averageArrayList.add(new double[]{generation, solution.getAverageFitness()});
             worseArrayList.add(new double[]{generation, solution.getWorstFitness()});
@@ -269,5 +275,12 @@ public class App implements GeneticAlgorithmDelegate {
     public void areButtonsEnabled(boolean enabled) {
         runButton.setEnabled(enabled);
         resetButton.setEnabled(enabled);
+    }
+
+    @Override
+    public void onEndSearch(Solution solution) {
+        SwingUtilities.invokeLater(() -> {
+            absoluteBestJTextPane.setText(solution.getAbsoluteBestRepresentation());
+        });
     }
 }

@@ -61,6 +61,7 @@ public class GeneticAlgorithm extends Thread {
         super.run();
 
         delegate.areButtonsEnabled(false);
+        delegate.onStarSearch();
 
         List<PathChromosome> population = getInitialPopulation();
         List<Solution> solutions = new ArrayList<>();
@@ -85,6 +86,7 @@ public class GeneticAlgorithm extends Thread {
             delegate.didEvaluateGeneration(i, solution);
         }
 
+        delegate.onEndSearch(solution);
         delegate.areButtonsEnabled(true);
     }
 
