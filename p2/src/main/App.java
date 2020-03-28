@@ -68,9 +68,9 @@ public class App implements GeneticAlgorithmDelegate {
     }
 
     private void setupView() {
-        SpinnerNumberModel populationSpinnerDataModel = new SpinnerNumberModel(100, 20, 1000, 1);
+        SpinnerNumberModel populationSpinnerDataModel = new SpinnerNumberModel(100, 20, 10000, 1);
         populationSizeSpinner.setModel(populationSpinnerDataModel);
-        SpinnerNumberModel numberOfGenerationsSpinnerDataModel = new SpinnerNumberModel(100, 20, 1000, 1);
+        SpinnerNumberModel numberOfGenerationsSpinnerDataModel = new SpinnerNumberModel(100, 20, 10000, 1);
         numberOfGenerationsSpinner.setModel(numberOfGenerationsSpinnerDataModel);
 
         String[] selectionAlgorithms = new String[] {"Ruleta", "Torneo"};

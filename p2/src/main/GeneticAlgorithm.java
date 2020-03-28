@@ -127,8 +127,8 @@ public class GeneticAlgorithm extends Thread {
         String absoluteBestRepresentation = String.format(" Fitnes óptimo del problema: %s\n " +
                         "Mejor fitness enontrado: %.2f\n " +
                         "Permutación: %s\n " +
-                        "Peor fitness: %f\n " +
-                        "Media: %f\n " +
+                        "Peor fitness: %.2f\n " +
+                        "Media: %.2f\n " +
                         "Número de cruces: %d\n " +
                         "Número de mutaciones: %d",
                 configuration.getCosteOptimo(),
