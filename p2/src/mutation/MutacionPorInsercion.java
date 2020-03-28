@@ -22,7 +22,7 @@ public class MutacionPorInsercion implements MutationAlgorithm {
     }
 
     @Override
-    public PathChromosome mutate(PathChromosome chromosome, double mutationProbability) {
+    public PathChromosome mutate(PathChromosome chromosome) {
         /**
          * Elegimos el número de ciudades que van a cambiar su posición.
          */

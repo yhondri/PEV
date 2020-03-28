@@ -12,13 +12,7 @@ import java.util.Random;
  */
 public class MutacionPorIntercambio implements MutationAlgorithm {
     @Override
-    public PathChromosome mutate(PathChromosome chromosome, double mutationProbability) {
-        Random random = new Random();
-        double result = random.nextDouble();
-        if (result > mutationProbability) {
-            return chromosome;
-        }
-
+    public PathChromosome mutate(PathChromosome chromosome) {
         List<Integer> newGenes = chromosome.cloneGenotype();
 
         int initialPoint = 0;

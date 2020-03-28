@@ -5,6 +5,7 @@ import entities.Configuration;
 import entities.PathChromosome;
 import entities.Solution;
 import helper.Pair;
+import helper.Utils;
 import mutation.MutationAlgorithm;
 import selection.SelectionAlgorithm;
 import java.util.*;
@@ -61,7 +62,7 @@ public class GeneticAlgorithm extends Thread {
 
         List<PathChromosome> population = getInitialPopulation();
         List<Solution> solutions = new ArrayList<>();
-        Solution solution = evaluatePopulation(population);
+        Solution solution = evaluatePopulation(population, 0, 0);
         solution.setAbsoluteBest(solution.getBestFitness());
         solutions.add(solution);
         delegate.didEvaluateGeneration(0, solution);
@@ -70,10 +71,10 @@ public class GeneticAlgorithm extends Thread {
         for (int i = 1; i < configuration.getNumberOfGenerations(); i++) {
             List<PathChromosome> eliteList = getElite(population);
             population = selectionAlgorithm.selectPopulation(population);
-            crossPopulation(population);
-            mutatePopulation(population);
+            int numberOfcrossovers = crossPopulation(population);
+            int numberOfMutations = mutatePopulation(population);
             addElite(population, eliteList);
-            solution = evaluatePopulation(population);
+            solution = evaluatePopulation(population, numberOfcrossovers, numberOfMutations);
             if (!isBetterFitness(solution.getAbsoluteBest(), absBest)) {
                 solution.setAbsoluteBest(absBest);
             }
@@ -102,7 +103,7 @@ public class GeneticAlgorithm extends Thread {
         return population;
     }
 
-    private Solution evaluatePopulation(List<PathChromosome> population) {
+    private Solution evaluatePopulation(List<PathChromosome> population, int numberOfCrossover, int numberOfMutations) {
         Solution solution = new Solution();
 
         if (population.size() == 0) {
@@ -123,7 +124,20 @@ public class GeneticAlgorithm extends Thread {
         solution.setWorstFitness(population.get(0).getFitness());
         solution.setAbsoluteBest(bestChromosome.getFitness());
 
-        String absoluteBestRepresentation = String.format("Permutación: %s\nAptitud: %.2f", bestChromosome.getGenes().toString(), bestChromosome.getFitness());
+        String absoluteBestRepresentation = String.format(" Fitnes óptimo del problema: %s\n " +
+                        "Mejor fitness enontrado: %.2f\n " +
+                        "Permutación: %s\n " +
+                        "Peor fitness: %f\n " +
+                        "Media: %f\n " +
+                        "Número de cruces: %d\n " +
+                        "Número de mutaciones: %d",
+                configuration.getCosteOptimo(),
+                bestChromosome.getFitness(),
+                bestChromosome.getGenes().toString(),
+                solution.getWorstFitness(),
+                solution.getAverageFitness(),
+                numberOfCrossover,
+                numberOfMutations);
         solution.setAbsoluteBestRepresentation(absoluteBestRepresentation);
 
         double acumulatedFitness = 0;
@@ -142,7 +156,12 @@ public class GeneticAlgorithm extends Thread {
         return population;
     }
 
-    private void crossPopulation(List<PathChromosome> population) {
+    /**
+     * Cruza los individuos de una poblacción para producir individuos que combinan característiccas de los progenitores.
+     * @param population Los individuos a cruzar.
+     * @return Devuelve el número de curces que se han producido.
+     */
+    private int crossPopulation(List<PathChromosome> population) {
         List<Integer> selectedForCrossoverList = new ArrayList<>();
         for (int i = 0; i < configuration.getPopulationSize(); i++) {
             double crossoverResult = random.nextDouble();
@@ -163,22 +182,38 @@ public class GeneticAlgorithm extends Thread {
             PathChromosome chromosomeA = population.get(position1);
             PathChromosome chromosomeB = population.get(position2);
 
-            if (chromosomeA.getGenes().contains(null) || chromosomeB.getGenes().contains(null)) {
-                System.out.println("Stop");
-            }
-
             Pair<PathChromosome, PathChromosome> result = crossoverAlgorithm.crossOver(chromosomeA, chromosomeB);
 
             population.set(position1, result.getElement0());
             population.set(position2, result.getElement1());
         }
+
+        return selectedForCrossoverList.size();
     }
 
-    private void mutatePopulation(List<PathChromosome> population) {
+
+
+    /**
+     * Se aplica una pequeña modificcacción en uno o mas genes de un individuo.
+     * @param population Los individuos a mutar.
+     * @return Devuelve el número de mutaciones que se han producido.
+     */
+    private int mutatePopulation(List<PathChromosome> population) {
+        int numberOfMutation = 0;
         for (int i = 0; i < configuration.getPopulationSize(); i++) {
-            PathChromosome chromosome = mutationAlgorithm.mutate(population.get(i), configuration.getMutationValue());
+            PathChromosome chromosome;
+            double result = Utils.random.nextDouble();
+            if (result > configuration.getMutationValue()) {
+                chromosome =  population.get(i).getCopy();
+            } else {
+                chromosome = mutationAlgorithm.mutate(population.get(i));
+                numberOfMutation += 1;
+            }
+
             population.set(i, chromosome);
         }
+
+        return numberOfMutation;
     }
 
     private boolean isBetterFitness(double absoluteBest, double absBest) {

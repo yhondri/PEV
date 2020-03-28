@@ -10,13 +10,7 @@ import java.util.*;
  */
 public class MutacionPorInversion implements MutationAlgorithm {
     @Override
-    public PathChromosome mutate(PathChromosome chromosome, double mutationProbability) {
-        Random random = new Random();
-        double result = random.nextDouble();
-        if (result > mutationProbability) {
-            return chromosome;
-        }
-
+    public PathChromosome mutate(PathChromosome chromosome) {
         List<Integer> newGenes = chromosome.cloneGenotype();
 
         Pair<Integer, Integer> maxMinPair = Utils.getMaxMinPosition(chromosome.getGenes().size()-1);

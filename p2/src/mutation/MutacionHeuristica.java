@@ -13,7 +13,7 @@ public class MutacionHeuristica implements MutationAlgorithm {
     private FitnessCalculator fitnessCalculator;
 
     @Override
-    public PathChromosome mutate(PathChromosome chromosome, double mutationProbability) {
+    public PathChromosome mutate(PathChromosome chromosome) {
         List<Integer> permutations = new ArrayList<>();
 
         /* Obtenemos los 3 valorres a permutar */

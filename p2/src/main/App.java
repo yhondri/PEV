@@ -106,7 +106,7 @@ public class App implements GeneticAlgorithmDelegate {
     }
 
     private void initChartPanel() {
-        configuration = new Configuration("", readerHelper.getChromosomeSize(), 100, 100, 0.6, 0.05, 0.02);
+        configuration = new Configuration("", readerHelper.getChromosomeSize(), 100, 100, 0.6, 0.05, 0.02, "--");
         bestArrayList = new ArrayList<>(configuration.getNumberOfGenerations());
         bestLinePlot = new LinePlot("Best", Color.red, new double[][]{{0, 0}});
         averageArrayList = new ArrayList<>(configuration.getNumberOfGenerations());
@@ -202,6 +202,8 @@ public class App implements GeneticAlgorithmDelegate {
                 break;
         }
 
+        String[] costesOptimos = new String[] {"50", "224416", "388214", "1818146"};
+        String costeOptimo = costesOptimos[problemComboBox.getSelectedIndex()];
         String problemFileName = null;
         switch (problemComboBox.getSelectedIndex()) {
             case 0:
@@ -232,7 +234,7 @@ public class App implements GeneticAlgorithmDelegate {
            ((MutacionHeuristica)mutationAlgorithm).setFitnessCalculator(fitnessCalculator);
         }
 
-        configuration = new Configuration(problemFileName, readerHelper.getChromosomeSize(), populationSize, numberOfGenerations, crossoverValue, mutationValue, eliteValue);
+        configuration = new Configuration(problemFileName, readerHelper.getChromosomeSize(), populationSize, numberOfGenerations, crossoverValue, mutationValue, eliteValue, costeOptimo);
         GeneticAlgorithm geneticAlgorithm = new GeneticAlgorithm(configuration, selectionAlgorithm, crossoverAlgorithm, mutationAlgorithm, fitnessCalculator, this);
 
         initChartPanel();
