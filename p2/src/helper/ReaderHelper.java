@@ -46,15 +46,14 @@ public class ReaderHelper {
                 }
 
                 //print the input matrix
-                System.out.println("The input sorted matrix is : ");
-                for (int i = 0; i < chromosomeSize; i++) {
-                    for (int j = 0; j < chromosomeSize; j++) {
-                        System.out.printf("%5d ", a[i][j]);
-                    }
-                    System.out.println();
-
-                }
-
+//                System.out.println("The input sorted matrix is : ");
+//                for (int i = 0; i < chromosomeSize; i++) {
+//                    for (int j = 0; j < chromosomeSize; j++) {
+//                        System.out.printf("%5d ", a[i][j]);
+//                    }
+//                    System.out.println();
+//
+//                }
             }
         } catch (Exception e) {
             e.printStackTrace();
