@@ -74,7 +74,7 @@ public class App implements GeneticAlgorithmDelegate {
         String[] selectionAlgorithms = new String[]{"Ruleta", "Torneo", "E. Universal", "Truncamiento", "Restos"};
         DefaultComboBoxModel selectionModel = new DefaultComboBoxModel(selectionAlgorithms);
         selectionAlgorithmComboBox.setModel(selectionModel);
-        String[] crossoverAlgorithms = new String[]{"PMX", "Cruce por orden (OX)", "Cruce por ciclos (CX)", "Cruce por recombinacion de rutas", "Cruce por codificación ordinal"};
+        String[] crossoverAlgorithms = new String[]{"PMX", "Cruce por orden (OX)", "Cruce por ciclos (CX)", "Cruce por recombinacion de rutas", "Cruce por codificación ordinal", "Cruce YI"};
         DefaultComboBoxModel crossoverModel = new DefaultComboBoxModel(crossoverAlgorithms);
         crossoverAlgorithmComboBox.setModel(crossoverModel);
         SpinnerNumberModel crossoverSpinnerDataModel = new SpinnerNumberModel(0.6, 0.0, 100.0, 0.01);
@@ -204,6 +204,9 @@ public class App implements GeneticAlgorithmDelegate {
                 break;
             case 4:
                 crossoverAlgorithm = new CrucePorCodificacionOrdinal();
+                break;
+            case 5:
+                crossoverAlgorithm = new CruceYI();
                 break;
             default:
                 break;
