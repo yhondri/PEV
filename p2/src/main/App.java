@@ -257,4 +257,10 @@ public class App implements GeneticAlgorithmDelegate {
             plot2DPanel.setFixedBounds(0, 0, generation);
         });
     }
+
+    @Override
+    public void areButtonsEnabled(boolean enabled) {
+        runButton.setEnabled(enabled);
+        resetButton.setEnabled(enabled);
+    }
 }
