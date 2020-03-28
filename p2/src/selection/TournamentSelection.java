@@ -24,11 +24,11 @@ public class TournamentSelection implements SelectionAlgorithm {
 
 	private PathChromosome getBestChromosomeFromPopulation(PathChromosome[] population) {
 		int best = 0;
-		double bestFitness = population[0].getFitness();
+		PathChromosome bestFitness = population[0];
 		for (int j = 1; j < 3; j++) {
-			if (population[j].getFitness() > bestFitness) {
+			if (population[j].compareTo(bestFitness) < 0) {
 				best = j;
-				bestFitness = population[j].getFitness();
+				bestFitness = population[j];
 			}
 		}
 		return population[best];

@@ -150,6 +150,7 @@ public class GeneticAlgorithm extends Thread {
         for (int i = population.size()-1; i >= 0; i--) {
             acumulatedFitness += population.get(i).getFitness()/totalFitness;
             population.get(i).setAcumulatedFitness(acumulatedFitness);
+            population.get(i).setGrade(population.get(i).getFitness() / totalFitness);
         }
 
         return solution;
