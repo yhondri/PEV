@@ -98,7 +98,7 @@ public class App implements GeneticAlgorithmDelegate {
         eliteSpinnerTextField.setEditable(false);
         eliteSpinnerTextField.setBackground(Color.white);
 
-        String[] problems = new String[]{"Ajuste", "datos12", "datos15", "datos30", "tai100a", "tai256c"};
+        String[] problems = new String[]{"Ajuste", "datos12", "datos15", "datos30"};//, "tai100a", "tai256c"};
         DefaultComboBoxModel problemsModel = new DefaultComboBoxModel(problems);
         problemComboBox.setModel(problemsModel);
     }
