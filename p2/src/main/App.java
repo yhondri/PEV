@@ -7,10 +7,13 @@ import helper.ReaderHelper;
 import mutation.*;
 import org.math.plot.Plot2DPanel;
 import org.math.plot.plots.LinePlot;
+import helper.ResourceHelper;
 import selection.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class App implements GeneticAlgorithmDelegate {
@@ -241,7 +244,13 @@ public class App implements GeneticAlgorithmDelegate {
                 break;
         }
 
-        readerHelper.readFile(problemFileName);
+        InputStream url = new ResourceHelper().getFileInputStream(problemFileName);
+        try {
+            readerHelper.readFile(url);
+        } catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(null, "¡Ups ha ocurrido un error al intentar leer el fichero seleccionado!");
+        }
+
         FitnessCalculator fitnessCalculator = new FitnessCalculator(readerHelper.getFlujoMatrix(), readerHelper.getDistanciaMatrix());
         if (mutationAlgorithm instanceof MutacionHeuristica) {
             ((MutacionHeuristica) mutationAlgorithm).setFitnessCalculator(fitnessCalculator);
@@ -416,4 +425,5 @@ public class App implements GeneticAlgorithmDelegate {
     public JComponent $$$getRootComponent$$$() {
         return panelMain;
     }
+
 }

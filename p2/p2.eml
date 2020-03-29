@@ -3,6 +3,30 @@
 	<output-test url="file://$MODULE_DIR$/out/test/p2"/>
 	<exclude-output/>
 	<contentEntry url="file://$MODULE_DIR$"/>
+	<lib name="jama-1.0.3-sources.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jama-1.0.3-sources.jar!/"/>
+	</lib>
+	<lib name="jama-1.0.3.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/jama-1.0.3.jar!/"/>
+	</lib>
+	<lib name="JMathArray-1.0-sources.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/JMathArray-1.0-sources.jar!/"/>
+	</lib>
+	<lib name="JMathArray-1.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/JMathArray-1.0.jar!/"/>
+	</lib>
+	<lib name="JMathIO-1.0-sources.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/JMathIO-1.0-sources.jar!/"/>
+	</lib>
+	<lib name="JMathIO-1.0.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/JMathIO-1.0.jar!/"/>
+	</lib>
+	<lib name="JMathPlot-1.0.1-sources.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/JMathPlot-1.0.1-sources.jar!/"/>
+	</lib>
+	<lib name="JMathPlot-1.0.1.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/JMathPlot-1.0.1.jar!/"/>
+	</lib>
 	<levels>
 		<level name="jama-1.0.3-sources" value="project"/>
 	</levels>

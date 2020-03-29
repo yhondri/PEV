@@ -1,7 +1,7 @@
 package helper;
 
-import java.io.File;
-import java.net.URL;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Scanner;
 
 public class ReaderHelper {
@@ -9,11 +9,12 @@ public class ReaderHelper {
     private int[][] distanciaMatrix;
     private int chromosomeSize;
 
-    public void readFile(String fileName) {
-        try {
+    public void readFile(InputStream fileName) throws FileNotFoundException {
+
+//        try {
             // Read input file
-            URL fileURL = ClassLoader.getSystemResource(fileName);
-            Scanner input = new Scanner(new File(fileURL.getPath()));
+
+            Scanner input = new Scanner(fileName);
 
             chromosomeSize = 0;
             if (input.hasNextInt()) {
@@ -55,9 +56,9 @@ public class ReaderHelper {
 //
 //                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     public int[][] getFlujoMatrix() {

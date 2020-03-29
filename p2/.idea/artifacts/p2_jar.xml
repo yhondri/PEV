@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="p2:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/p2_jar</output-path>
+    <root id="archive" name="p2.jar">
+      <element id="module-output" name="p2" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/JMathIO-1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/JMathPlot-1.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/JMathArray-1.0-sources.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jama-1.0.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/JMathArray-1.0.jar" path-in-jar="/" />
+      <element id="library" level="module" name="forms_rt.jar" module-name="p2" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/JMathIO-1.0-sources.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jama-1.0.3-sources.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/JMathPlot-1.0.1-sources.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

@@ -5,7 +5,6 @@
       <root url="jar://$PROJECT_DIR$/lib/JMathArray-1.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/JMathIO-1.0.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/JMathPlot-1.0.1.jar!/" />
-      <root url="jar://$USER_HOME$/eclipse-workspace/p2/lib/forms_rt.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
