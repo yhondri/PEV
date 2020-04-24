@@ -14,9 +14,11 @@ public class Configuration {
     private String costeOptimo;
     private int maxDepth;
     private List<Pair<String, Integer>> functions;
+    private List<String> terminalList;
 
-    public Configuration(List<Pair<String, Integer>> functions, int chromosomeSize, int populationSize, int numberOfGenerations, double crossoverValue, double mutationValue, double eliteValue, int maxDepth) {
+    public Configuration(List<Pair<String, Integer>> functions, List<String> terminalList, int chromosomeSize, int populationSize, int numberOfGenerations, double crossoverValue, double mutationValue, double eliteValue, int maxDepth) {
         this.functions = functions;
+        this.terminalList = terminalList;
         this.chromosomeSize = chromosomeSize;
         this.populationSize = populationSize;
         this.numberOfGenerations = numberOfGenerations;
@@ -53,5 +55,25 @@ public class Configuration {
 
     public String getCosteOptimo() {
         return costeOptimo;
+    }
+
+    public int getMaxDepth() {
+        return maxDepth;
+    }
+
+    public int getNumberOfFunctions() {
+        return functions.size();
+    }
+
+    public Pair<String, Integer> getFunctionAtIndex(int index) {
+        return functions.get(index);
+    }
+
+    public int getNumberOfTerminals() {
+        return terminalList.size();
+    }
+
+    public String getTerminalAtIndex(int index) {
+        return terminalList.get(index);
     }
 }

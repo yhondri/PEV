@@ -11,6 +11,7 @@ import selection.SelectionAlgorithm;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class App implements GeneticAlgorithmDelegate {
@@ -39,6 +40,7 @@ public class App implements GeneticAlgorithmDelegate {
     //endregion UI
 
     private List<Pair<String, Integer>> functions;
+    private List<String> terminalList;
     private Configuration configuration;
     private Plot2DPanel plot2DPanel;
     private LinePlot bestLinePlot;
@@ -61,6 +63,7 @@ public class App implements GeneticAlgorithmDelegate {
     }
 
     public App() {
+        initData();
         setupView();
         initChartPanel();
         setupListeners();
@@ -71,6 +74,14 @@ public class App implements GeneticAlgorithmDelegate {
         functions.add(new Pair<>("AND", 2));
         functions.add(new Pair<>("OR", 2));
         functions.add(new Pair<>("NOT", 2));
+
+        terminalList = new ArrayList<>(6);
+        terminalList.add("A0");
+        terminalList.add("A1");
+        terminalList.add("D0");
+        terminalList.add("D1");
+        terminalList.add("D2");
+        terminalList.add("D3");
     }
 
     private void setupView() {
@@ -111,7 +122,7 @@ public class App implements GeneticAlgorithmDelegate {
     }
 
     private void initChartPanel() {
-        configuration = new Configuration(functions, 0, 100, 100, 0.6, 0.05, 0.02, 0);
+        configuration = new Configuration(functions, terminalList,0, 100, 100, 0.6, 0.05, 0.02, 0);
         bestArrayList = new ArrayList<>(configuration.getNumberOfGenerations());
         bestLinePlot = new LinePlot("Best", Color.red, new double[][]{{0, 0}});
         averageArrayList = new ArrayList<>(configuration.getNumberOfGenerations());
@@ -227,7 +238,7 @@ public class App implements GeneticAlgorithmDelegate {
             functions.add(new Pair<>("IF", 3));
         }
 
-        configuration = new Configuration(functions, 0, populationSize, numberOfGenerations, crossoverValue, mutationValue, eliteValue, maxDepth);
+        configuration = new Configuration(functions, terminalList,0, populationSize, numberOfGenerations, crossoverValue, mutationValue, eliteValue, maxDepth);
         GeneticProblem geneticAlgorithm = new GeneticProblem(configuration, this);
 
         initChartPanel();
