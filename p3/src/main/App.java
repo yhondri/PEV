@@ -2,6 +2,8 @@ package main;
 
 import crossover.CrossoverAlgorithm;
 import entities.Configuration;
+import entities.MultiplexorTestValue;
+import entities.MultiplexorTestValueSixInputs;
 import entities.Solution;
 import javafx.util.Pair;
 import mutation.MutationAlgorithm;
@@ -122,7 +124,7 @@ public class App implements GeneticAlgorithmDelegate {
     }
 
     private void initChartPanel() {
-        configuration = new Configuration(functions, terminalList,0, 100, 100, 0.6, 0.05, 0.02, 0);
+        configuration = new Configuration(100, 100);
         bestArrayList = new ArrayList<>(configuration.getNumberOfGenerations());
         bestLinePlot = new LinePlot("Best", Color.red, new double[][]{{0, 0}});
         averageArrayList = new ArrayList<>(configuration.getNumberOfGenerations());
@@ -234,11 +236,13 @@ public class App implements GeneticAlgorithmDelegate {
                 break;
         }
 
+        MultiplexorTestValue multiplexorTestValue = new MultiplexorTestValueSixInputs();
+
         if (useIfFunctionCheckbox.isSelected()) {
             functions.add(new Pair<>("IF", 3));
         }
 
-        configuration = new Configuration(functions, terminalList,0, populationSize, numberOfGenerations, crossoverValue, mutationValue, eliteValue, maxDepth);
+        configuration = new Configuration(functions, terminalList,0, populationSize, numberOfGenerations, crossoverValue, mutationValue, eliteValue, maxDepth, multiplexorTestValue);
         GeneticProblem geneticAlgorithm = new GeneticProblem(configuration, this);
 
         initChartPanel();

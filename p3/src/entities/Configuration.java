@@ -11,12 +11,17 @@ public class Configuration {
     private double crossoverValue;
     private double mutationValue;
     private double eliteValue;
-    private String costeOptimo;
     private int maxDepth;
     private List<Pair<String, Integer>> functions;
     private List<String> terminalList;
+    private MultiplexorTestValue multiplexorTestValue;
 
-    public Configuration(List<Pair<String, Integer>> functions, List<String> terminalList, int chromosomeSize, int populationSize, int numberOfGenerations, double crossoverValue, double mutationValue, double eliteValue, int maxDepth) {
+    public Configuration(int populationSize, int numberOfGenerations) {
+        this.populationSize = populationSize;
+        this.numberOfGenerations = numberOfGenerations;
+    }
+
+    public Configuration(List<Pair<String, Integer>> functions, List<String> terminalList, int chromosomeSize, int populationSize, int numberOfGenerations, double crossoverValue, double mutationValue, double eliteValue, int maxDepth, MultiplexorTestValue multiplexorTestValue) {
         this.functions = functions;
         this.terminalList = terminalList;
         this.chromosomeSize = chromosomeSize;
@@ -25,8 +30,8 @@ public class Configuration {
         this.crossoverValue = crossoverValue;
         this.mutationValue = mutationValue;
         this.eliteValue = eliteValue;
-        this.costeOptimo = costeOptimo;
         this.maxDepth = maxDepth;
+        this.multiplexorTestValue = multiplexorTestValue;
     }
 
     public int getChromosomeSize() {
@@ -53,10 +58,6 @@ public class Configuration {
         return eliteValue;
     }
 
-    public String getCosteOptimo() {
-        return costeOptimo;
-    }
-
     public int getMaxDepth() {
         return maxDepth;
     }
@@ -75,5 +76,9 @@ public class Configuration {
 
     public String getTerminalAtIndex(int index) {
         return terminalList.get(index);
+    }
+
+    public MultiplexorTestValue getMultiplexorTestValue() {
+        return multiplexorTestValue;
     }
 }
