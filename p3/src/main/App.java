@@ -6,9 +6,11 @@ import entities.MultiplexorTestValue;
 import entities.MultiplexorTestValueSixInputs;
 import entities.Solution;
 import javafx.util.Pair;
+import mutation.MutacionTerminalSimple;
 import mutation.MutationAlgorithm;
 import org.math.plot.Plot2DPanel;
 import org.math.plot.plots.LinePlot;
+import selection.RouletteSelection;
 import selection.SelectionAlgorithm;
 import javax.swing.*;
 import java.awt.*;
@@ -107,16 +109,16 @@ public class App implements GeneticAlgorithmDelegate {
         crossoverSpinnerTextField.setEditable(false);
         crossoverSpinnerTextField.setBackground(Color.white);
 
-        String[] mutationAlgorithms = new String[]{"Mutación por Inversión", "Mutación por Intercambio", "Mutación por inserción", "Mutación heurística", "Mutación YI"};
+        String[] mutationAlgorithms = new String[]{"Mutación terminal simple"};
         DefaultComboBoxModel mutationModel = new DefaultComboBoxModel(mutationAlgorithms);
         mutationComboBox.setModel(mutationModel);
-        SpinnerNumberModel mutationSpinnerDataModel = new SpinnerNumberModel(0.05, 0.0, 100.0, 0.01);
+        SpinnerNumberModel mutationSpinnerDataModel = new SpinnerNumberModel(0.05, 0.0, 1, 0.01);
         mutationPercentSpinner.setModel(mutationSpinnerDataModel);
         JFormattedTextField mutationSpinnerTextField = ((JSpinner.DefaultEditor) mutationPercentSpinner.getEditor()).getTextField();
         mutationSpinnerTextField.setEditable(false);
         mutationSpinnerTextField.setBackground(Color.white);
 
-        SpinnerNumberModel eliteSpinnerDataModel = new SpinnerNumberModel(0.02, 0.0, 100.0, 0.01);
+        SpinnerNumberModel eliteSpinnerDataModel = new SpinnerNumberModel(0.02, 0.0, 1, 0.01);
         eliteSpinner.setModel(eliteSpinnerDataModel);
         JFormattedTextField eliteSpinnerTextField = ((JSpinner.DefaultEditor) eliteSpinner.getEditor()).getTextField();
         eliteSpinnerTextField.setEditable(false);
@@ -173,7 +175,7 @@ public class App implements GeneticAlgorithmDelegate {
         SelectionAlgorithm selectionAlgorithm = null;
         switch (selectionAlgorithmComboBox.getSelectedIndex()) {
             case 0:
-//                selectionAlgorithm = new RouletteSelection();
+                selectionAlgorithm = new RouletteSelection();
                 break;
             case 1:
 //                selectionAlgorithm = new TournamentSelection();
@@ -194,7 +196,7 @@ public class App implements GeneticAlgorithmDelegate {
         MutationAlgorithm mutationAlgorithm = null;
         switch (mutationComboBox.getSelectedIndex()) {
             case 0:
-//                mutationAlgorithm = new MutacionPorInversion();
+                mutationAlgorithm = new MutacionTerminalSimple(terminalList);
                 break;
             case 1:
 //                mutationAlgorithm = new MutacionPorIntercambio();
@@ -243,7 +245,7 @@ public class App implements GeneticAlgorithmDelegate {
         }
 
         configuration = new Configuration(functions, terminalList,0, populationSize, numberOfGenerations, crossoverValue, mutationValue, eliteValue, maxDepth, multiplexorTestValue);
-        GeneticProblem geneticAlgorithm = new GeneticProblem(configuration, this);
+        GeneticProblem geneticAlgorithm = new GeneticProblem(configuration, this, selectionAlgorithm, mutationAlgorithm);
 
         initChartPanel();
         geneticAlgorithm.start();

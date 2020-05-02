@@ -3,26 +3,27 @@ package main;
 import entities.*;
 import helper.Utils;
 import javafx.util.Pair;
+import mutation.MutationAlgorithm;
 import selection.SelectionAlgorithm;
-
 import java.util.*;
 
 public class GeneticProblem extends Thread {
     private Configuration configuration;
     private SelectionAlgorithm selectionAlgorithm;
+    private MutationAlgorithm mutationAlgorithm;
     private final Random random = new Random();
     private final GeneticAlgorithmDelegate delegate;
 
-    public GeneticProblem(Configuration configuration, GeneticAlgorithmDelegate delegate) {
+    public GeneticProblem(Configuration configuration, GeneticAlgorithmDelegate delegate, SelectionAlgorithm selectionAlgorithm, MutationAlgorithm mutationAlgorithm) {
         this.configuration = configuration;
         this.selectionAlgorithm = selectionAlgorithm;
         this.delegate = delegate;
+        this.mutationAlgorithm = mutationAlgorithm;
     }
 
     @Override
     public void run() {
         super.run();
-
         List<TreeNode<String>> population = rampedAndHalfInitialization();
         List<Solution> solutions = new ArrayList<>();
         Solution solution = evaluatePopulation(population, 0, 0);
@@ -34,10 +35,10 @@ public class GeneticProblem extends Thread {
         for (int i = 1; i < configuration.getNumberOfGenerations(); i++) {
             List<TreeNode<String>> eliteList = getElite(population);
             population = selectionAlgorithm.selectPopulation(population);
-//            int numberOfcrossovers = crossPopulation(population);
-//            int numberOfMutations = mutatePopulation(population);
+            int numberOfcrossovers = 0; //TODO: crossPopulation(population);
+            int numberOfMutations = mutatePopulation(population);
             addElite(population, eliteList);
-//            solution = evaluatePopulation(population, numberOfcrossovers, numberOfMutations);
+            solution = evaluatePopulation(population, numberOfcrossovers, numberOfMutations);
             if (!isBetterFitness(solution.getAbsoluteBest(), absBest)) {
                 solution.setAbsoluteBest(absBest);
             }
@@ -89,6 +90,9 @@ public class GeneticProblem extends Thread {
             int functionIndex = Utils.getRandom(configuration.getNumberOfFunctions(),0);
             Pair<String, Integer> functionPair = configuration.getFunctionAtIndex(functionIndex);
             treeNode = new TreeNode<>(functionPair.getKey(), functionPair.getValue(), maxDepth);
+            for (int i = 0; i < functionPair.getValue(); i++) {
+                treeNode.addNodeAt(i, getTreeNodeByFullInitialization(depth + 1, maxDepth));
+            }
         } else {
             int terminalIndex = Utils.getRandom(configuration.getNumberOfTerminals(),0);
             String terminal = configuration.getTerminalAtIndex(terminalIndex);
@@ -172,7 +176,13 @@ public class GeneticProblem extends Thread {
 //            treeNode
 //        }
 
-        double fitness = treeNode.calculateDepth();
+        double fitness = 0;
+
+        if (treeNode.isLeaf()) {
+            return fitness;
+        }
+
+        fitness += treeNode.calculateDepth();
         for (TestValue testValue : configuration.getMultiplexorTestValue().getTestValues()) {
             Boolean result = evaluateFunctionTreeNode(treeNode, testValue.getValuesMap());
             if (result != testValue.getResult()) {
@@ -225,6 +235,30 @@ public class GeneticProblem extends Thread {
         }
         return null;
     }
+
+    /**
+     * Se aplica una pequeña modificación en uno o mas genes de un individuo.
+     * @param population Los individuos a mutar.
+     * @return Devuelve el número de mutaciones que se han producido.
+     */
+    private int mutatePopulation(List<TreeNode<String>> population) {
+        int numberOfMutation = 0;
+        for (int i = 0; i < configuration.getPopulationSize(); i++) {
+            TreeNode<String> treeNode;
+            double result = Utils.random.nextDouble();
+            if (result > configuration.getMutationValue()) {
+                treeNode = population.get(i).getCopy();
+            } else {
+                treeNode = mutationAlgorithm.mutate(population.get(i));
+                numberOfMutation += 1;
+            }
+
+            population.set(i, treeNode);
+        }
+
+        return numberOfMutation;
+    }
+
 
     private List<TreeNode<String>> getElite(List<TreeNode<String>> population) {
         int eliteLength = (int) Math.ceil(population.size() * configuration.getEliteValue());

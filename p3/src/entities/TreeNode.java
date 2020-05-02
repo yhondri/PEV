@@ -28,6 +28,10 @@ public class TreeNode<T> implements Comparable<TreeNode<T>>  {
         this.maxDepth = maxDepth;
     }
 
+    public void setKey(T key) {
+        this.key = key;
+    }
+
     public T getKey() {
         return key;
     }
@@ -36,6 +40,10 @@ public class TreeNode<T> implements Comparable<TreeNode<T>>  {
         children[index] = treeNode;
         treeNode.parent = this;
         treeNode.indexInParent = index;
+    }
+
+    public TreeNode[] getChildren() {
+        return children;
     }
 
     public int calculateDepth() {
@@ -56,7 +64,7 @@ public class TreeNode<T> implements Comparable<TreeNode<T>>  {
      * @return Devuelve sí, si el nodo tiene hijos, no en caso ccontrario.
      */
     public boolean isLeaf() {
-        return subtreeHeight() == 0;
+        return (subtreeHeight() == 0);
     }
 
     /**
@@ -65,7 +73,7 @@ public class TreeNode<T> implements Comparable<TreeNode<T>>  {
      */
     public int subtreeHeight() {
         if (children == null) {
-            return  0;
+            return 0;
         } else {
             return children.length;
         }
@@ -107,7 +115,7 @@ public class TreeNode<T> implements Comparable<TreeNode<T>>  {
     public TreeNode<T> getCopy() {
         TreeNode copy = new TreeNode(key, functionNumberOfValues, maxDepth);
 
-        if (copy != null) {
+        if (children != null) {
             copy.children = new TreeNode[children.length];
             for (int i = 0; i < children.length; i++) {
                 copy.children[i] = children[i].getCopy();
