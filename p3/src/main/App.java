@@ -1,6 +1,7 @@
 package main;
 
 import crossover.CrossoverAlgorithm;
+import crossover.OperadorDeCruce;
 import entities.Configuration;
 import entities.MultiplexorTestValue;
 import entities.MultiplexorTestValueSixInputs;
@@ -214,29 +215,29 @@ public class App implements GeneticAlgorithmDelegate {
                 break;
         }
 
-        CrossoverAlgorithm crossoverAlgorithm = null;
-        switch (crossoverAlgorithmComboBox.getSelectedIndex()) {
-            case 0:
-//                crossoverAlgorithm = new PMXCrossover();
-                break;
-            case 1:
-//                crossoverAlgorithm = new CrucePorOrdenOX();
-                break;
-            case 2:
-//                crossoverAlgorithm = new CrucePorCiclosCX();
-                break;
-            case 3:
-//                crossoverAlgorithm = new CrucePorRecombinacionDeRutas();
-                break;
-            case 4:
-//                crossoverAlgorithm = new CrucePorCodificacionOrdinal();
-                break;
-            case 5:
-//                crossoverAlgorithm = new CruceYI();
-                break;
-            default:
-                break;
-        }
+        CrossoverAlgorithm crossoverAlgorithm = new OperadorDeCruce(crossoverValue);
+//        switch (crossoverAlgorithmComboBox.getSelectedIndex()) {
+//            case 0:
+////                crossoverAlgorithm = new PMXCrossover();
+//                break;
+//            case 1:
+////                crossoverAlgorithm = new CrucePorOrdenOX();
+//                break;
+//            case 2:
+////                crossoverAlgorithm = new CrucePorCiclosCX();
+//                break;
+//            case 3:
+////                crossoverAlgorithm = new CrucePorRecombinacionDeRutas();
+//                break;
+//            case 4:
+////                crossoverAlgorithm = new CrucePorCodificacionOrdinal();
+//                break;
+//            case 5:
+////                crossoverAlgorithm = new CruceYI();
+//                break;
+//            default:
+//                break;
+//        }
 
         MultiplexorTestValue multiplexorTestValue = new MultiplexorTestValueSixInputs();
 
@@ -245,7 +246,7 @@ public class App implements GeneticAlgorithmDelegate {
         }
 
         configuration = new Configuration(functions, terminalList,0, populationSize, numberOfGenerations, crossoverValue, mutationValue, eliteValue, maxDepth, multiplexorTestValue);
-        GeneticProblem geneticAlgorithm = new GeneticProblem(configuration, this, selectionAlgorithm, mutationAlgorithm);
+        GeneticProblem geneticAlgorithm = new GeneticProblem(configuration, this, selectionAlgorithm, mutationAlgorithm, crossoverAlgorithm);
 
         initChartPanel();
         geneticAlgorithm.start();

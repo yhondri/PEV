@@ -1,5 +1,6 @@
 package main;
 
+import crossover.CrossoverAlgorithm;
 import entities.*;
 import helper.Utils;
 import javafx.util.Pair;
@@ -13,18 +14,22 @@ public class GeneticProblem extends Thread {
     private MutationAlgorithm mutationAlgorithm;
     private final Random random = new Random();
     private final GeneticAlgorithmDelegate delegate;
+    private final CrossoverAlgorithm crossoverAlgorithm;
+    //Control del Bloating, k para penalizaión bien fundamentada (página 42 T7).
+    private static final double k = 0.25;
 
-    public GeneticProblem(Configuration configuration, GeneticAlgorithmDelegate delegate, SelectionAlgorithm selectionAlgorithm, MutationAlgorithm mutationAlgorithm) {
+    public GeneticProblem(Configuration configuration, GeneticAlgorithmDelegate delegate, SelectionAlgorithm selectionAlgorithm, MutationAlgorithm mutationAlgorithm, CrossoverAlgorithm crossoverAlgorithm) {
         this.configuration = configuration;
         this.selectionAlgorithm = selectionAlgorithm;
         this.delegate = delegate;
         this.mutationAlgorithm = mutationAlgorithm;
+        this.crossoverAlgorithm = crossoverAlgorithm;
     }
 
     @Override
     public void run() {
         super.run();
-        List<TreeNode<String>> population = rampedAndHalfInitialization();
+        List<TreeNode> population = rampedAndHalfInitialization();
         List<Solution> solutions = new ArrayList<>();
         Solution solution = evaluatePopulation(population, 0, 0);
         solution.setAbsoluteBest(solution.getBestFitness());
@@ -33,9 +38,9 @@ public class GeneticProblem extends Thread {
 
         double absBest = solution.getAbsoluteBest();
         for (int i = 1; i < configuration.getNumberOfGenerations(); i++) {
-            List<TreeNode<String>> eliteList = getElite(population);
+            List<TreeNode> eliteList = getElite(population);
             population = selectionAlgorithm.selectPopulation(population);
-            int numberOfcrossovers = 0; //TODO: crossPopulation(population);
+            int numberOfcrossovers = crossPopulation(population);
             int numberOfMutations = mutatePopulation(population);
             addElite(population, eliteList);
             solution = evaluatePopulation(population, numberOfcrossovers, numberOfMutations);
@@ -58,13 +63,13 @@ public class GeneticProblem extends Thread {
         return absoluteBest <= absBest;
     }
 
-    private List<TreeNode<String>> rampedAndHalfInitialization() {
+    private List<TreeNode> rampedAndHalfInitialization() {
         int treeMaxDepth = configuration.getPopulationSize()/configuration.getMaxDepth();
 
-        List<TreeNode<String>> treeNodeList = new ArrayList<>(configuration.getPopulationSize());
+        List<TreeNode> treeNodeList = new ArrayList<>(configuration.getPopulationSize());
         for (int i = 0; i < configuration.getPopulationSize(); i++) {
             int subTreeMaxDepth = (i/treeMaxDepth)+1;
-            TreeNode<String> treeNode;
+            TreeNode treeNode;
             if (i%2 == 0) {
                 treeNode = getTreeNodeByFullInitialization(0, subTreeMaxDepth);
             } else {
@@ -84,19 +89,19 @@ public class GeneticProblem extends Thread {
      * @param maxDepth profundidad máxima del subárbol.
      * @return Devuelve un nuevo nodo que puede ser un nodo función o terminal.
      */
-    private TreeNode<String> getTreeNodeByFullInitialization(int depth, int maxDepth) {
-        TreeNode<String> treeNode;
+    private TreeNode getTreeNodeByFullInitialization(int depth, int maxDepth) {
+        TreeNode treeNode;
         if (depth < maxDepth) {
             int functionIndex = Utils.getRandom(configuration.getNumberOfFunctions(),0);
             Pair<String, Integer> functionPair = configuration.getFunctionAtIndex(functionIndex);
-            treeNode = new TreeNode<>(functionPair.getKey(), functionPair.getValue(), maxDepth);
+            treeNode = new TreeNode(functionPair.getKey(), functionPair.getValue(), maxDepth);
             for (int i = 0; i < functionPair.getValue(); i++) {
                 treeNode.addNodeAt(i, getTreeNodeByFullInitialization(depth + 1, maxDepth));
             }
         } else {
             int terminalIndex = Utils.getRandom(configuration.getNumberOfTerminals(),0);
             String terminal = configuration.getTerminalAtIndex(terminalIndex);
-            treeNode = new TreeNode<>(terminal, maxDepth);
+            treeNode = new TreeNode(terminal, maxDepth);
         }
         return treeNode;
     }
@@ -108,31 +113,31 @@ public class GeneticProblem extends Thread {
      * @param maxDepth Profundidad máxima del nodo.
      * @return Devuelve un nuevo nodo que puede ser un nodo función o terminal.
      */
-    private TreeNode<String> getTreeNodeByGrowInitialization(int depth, int maxDepth) {
-        TreeNode<String> treeNode;
+    private TreeNode getTreeNodeByGrowInitialization(int depth, int maxDepth) {
+        TreeNode treeNode;
         if (depth < maxDepth) {
             int functionIndex = Utils.getRandom(configuration.getNumberOfFunctions() + configuration.getNumberOfTerminals(),0);
             if (functionIndex >= configuration.getNumberOfFunctions()) {
                 String terminal = configuration.getTerminalAtIndex(functionIndex - configuration.getNumberOfFunctions());
-                treeNode = new TreeNode<>(terminal, configuration.getMaxDepth());
+                treeNode = new TreeNode(terminal, configuration.getMaxDepth());
             } else {
                 Pair<String, Integer> functionPair = configuration.getFunctionAtIndex(functionIndex);
-                treeNode = new TreeNode<>(functionPair.getKey(), functionPair.getValue(), configuration.getMaxDepth());
+                treeNode = new TreeNode(functionPair.getKey(), functionPair.getValue(), configuration.getMaxDepth());
                 //Obtenemos el número de terminales necesarios para la función.
                 for (int i = 0; i < functionPair.getValue(); i++) {
-                    TreeNode<String> childrenNode = getTreeNodeByGrowInitialization(depth+1, maxDepth);
+                    TreeNode childrenNode = getTreeNodeByGrowInitialization(depth+1, maxDepth);
                     treeNode.addNodeAt(i, childrenNode);
                 }
             }
         } else {
             int terminalIndex = Utils.getRandom(configuration.getNumberOfTerminals(),0);
             String terminal = configuration.getTerminalAtIndex(terminalIndex);
-            treeNode = new TreeNode<>(terminal, configuration.getMaxDepth());
+            treeNode = new TreeNode(terminal, configuration.getMaxDepth());
         }
         return treeNode;
     }
 
-    private Solution evaluatePopulation(List<TreeNode<String>> population, int numberOfCrossover, int numberOfMutations) {
+    private Solution evaluatePopulation(List<TreeNode> population, int numberOfCrossover, int numberOfMutations) {
         Solution solution = new Solution();
 
         if (population.size() == 0) {
@@ -147,14 +152,13 @@ public class GeneticProblem extends Thread {
         }
 
         population = sortPopulation(population);
-        TreeNode<String> bestTreeNode = population.get(population.size()-1);
+        TreeNode bestTreeNode = population.get(population.size()-1);
         solution.setAverageFitness(totalFitness/configuration.getPopulationSize());
         solution.setBestFitness(bestTreeNode.getFitness());
         solution.setWorstFitness(population.get(0).getFitness());
         solution.setAbsoluteBest(bestTreeNode.getFitness());
 
-        //TODO
-        solution.setAbsoluteBestRepresentation("Falta representaión");
+        solution.setAbsoluteBestRepresentation(bestTreeNode.getRepresentation());
 
         double acumulatedFitness = 0;
         for (int i = population.size()-1; i >= 0; i--) {
@@ -166,23 +170,53 @@ public class GeneticProblem extends Thread {
         return solution;
     }
 
-    private List<TreeNode<String>>sortPopulation(List<TreeNode<String>> population) {
+    private List<TreeNode>sortPopulation(List<TreeNode> population) {
         Collections.sort(population, Collections.reverseOrder());
         return population;
     }
 
-    private double evaluateTreeNode(TreeNode<String> treeNode) {
-//        if (treeNode.calculateDepth() > configuration.getMaxDepth()) {
-//            treeNode
-//        }
+    /**
+     * Cruza los individuos de una poblacción para producir individuos que combinan característiccas de los progenitores.
+     * @param population Los individuos a cruzar.
+     * @return Devuelve el número de curces que se han producido.
+     */
+    private int crossPopulation(List<TreeNode> population) {
+        List<Integer> selectedForCrossoverList = new ArrayList<>();
+        for (int i = 0; i < configuration.getPopulationSize(); i++) {
+            double crossoverResult = random.nextDouble();
+            if (crossoverResult < configuration.getCrossoverValue()) {
+                selectedForCrossoverList.add(i);
+            }
+        }
 
-        double fitness = 0;
+        if (selectedForCrossoverList.size()%2 == 1) {
+            int randomPosition = random.nextInt(selectedForCrossoverList.size());
+            selectedForCrossoverList.remove(randomPosition);
+        }
+
+        for (int i = 0; i < selectedForCrossoverList.size(); i += 2) {
+            int position1 = selectedForCrossoverList.get(i);
+            int position2 = selectedForCrossoverList.get(i + 1);
+
+            TreeNode chromosomeA = population.get(position1);
+            TreeNode chromosomeB = population.get(position2);
+
+            Pair<TreeNode, TreeNode> result = crossoverAlgorithm.crossOver(chromosomeA, chromosomeB);
+
+            population.set(position1, result.getKey());
+            population.set(position2, result.getValue());
+        }
+
+        return selectedForCrossoverList.size();
+    }
+
+    private double evaluateTreeNode(TreeNode treeNode) {
+        double fitness = treeNode.getHeight() * k;
 
         if (treeNode.isLeaf()) {
             return fitness;
         }
 
-        fitness += treeNode.calculateDepth();
         for (TestValue testValue : configuration.getMultiplexorTestValue().getTestValues()) {
             Boolean result = evaluateFunctionTreeNode(treeNode, testValue.getValuesMap());
             if (result != testValue.getResult()) {
@@ -193,7 +227,7 @@ public class GeneticProblem extends Thread {
         return fitness;
     }
 
-    private Boolean evaluateTreeNode(TreeNode<String> treeNode, Map<String, Boolean> values) {
+    private Boolean evaluateTreeNode(TreeNode treeNode, Map<String, Boolean> values) {
         if (treeNode.isLeaf()) {
             return values.get(treeNode.getKey());
         }
@@ -210,7 +244,7 @@ public class GeneticProblem extends Thread {
      * @param values Mapa de los valores del multiplexor contra los que se va a evaluar la función.
      * @return El resultado de la evaluación.
      */
-    private Boolean evaluateFunctionTreeNode(TreeNode<String> treeNode, Map<String, Boolean> values) {
+    private Boolean evaluateFunctionTreeNode(TreeNode treeNode, Map<String, Boolean> values) {
         Boolean firstNode = evaluateTreeNode(treeNode.getNodeAtIndex(0), values);
         if (Function.NOT == Function.valueOf(treeNode.getKey())) {
             return !firstNode;
@@ -241,10 +275,10 @@ public class GeneticProblem extends Thread {
      * @param population Los individuos a mutar.
      * @return Devuelve el número de mutaciones que se han producido.
      */
-    private int mutatePopulation(List<TreeNode<String>> population) {
+    private int mutatePopulation(List<TreeNode> population) {
         int numberOfMutation = 0;
         for (int i = 0; i < configuration.getPopulationSize(); i++) {
-            TreeNode<String> treeNode;
+            TreeNode treeNode;
             double result = Utils.random.nextDouble();
             if (result > configuration.getMutationValue()) {
                 treeNode = population.get(i).getCopy();
@@ -260,23 +294,23 @@ public class GeneticProblem extends Thread {
     }
 
 
-    private List<TreeNode<String>> getElite(List<TreeNode<String>> population) {
+    private List<TreeNode> getElite(List<TreeNode> population) {
         int eliteLength = (int) Math.ceil(population.size() * configuration.getEliteValue());
         if (eliteLength == 0) {
             return null;
         }
 
         population = sortPopulation(population);
-        List<TreeNode<String>> eliteList = new ArrayList<>(eliteLength);
+        List<TreeNode> eliteList = new ArrayList<>(eliteLength);
         for (int i = (population.size() - 1), j = 0; i >= 0 && j < eliteLength; i--, j++) {
-            TreeNode<String> newCopy = population.get(i).getCopy();
+            TreeNode newCopy = population.get(i).getCopy();
             eliteList.add(newCopy);
         }
 
         return eliteList;
     }
 
-    private void addElite(List<TreeNode<String>> population, List<TreeNode<String>> eliteList) {
+    private void addElite(List<TreeNode> population, List<TreeNode> eliteList) {
         if (eliteList == null) {
             return;
         }

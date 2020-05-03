@@ -1,10 +1,12 @@
 package entities;
 
-public class TreeNode<T> implements Comparable<TreeNode<T>>  {
+import static java.lang.Integer.max;
+
+public class TreeNode implements Comparable<TreeNode>  {
     //Padre del nodo
-    private TreeNode<T> parent;
+    private TreeNode parent;
     //Dato del nodo (operador o argumento).
-    private T key;
+    private String key;
     //Hijos del nodo
     private TreeNode[] children;
     //Profundidad máxima del nodo.
@@ -16,27 +18,31 @@ public class TreeNode<T> implements Comparable<TreeNode<T>>  {
     private double acumulatedFitness;
     private double grade;
 
-    public TreeNode(T key, int functionNumberOfValues, int maxDepth) {
+    public TreeNode(String key, int functionNumberOfValues, int maxDepth) {
         this.key = key;
         this.maxDepth = maxDepth;
         this.functionNumberOfValues = functionNumberOfValues;
         this.children = new TreeNode[functionNumberOfValues];
     }
 
-    public TreeNode(T key, int maxDepth) {
+    public TreeNode(String key, int maxDepth) {
         this.key = key;
         this.maxDepth = maxDepth;
     }
 
-    public void setKey(T key) {
+    public TreeNode getParent() {
+        return parent;
+    }
+
+    public void setKey(String key) {
         this.key = key;
     }
 
-    public T getKey() {
+    public String getKey() {
         return key;
     }
 
-    public void addNodeAt(int index, TreeNode<T> treeNode) {
+    public void addNodeAt(int index, TreeNode treeNode) {
         children[index] = treeNode;
         treeNode.parent = this;
         treeNode.indexInParent = index;
@@ -46,17 +52,33 @@ public class TreeNode<T> implements Comparable<TreeNode<T>>  {
         return children;
     }
 
-    public int calculateDepth() {
+    public int getHeight() {
         if (isLeaf()) {
             return 1;
         }
 
         int totalHeight = 1;
-        for (TreeNode<String> treeNode : children) {
-            totalHeight = treeNode.calculateDepth();
+        for (TreeNode treeNode : children) {
+            totalHeight = treeNode.getHeight();
         }
 
         return totalHeight;
+    }
+
+    public int getDepth() {
+        if (isLeaf()) {
+            return 1;
+        }
+
+        int depth = 0;
+        for (TreeNode child: children) {
+            depth = max(depth, child.getDepth());
+            if (depth > maxDepth) {
+                return maxDepth;
+            }
+        }
+
+        return depth + 1;
     }
 
     /**
@@ -79,7 +101,7 @@ public class TreeNode<T> implements Comparable<TreeNode<T>>  {
         }
     }
 
-    public TreeNode<T> getNodeAtIndex(int index) {
+    public TreeNode getNodeAtIndex(int index) {
         return children[index];
     }
 
@@ -92,7 +114,7 @@ public class TreeNode<T> implements Comparable<TreeNode<T>>  {
     }
 
     @Override
-    public int compareTo(TreeNode<T> obj) {
+    public int compareTo(TreeNode obj) {
         return Double.compare(this.fitness, obj.getFitness());
     }
 
@@ -112,7 +134,7 @@ public class TreeNode<T> implements Comparable<TreeNode<T>>  {
         return grade;
     }
 
-    public TreeNode<T> getCopy() {
+    public TreeNode getCopy() {
         TreeNode copy = new TreeNode(key, functionNumberOfValues, maxDepth);
 
         if (children != null) {
@@ -123,5 +145,39 @@ public class TreeNode<T> implements Comparable<TreeNode<T>>  {
         }
 
         return copy;
+    }
+
+    public int getIndexInParent() {
+        return indexInParent;
+    }
+
+    public void removeParent() {
+        parent = null;
+        indexInParent = -1;
+    }
+
+    /**
+     * From Java documentation: However, This is true for the simple cases.
+     * If you need to concatenate inside the loop, it is always suggested to use  StringBuilder.
+     * @return La representación del TreeNode.
+     */
+    public String getRepresentation() {
+        if (isLeaf()) {
+            return key;
+        }
+
+        StringBuilder representationStringBuilder = new StringBuilder("(" +key);
+        for (TreeNode node : children) {
+            representationStringBuilder.append(" ");
+            String chilRepresentation = node.getRepresentation();
+            representationStringBuilder.append(chilRepresentation);
+        }
+        representationStringBuilder.append(")");
+        return representationStringBuilder.toString();
+    }
+
+    @Override
+    public String toString() {
+        return getRepresentation();
     }
 }
