@@ -54,9 +54,6 @@ public class GeneticProblem extends Thread {
 
         delegate.onEndSearch(solution);
         delegate.areButtonsEnabled(true);
-
-        int i = 0;
-        i += 2;
     }
 
     private boolean isBetterFitness(double absoluteBest, double absBest) {
