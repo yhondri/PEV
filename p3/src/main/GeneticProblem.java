@@ -17,13 +17,15 @@ public class GeneticProblem extends Thread {
     private final CrossoverAlgorithm crossoverAlgorithm;
     //Control del Bloating, k para penalizaión bien fundamentada (página 42 T7).
     private static final double k = 0.25;
+    private ControlBloating controlBloating;
 
-    public GeneticProblem(Configuration configuration, GeneticAlgorithmDelegate delegate, SelectionAlgorithm selectionAlgorithm, MutationAlgorithm mutationAlgorithm, CrossoverAlgorithm crossoverAlgorithm) {
+    public GeneticProblem(Configuration configuration, GeneticAlgorithmDelegate delegate, SelectionAlgorithm selectionAlgorithm, MutationAlgorithm mutationAlgorithm, CrossoverAlgorithm crossoverAlgorithm, ControlBloating controlBloating) {
         this.configuration = configuration;
         this.selectionAlgorithm = selectionAlgorithm;
         this.delegate = delegate;
         this.mutationAlgorithm = mutationAlgorithm;
         this.crossoverAlgorithm = crossoverAlgorithm;
+        this.controlBloating = controlBloating;
     }
 
     @Override

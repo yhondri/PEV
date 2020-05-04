@@ -2,10 +2,7 @@ package main;
 
 import crossover.CrossoverAlgorithm;
 import crossover.OperadorDeCruce;
-import entities.Configuration;
-import entities.MultiplexorTestValue;
-import entities.MultiplexorTestValueSixInputs;
-import entities.Solution;
+import entities.*;
 import javafx.util.Pair;
 import mutation.MutacionTerminalSimple;
 import mutation.MutationAlgorithm;
@@ -41,6 +38,8 @@ public class App implements GeneticAlgorithmDelegate {
     private JTextPane absoluteBestJTextPane;
     private JCheckBox useIfFunctionCheckbox;
     private JSpinner maxDepthSpinner;
+    private JComboBox bloatingControlMethodComboBox;
+    private JPanel bloatingControlJPanel;
     //endregion UI
 
     private List<Pair<String, Integer>> functions;
@@ -96,6 +95,10 @@ public class App implements GeneticAlgorithmDelegate {
         populationSizeSpinner.setModel(populationSpinnerDataModel);
         SpinnerNumberModel numberOfGenerationsSpinnerDataModel = new SpinnerNumberModel(100, 20, 10000, 1);
         numberOfGenerationsSpinner.setModel(numberOfGenerationsSpinnerDataModel);
+
+        String[] bloatingControlMethods = new String[]{"Método Tarpeian", "Penalización bien fundamentada"};
+        DefaultComboBoxModel bloatinControlModel = new DefaultComboBoxModel(bloatingControlMethods);
+        bloatingControlMethodComboBox.setModel(bloatinControlModel);
 
         String[] selectionAlgorithms = new String[]{"Ruleta", "Torneo", "E. Universal", "Truncamiento", "Restos"};
         DefaultComboBoxModel selectionModel = new DefaultComboBoxModel(selectionAlgorithms);
@@ -235,6 +238,16 @@ public class App implements GeneticAlgorithmDelegate {
 //                break;
 //        }
 
+        ControlBloating controlBloating;
+        switch (bloatingControlMethodComboBox.getSelectedIndex()) {
+            case 0:
+                controlBloating = ControlBloating.METODO_TARPEIAN;
+                break;
+            default:
+                controlBloating = ControlBloating.PENALIZACIÓN_BIEN_FUNDAMENTADA;
+                break;
+        }
+
         MultiplexorTestValue multiplexorTestValue = new MultiplexorTestValueSixInputs();
 
         if (useIfFunctionCheckbox.isSelected()) {
@@ -242,7 +255,7 @@ public class App implements GeneticAlgorithmDelegate {
         }
 
         configuration = new Configuration(functions, terminalList,0, populationSize, numberOfGenerations, crossoverValue, mutationValue, eliteValue, maxDepth, multiplexorTestValue);
-        GeneticProblem geneticAlgorithm = new GeneticProblem(configuration, this, selectionAlgorithm, mutationAlgorithm, crossoverAlgorithm);
+        GeneticProblem geneticAlgorithm = new GeneticProblem(configuration, this, selectionAlgorithm, mutationAlgorithm, crossoverAlgorithm, controlBloating);
 
         initChartPanel();
         geneticAlgorithm.start();
