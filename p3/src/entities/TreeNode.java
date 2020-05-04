@@ -59,7 +59,7 @@ public class TreeNode implements Comparable<TreeNode>  {
 
         int totalHeight = 1;
         for (TreeNode treeNode : children) {
-            totalHeight = treeNode.getHeight();
+            totalHeight += treeNode.getHeight();
         }
 
         return totalHeight;

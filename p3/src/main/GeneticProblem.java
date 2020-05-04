@@ -213,12 +213,13 @@ public class GeneticProblem extends Thread {
     private double evaluateTreeNode(TreeNode treeNode) {
         double fitness = treeNode.getHeight() * k;
 
-        if (treeNode.isLeaf()) {
-            return fitness;
+        if (treeNode.getKey().length() == 2) {
+            String top = "stop";
+            int i = 2;
         }
 
         for (TestValue testValue : configuration.getMultiplexorTestValue().getTestValues()) {
-            Boolean result = evaluateFunctionTreeNode(treeNode, testValue.getValuesMap());
+            Boolean result = evaluateTreeNode(treeNode, testValue.getValuesMap());
             if (result != testValue.getResult()) {
                 fitness += 10;
             }
