@@ -17,17 +17,29 @@ public class TreeNode implements Comparable<TreeNode>  {
     private double fitness;
     private double acumulatedFitness;
     private double grade;
+    //Número de nodos del árbol
+    private int cardinal;
+    //Número de hojas del árbol;
+    private int leafCardinal;
 
     public TreeNode(String key, int functionNumberOfValues, int maxDepth) {
         this.key = key;
         this.maxDepth = maxDepth;
         this.functionNumberOfValues = functionNumberOfValues;
         this.children = new TreeNode[functionNumberOfValues];
+        this.leafCardinal = 0;
+        this.cardinal = 1;
+        for(TreeNode t:this.children){
+            this.cardinal += t.cardinal;
+            this.leafCardinal += t.leafCardinal;
+        }
     }
 
     public TreeNode(String key, int maxDepth) {
         this.key = key;
         this.maxDepth = maxDepth;
+        this.cardinal = 1;
+        this.leafCardinal = 1;
     }
 
     public TreeNode getParent() {
@@ -111,6 +123,14 @@ public class TreeNode implements Comparable<TreeNode>  {
 
     public double getFitness() {
         return fitness;
+    }
+
+    public int getCardinal(){
+        return this.cardinal;
+    }
+
+    public int getLeafCardinal(){
+        return leafCardinal;
     }
 
     @Override

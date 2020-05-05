@@ -5,6 +5,7 @@ import crossover.OperadorDeCruce;
 import entities.*;
 //import javafx.util.Pair;
 import helper.Pair;
+import mutation.MutacionFuncionalSimple;
 import mutation.MutacionTerminalSimple;
 import mutation.MutationAlgorithm;
 import org.math.plot.Plot2DPanel;
@@ -77,7 +78,7 @@ public class App implements GeneticAlgorithmDelegate {
         functions = new ArrayList<>();
         functions.add(new Pair<>("AND", 2));
         functions.add(new Pair<>("OR", 2));
-        functions.add(new Pair<>("NOT", 2));
+        functions.add(new Pair<>("NOT", 1));
 
         terminalList = new ArrayList<>(6);
         terminalList.add("A0");
@@ -110,7 +111,7 @@ public class App implements GeneticAlgorithmDelegate {
         crossoverSpinnerTextField.setEditable(false);
         crossoverSpinnerTextField.setBackground(Color.white);
 
-        String[] mutationAlgorithms = new String[]{"Mutación terminal simple"};
+        String[] mutationAlgorithms = new String[]{"Mutación terminal simple", "Mutación funcional simple."};
         DefaultComboBoxModel mutationModel = new DefaultComboBoxModel(mutationAlgorithms);
         mutationComboBox.setModel(mutationModel);
         SpinnerNumberModel mutationSpinnerDataModel = new SpinnerNumberModel(0.05, 0.0, 1, 0.01);
@@ -200,7 +201,7 @@ public class App implements GeneticAlgorithmDelegate {
                 mutationAlgorithm = new MutacionTerminalSimple(terminalList);
                 break;
             case 1:
-//                mutationAlgorithm = new MutacionPorIntercambio();
+                mutationAlgorithm = new MutacionFuncionalSimple(functions);
                 break;
             case 2:
 //                mutationAlgorithm = new MutacionPorInsercion();
@@ -210,6 +211,9 @@ public class App implements GeneticAlgorithmDelegate {
                 break;
             case 4:
 //                mutationAlgorithm = new MutacionYI();
+                break;
+                case 5:
+//                mutationAlgorithm = new MutacionPorIntercambio();
                 break;
             default:
                 break;
