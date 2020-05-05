@@ -213,6 +213,11 @@ public class GeneticProblem extends Thread {
         return selectedForCrossoverList.size();
     }
 
+    /**
+     * Ejecuta sobre la población pasada por parámetros el control de bloating seleccionado.
+     * @param population Población sobre la que se va a ejecutar el control de bloating.
+     * @return Población modificada tras aplicar el control de bloating.
+     */
     private List<TreeNode>  controlBloating(List<TreeNode> population) {
         double averageFitness = calculateAverageFitness(population);
         double averageSize = calculateAverageSize(population);
@@ -225,11 +230,11 @@ public class GeneticProblem extends Thread {
     }
 
     /**
-     * Aplica control de bloating Tarpeian a la pobación dada.
-     * @param population
-     * @param averageSize
-     * @param n
-     * @return
+     * Aplica el control de bloating por el método Tarpeian sobre una población dada.
+     * @param population Población sobre la que se va a aplicar el control de bloating.
+     * @param averageSize Tamaño medio de la población.
+     * @param n Número n necesario para calcular la probabilidad de aplicar el control de bloating.
+     * @return Población modificada tras aplicar el control de bloating.
      */
     private List<TreeNode> executeTarpeianBloatingControl(List<TreeNode> population, double averageSize, int n) {
         double probability = 1/n;
@@ -247,22 +252,13 @@ public class GeneticProblem extends Thread {
         return resultPopulation;
     }
 
-    private double calculateAverageFitness(List<TreeNode> population) {
-        double averageFitness = 0;
-        for (TreeNode treeNode : population) {
-            averageFitness += treeNode.getFitness();
-        }
-        return averageFitness;
-    }
-
-    private double calculateAverageSize(List<TreeNode> population) {
-        double averageSize = 0;
-        for (TreeNode treeNode : population) {
-            averageSize += treeNode.getHeight();
-        }
-        return (averageSize/population.size());
-    }
-
+    /**
+     * Aplica el control de bloating por el método Penalización bien fundamentada en la población pasada por parámetro.
+     * @param population Población sobre la que se va a aplicar el control de bloating.
+     * @param averageSize Tamaño medio de la población.
+     * @param averageFitness Media del fitness de la población pasada por parámetro.
+     * @return Población modificada tras aplicar el control de bloating.
+     */
     private List<TreeNode> executePenaltyBloatingControl(List<TreeNode> population, double averageSize, double averageFitness) {
         List<TreeNode> resultPopulation = new ArrayList<>(population.size());
         double varianza = 0;
@@ -287,6 +283,32 @@ public class GeneticProblem extends Thread {
         }
 
         return resultPopulation;
+    }
+
+    /**
+     * Calcula el fitness medio sobre la población pasada por parámetro.
+     * @param population Población sobre la que se va a realizar el cálculo.
+     * @return El fitness medio de la población.
+     */
+    private double calculateAverageFitness(List<TreeNode> population) {
+        double averageFitness = 0;
+        for (TreeNode treeNode : population) {
+            averageFitness += treeNode.getFitness();
+        }
+        return averageFitness;
+    }
+
+    /**
+     * Calcula el tamaño medio de los individuos la población pasada por parámetro.
+     * @param population Población sobre la que se va a realizar el cálculo.
+     * @return El tamaño medio de los individuos de la población.
+     */
+    private double calculateAverageSize(List<TreeNode> population) {
+        double averageSize = 0;
+        for (TreeNode treeNode : population) {
+            averageSize += treeNode.getHeight();
+        }
+        return (averageSize/population.size());
     }
 
     private double evaluateTreeNode(TreeNode treeNode) {
