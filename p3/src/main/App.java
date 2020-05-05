@@ -5,9 +5,7 @@ import crossover.OperadorDeCruce;
 import entities.*;
 //import javafx.util.Pair;
 import helper.Pair;
-import mutation.MutacionFuncionalSimple;
-import mutation.MutacionTerminalSimple;
-import mutation.MutationAlgorithm;
+import mutation.*;
 import org.math.plot.Plot2DPanel;
 import org.math.plot.plots.LinePlot;
 import selection.RouletteSelection;
@@ -111,7 +109,7 @@ public class App implements GeneticAlgorithmDelegate {
         crossoverSpinnerTextField.setEditable(false);
         crossoverSpinnerTextField.setBackground(Color.white);
 
-        String[] mutationAlgorithms = new String[]{"Mutación terminal simple", "Mutación funcional simple."};
+        String[] mutationAlgorithms = new String[]{"Mutación terminal simple", "Mutación funcional simple", "Mutación de árbol", "Mutación por permutación"};
         DefaultComboBoxModel mutationModel = new DefaultComboBoxModel(mutationAlgorithms);
         mutationComboBox.setModel(mutationModel);
         SpinnerNumberModel mutationSpinnerDataModel = new SpinnerNumberModel(0.05, 0.0, 1, 0.01);
@@ -204,16 +202,13 @@ public class App implements GeneticAlgorithmDelegate {
                 mutationAlgorithm = new MutacionFuncionalSimple(functions);
                 break;
             case 2:
-//                mutationAlgorithm = new MutacionPorInsercion();
+                mutationAlgorithm = new MutacionDeArbol(functions, terminalList, maxDepth);
                 break;
             case 3:
-//                mutationAlgorithm = new MutacionHeuristica();
+                mutationAlgorithm = new MutacionPorPermutacion();
                 break;
             case 4:
 //                mutationAlgorithm = new MutacionYI();
-                break;
-                case 5:
-//                mutationAlgorithm = new MutacionPorIntercambio();
                 break;
             default:
                 break;
