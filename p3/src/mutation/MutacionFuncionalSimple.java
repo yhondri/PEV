@@ -19,13 +19,27 @@ public class MutacionFuncionalSimple implements MutationAlgorithm {
 
     @Override
     public TreeNode mutate(TreeNode treeNode) {
-        int numBranches = treeNode.getCardinal() - treeNode.getLeafCardinal();
+        int numBranches = treeNode.getHeight() - getLeafCardinal(treeNode);
         int selectedBranchNode = Utils.getRandom(numBranches, 0);
         TreeNode branchToMutate = getBranch(treeNode, selectedBranchNode);
         int arity = branchToMutate.getChildren().length;
         List<String> sameArityFuncs = getSameArityFunctions(arity);
         branchToMutate.setKey(sameArityFuncs.get(Utils.getRandom(sameArityFuncs.size(), 0)));
         return treeNode;
+    }
+
+    /**
+     * Calcula el número de hojas que tiene el árbol.
+     * @param treeNode Árbol a explorar.
+     * @return Número de hojas que contiene el árbol.*/
+    private int getLeafCardinal(TreeNode treeNode) {
+        if(treeNode.isLeaf())
+            return 1;
+        int c = 0;
+        for(TreeNode t: treeNode.getChildren()){
+            c += getLeafCardinal(t);
+        }
+        return c;
     }
 
     /**
@@ -59,7 +73,7 @@ public class MutacionFuncionalSimple implements MutationAlgorithm {
         }
         while(ret == null && i <treeNode.getChildren().length){
             ret = getBranch(treeNode.getChildren()[i], sel - prevCardinal);
-            prevCardinal += treeNode.getChildren()[i].getCardinal() - treeNode.getChildren()[i].getLeafCardinal();
+            prevCardinal += treeNode.getChildren()[i].getHeight() - getLeafCardinal(treeNode.getChildren()[i]);
             i++;
         }
         return ret;
