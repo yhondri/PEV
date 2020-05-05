@@ -269,7 +269,7 @@ public class GeneticProblem extends Thread {
         double covarianza = 0;
 
         for (TreeNode treeNode : population) {
-            varianza += (2 * (treeNode.getHeight() - averageSize));
+            varianza += (treeNode.getHeight() - averageSize) * (treeNode.getHeight() - averageSize);
             covarianza += (treeNode.getFitness() - averageFitness) * (treeNode.getHeight() - averageSize);
         }
 
