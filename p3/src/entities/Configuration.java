@@ -1,6 +1,8 @@
 package entities;
 
-import javafx.util.Pair;
+//import javafx.util.Pair;
+
+import helper.Pair;
 
 import java.util.List;
 

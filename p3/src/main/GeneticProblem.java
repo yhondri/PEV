@@ -2,8 +2,9 @@ package main;
 
 import crossover.CrossoverAlgorithm;
 import entities.*;
+import helper.Pair;
 import helper.Utils;
-import javafx.util.Pair;
+//import javafx.util.Pair;
 import mutation.MutationAlgorithm;
 import selection.SelectionAlgorithm;
 import java.util.*;

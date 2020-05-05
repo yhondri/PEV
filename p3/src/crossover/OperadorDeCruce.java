@@ -1,8 +1,9 @@
 package crossover;
 
 import entities.TreeNode;
+import helper.Pair;
 import helper.Utils;
-import javafx.util.Pair;
+//import javafx.util.Pair;
 
 public class OperadorDeCruce implements CrossoverAlgorithm {
     private double crossOverProbability;
