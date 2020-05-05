@@ -151,6 +151,9 @@ public class GeneticProblem extends Thread {
             totalFitness += fitness;
         }
 
+        //Control bloating
+        controlBloating(population);
+
         population = sortPopulation(population);
         TreeNode bestTreeNode = population.get(population.size()-1);
         solution.setAverageFitness(totalFitness/configuration.getPopulationSize());
@@ -210,9 +213,84 @@ public class GeneticProblem extends Thread {
         return selectedForCrossoverList.size();
     }
 
+    private List<TreeNode>  controlBloating(List<TreeNode> population) {
+        double averageFitness = calculateAverageFitness(population);
+        double averageSize = calculateAverageSize(population);
+        int n = 2;
+        if (controlBloating == ControlBloating.METODO_TARPEIAN) {
+            return executeTarpeianBloatingControl(population, averageSize, n);
+        } else {
+            return executePenaltyBloatingControl(population, averageSize, averageFitness);
+        }
+    }
+
+    /**
+     * Aplica control de bloating Tarpeian a la pobación dada.
+     * @param population
+     * @param averageSize
+     * @param n
+     * @return
+     */
+    private List<TreeNode> executeTarpeianBloatingControl(List<TreeNode> population, double averageSize, int n) {
+        double probability = 1/n;
+        List<TreeNode> resultPopulation = new ArrayList<>(population.size());
+
+        for (TreeNode treeNode : population) {
+            if ((treeNode.getHeight() > averageSize)) {
+                if (Utils.random.nextDouble() < probability) {
+                    treeNode.setFitness(Integer.MAX_VALUE);
+                }
+            }
+            resultPopulation.add(treeNode);
+        }
+
+        return resultPopulation;
+    }
+
+    private double calculateAverageFitness(List<TreeNode> population) {
+        double averageFitness = 0;
+        for (TreeNode treeNode : population) {
+            averageFitness += treeNode.getFitness();
+        }
+        return averageFitness;
+    }
+
+    private double calculateAverageSize(List<TreeNode> population) {
+        double averageSize = 0;
+        for (TreeNode treeNode : population) {
+            averageSize += treeNode.getHeight();
+        }
+        return (averageSize/population.size());
+    }
+
+    private List<TreeNode> executePenaltyBloatingControl(List<TreeNode> population, double averageSize, double averageFitness) {
+        List<TreeNode> resultPopulation = new ArrayList<>(population.size());
+        double varianza = 0;
+        double covarianza = 0;
+
+        for (TreeNode treeNode : population) {
+            varianza += (2 * (treeNode.getHeight() - averageSize));
+            covarianza += (treeNode.getFitness() - averageFitness) * (treeNode.getHeight() - averageSize);
+        }
+
+        varianza /= population.size();
+        covarianza /= population.size();
+        double k = covarianza / varianza;
+        if (k != k) { //Control NaN error
+            k = 0;
+        }
+
+        for (TreeNode treeNode : population) {
+            double newFitness = treeNode.getFitness() - k * treeNode.getHeight();
+            treeNode.setFitness(newFitness);
+            resultPopulation.add(treeNode);
+        }
+
+        return resultPopulation;
+    }
+
     private double evaluateTreeNode(TreeNode treeNode) {
         double fitness = treeNode.getHeight() * k;
-
         for (TestValue testValue : configuration.getMultiplexorTestValue().getTestValues()) {
             Boolean result = evaluateTreeNode(treeNode, testValue.getValuesMap());
             if (result != testValue.getResult()) {
