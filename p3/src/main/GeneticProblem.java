@@ -7,6 +7,7 @@ import helper.Utils;
 //import javafx.util.Pair;
 import mutation.MutationAlgorithm;
 import selection.SelectionAlgorithm;
+
 import java.util.*;
 
 public class GeneticProblem extends Thread {
@@ -19,9 +20,11 @@ public class GeneticProblem extends Thread {
     //Control del Bloating, k para penalizaión bien fundamentada (página 42 T7).
     private static final double k = 0.25;
     private ControlBloating controlBloating;
+    private InitializationMethod initializationMethod;
 
-    public GeneticProblem(Configuration configuration, GeneticAlgorithmDelegate delegate, SelectionAlgorithm selectionAlgorithm, MutationAlgorithm mutationAlgorithm, CrossoverAlgorithm crossoverAlgorithm, ControlBloating controlBloating) {
+    public GeneticProblem(Configuration configuration, GeneticAlgorithmDelegate delegate, InitializationMethod initializationMethod, SelectionAlgorithm selectionAlgorithm, MutationAlgorithm mutationAlgorithm, CrossoverAlgorithm crossoverAlgorithm, ControlBloating controlBloating) {
         this.configuration = configuration;
+        this.initializationMethod = initializationMethod;
         this.selectionAlgorithm = selectionAlgorithm;
         this.delegate = delegate;
         this.mutationAlgorithm = mutationAlgorithm;
@@ -32,7 +35,22 @@ public class GeneticProblem extends Thread {
     @Override
     public void run() {
         super.run();
-        List<TreeNode> population = rampedAndHalfInitialization();
+
+        List<TreeNode> population;
+        switch (initializationMethod) {
+            case RAMPED_HALF:
+                population = rampedAndHalfInitialization();
+                break;
+            case CRECIENTE:
+                population = getInitialPopulationByGrowInitialization();
+                break;
+            case COMPLETA:
+                population = getInitialPopulationByFullInitialization();
+                break;
+            default:
+                throw new RuntimeException("Método no implementado");
+        }
+
         List<Solution> solutions = new ArrayList<>();
         Solution solution = evaluatePopulation(population, 0, 0);
         solution.setAbsoluteBest(solution.getBestFitness());
@@ -64,13 +82,13 @@ public class GeneticProblem extends Thread {
     }
 
     private List<TreeNode> rampedAndHalfInitialization() {
-        int treeMaxDepth = configuration.getPopulationSize()/configuration.getMaxDepth();
+        int treeMaxDepth = configuration.getPopulationSize() / configuration.getMaxDepth();
 
         List<TreeNode> treeNodeList = new ArrayList<>(configuration.getPopulationSize());
         for (int i = 0; i < configuration.getPopulationSize(); i++) {
-            int subTreeMaxDepth = (i/treeMaxDepth)+1;
+            int subTreeMaxDepth = (i / treeMaxDepth) + 1;
             TreeNode treeNode;
-            if (i%2 == 0) {
+            if (i % 2 == 0) {
                 treeNode = getTreeNodeByFullInitialization(0, subTreeMaxDepth);
             } else {
                 treeNode = getTreeNodeByGrowInitialization(0, subTreeMaxDepth);
@@ -82,41 +100,63 @@ public class GeneticProblem extends Thread {
         return treeNodeList;
     }
 
+    private List<TreeNode> getInitialPopulationByFullInitialization() {
+        int treeMaxDepth = configuration.getPopulationSize() / configuration.getMaxDepth();
+        List<TreeNode> treeNodeList = new ArrayList<>(configuration.getPopulationSize());
+        for (int i = 0; i < configuration.getPopulationSize(); i++) {
+            int subTreeMaxDepth = (i / treeMaxDepth) + 1;
+            TreeNode treeNode = getTreeNodeByFullInitialization(0, subTreeMaxDepth);
+            treeNodeList.add(treeNode);
+        }
+        return treeNodeList;
+    }
+
     /**
      * Tomamos nodos del conjunto de funciones hasta que llegamos a una profundidad máxima.
      * A partir de esta profundidad se sotman los símbolos del conjunto de terminales.
-     * @param depth profundidad del nodo a crear.
+     * @param depth    profundidad del nodo a crear.
      * @param maxDepth profundidad máxima del subárbol.
      * @return Devuelve un nuevo nodo que puede ser un nodo función o terminal.
      */
     private TreeNode getTreeNodeByFullInitialization(int depth, int maxDepth) {
         TreeNode treeNode;
         if (depth < maxDepth) {
-            int functionIndex = Utils.getRandom(configuration.getNumberOfFunctions(),0);
+            int functionIndex = Utils.getRandom(configuration.getNumberOfFunctions(), 0);
             Pair<String, Integer> functionPair = configuration.getFunctionAtIndex(functionIndex);
             treeNode = new TreeNode(functionPair.getKey(), functionPair.getValue(), maxDepth);
             for (int i = 0; i < functionPair.getValue(); i++) {
                 treeNode.addNodeAt(i, getTreeNodeByFullInitialization(depth + 1, maxDepth));
             }
         } else {
-            int terminalIndex = Utils.getRandom(configuration.getNumberOfTerminals(),0);
+            int terminalIndex = Utils.getRandom(configuration.getNumberOfTerminals(), 0);
             String terminal = configuration.getTerminalAtIndex(terminalIndex);
             treeNode = new TreeNode(terminal, maxDepth);
         }
         return treeNode;
     }
 
+    private List<TreeNode> getInitialPopulationByGrowInitialization() {
+        int treeMaxDepth = configuration.getPopulationSize() / configuration.getMaxDepth();
+        List<TreeNode> treeNodeList = new ArrayList<>(configuration.getPopulationSize());
+        for (int i = 0; i < configuration.getPopulationSize(); i++) {
+            int subTreeMaxDepth = (i / treeMaxDepth) + 1;
+            TreeNode treeNode = getTreeNodeByGrowInitialization(0, subTreeMaxDepth);
+            treeNodeList.add(treeNode);
+        }
+        return treeNodeList;
+    }
+
     /**
      * Creamos nodos de la función hasta llegar a una profundidad máxima definida. Una vez alcanzada la profundidad máxima
      * solo tomamos los símbolos de la lista de términales.
-     * @param depth Profundidad actual del nodo.
+     * @param depth    Profundidad actual del nodo.
      * @param maxDepth Profundidad máxima del nodo.
      * @return Devuelve un nuevo nodo que puede ser un nodo función o terminal.
      */
     private TreeNode getTreeNodeByGrowInitialization(int depth, int maxDepth) {
         TreeNode treeNode;
         if (depth < maxDepth) {
-            int functionIndex = Utils.getRandom(configuration.getNumberOfFunctions() + configuration.getNumberOfTerminals(),0);
+            int functionIndex = Utils.getRandom(configuration.getNumberOfFunctions() + configuration.getNumberOfTerminals(), 0);
             if (functionIndex >= configuration.getNumberOfFunctions()) {
                 String terminal = configuration.getTerminalAtIndex(functionIndex - configuration.getNumberOfFunctions());
                 treeNode = new TreeNode(terminal, configuration.getMaxDepth());
@@ -125,12 +165,12 @@ public class GeneticProblem extends Thread {
                 treeNode = new TreeNode(functionPair.getKey(), functionPair.getValue(), configuration.getMaxDepth());
                 //Obtenemos el número de terminales necesarios para la función.
                 for (int i = 0; i < functionPair.getValue(); i++) {
-                    TreeNode childrenNode = getTreeNodeByGrowInitialization(depth+1, maxDepth);
+                    TreeNode childrenNode = getTreeNodeByGrowInitialization(depth + 1, maxDepth);
                     treeNode.addNodeAt(i, childrenNode);
                 }
             }
         } else {
-            int terminalIndex = Utils.getRandom(configuration.getNumberOfTerminals(),0);
+            int terminalIndex = Utils.getRandom(configuration.getNumberOfTerminals(), 0);
             String terminal = configuration.getTerminalAtIndex(terminalIndex);
             treeNode = new TreeNode(terminal, configuration.getMaxDepth());
         }
@@ -155,8 +195,8 @@ public class GeneticProblem extends Thread {
         controlBloating(population);
 
         population = sortPopulation(population);
-        TreeNode bestTreeNode = population.get(population.size()-1);
-        solution.setAverageFitness(totalFitness/configuration.getPopulationSize());
+        TreeNode bestTreeNode = population.get(population.size() - 1);
+        solution.setAverageFitness(totalFitness / configuration.getPopulationSize());
         solution.setBestFitness(bestTreeNode.getFitness());
         solution.setWorstFitness(population.get(0).getFitness());
         solution.setAbsoluteBest(bestTreeNode.getFitness());
@@ -164,8 +204,8 @@ public class GeneticProblem extends Thread {
         solution.setAbsoluteBestRepresentation(bestTreeNode.getRepresentation());
 
         double acumulatedFitness = 0;
-        for (int i = population.size()-1; i >= 0; i--) {
-            acumulatedFitness += population.get(i).getFitness()/totalFitness;
+        for (int i = population.size() - 1; i >= 0; i--) {
+            acumulatedFitness += population.get(i).getFitness() / totalFitness;
             population.get(i).setAcumulatedFitness(acumulatedFitness);
             population.get(i).setGrade(population.get(i).getFitness() / totalFitness);
         }
@@ -173,13 +213,14 @@ public class GeneticProblem extends Thread {
         return solution;
     }
 
-    private List<TreeNode>sortPopulation(List<TreeNode> population) {
+    private List<TreeNode> sortPopulation(List<TreeNode> population) {
         Collections.sort(population, Collections.reverseOrder());
         return population;
     }
 
     /**
      * Cruza los individuos de una poblacción para producir individuos que combinan característiccas de los progenitores.
+     *
      * @param population Los individuos a cruzar.
      * @return Devuelve el número de curces que se han producido.
      */
@@ -192,7 +233,7 @@ public class GeneticProblem extends Thread {
             }
         }
 
-        if (selectedForCrossoverList.size()%2 == 1) {
+        if (selectedForCrossoverList.size() % 2 == 1) {
             int randomPosition = random.nextInt(selectedForCrossoverList.size());
             selectedForCrossoverList.remove(randomPosition);
         }
@@ -215,10 +256,11 @@ public class GeneticProblem extends Thread {
 
     /**
      * Ejecuta sobre la población pasada por parámetros el control de bloating seleccionado.
+     *
      * @param population Población sobre la que se va a ejecutar el control de bloating.
      * @return Población modificada tras aplicar el control de bloating.
      */
-    private List<TreeNode>  controlBloating(List<TreeNode> population) {
+    private List<TreeNode> controlBloating(List<TreeNode> population) {
         double averageFitness = calculateAverageFitness(population);
         double averageSize = calculateAverageSize(population);
         int n = 2;
@@ -231,13 +273,14 @@ public class GeneticProblem extends Thread {
 
     /**
      * Aplica el control de bloating por el método Tarpeian sobre una población dada.
-     * @param population Población sobre la que se va a aplicar el control de bloating.
+     *
+     * @param population  Población sobre la que se va a aplicar el control de bloating.
      * @param averageSize Tamaño medio de la población.
-     * @param n Número n necesario para calcular la probabilidad de aplicar el control de bloating.
+     * @param n           Número n necesario para calcular la probabilidad de aplicar el control de bloating.
      * @return Población modificada tras aplicar el control de bloating.
      */
     private List<TreeNode> executeTarpeianBloatingControl(List<TreeNode> population, double averageSize, int n) {
-        double probability = 1/n;
+        double probability = 1 / n;
         List<TreeNode> resultPopulation = new ArrayList<>(population.size());
 
         for (TreeNode treeNode : population) {
@@ -254,8 +297,9 @@ public class GeneticProblem extends Thread {
 
     /**
      * Aplica el control de bloating por el método Penalización bien fundamentada en la población pasada por parámetro.
-     * @param population Población sobre la que se va a aplicar el control de bloating.
-     * @param averageSize Tamaño medio de la población.
+     *
+     * @param population     Población sobre la que se va a aplicar el control de bloating.
+     * @param averageSize    Tamaño medio de la población.
      * @param averageFitness Media del fitness de la población pasada por parámetro.
      * @return Población modificada tras aplicar el control de bloating.
      */
@@ -287,6 +331,7 @@ public class GeneticProblem extends Thread {
 
     /**
      * Calcula el fitness medio sobre la población pasada por parámetro.
+     *
      * @param population Población sobre la que se va a realizar el cálculo.
      * @return El fitness medio de la población.
      */
@@ -300,6 +345,7 @@ public class GeneticProblem extends Thread {
 
     /**
      * Calcula el tamaño medio de los individuos la población pasada por parámetro.
+     *
      * @param population Población sobre la que se va a realizar el cálculo.
      * @return El tamaño medio de los individuos de la población.
      */
@@ -308,7 +354,7 @@ public class GeneticProblem extends Thread {
         for (TreeNode treeNode : population) {
             averageSize += treeNode.getHeight();
         }
-        return (averageSize/population.size());
+        return (averageSize / population.size());
     }
 
     private double evaluateTreeNode(TreeNode treeNode) {
@@ -336,8 +382,9 @@ public class GeneticProblem extends Thread {
      * Not -> 1 argumento.
      * AND - OR -> 2 argumentos.
      * IF -> 3 argumentos (XYZ). Primero se evalua X, si X es true, evaluamos Y, si Y es false, evaluamos Z.
+     *
      * @param treeNode El nodo a evaluar.
-     * @param values Mapa de los valores del multiplexor contra los que se va a evaluar la función.
+     * @param values   Mapa de los valores del multiplexor contra los que se va a evaluar la función.
      * @return El resultado de la evaluación.
      */
     private Boolean evaluateFunctionTreeNode(TreeNode treeNode, Map<String, Boolean> values) {
@@ -368,6 +415,7 @@ public class GeneticProblem extends Thread {
 
     /**
      * Se aplica una pequeña modificación en uno o mas genes de un individuo.
+     *
      * @param population Los individuos a mutar.
      * @return Devuelve el número de mutaciones que se han producido.
      */

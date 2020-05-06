@@ -40,6 +40,7 @@ public class App implements GeneticAlgorithmDelegate {
     private JSpinner maxDepthSpinner;
     private JComboBox bloatingControlMethodComboBox;
     private JPanel bloatingControlJPanel;
+    private JComboBox initializationComboBox;
     //endregion UI
 
     private List<Pair<String, Integer>> functions;
@@ -91,10 +92,14 @@ public class App implements GeneticAlgorithmDelegate {
         SpinnerNumberModel maxDepthDataModel = new SpinnerNumberModel(3, 1, 100, 1);
         maxDepthSpinner.setModel(maxDepthDataModel);
 
-        SpinnerNumberModel populationSpinnerDataModel = new SpinnerNumberModel(100, 20, 10000, 1);
+        SpinnerNumberModel populationSpinnerDataModel = new SpinnerNumberModel(3000, 20, 10000, 1);
         populationSizeSpinner.setModel(populationSpinnerDataModel);
-        SpinnerNumberModel numberOfGenerationsSpinnerDataModel = new SpinnerNumberModel(100, 20, 10000, 1);
+        SpinnerNumberModel numberOfGenerationsSpinnerDataModel = new SpinnerNumberModel(300, 20, 10000, 1);
         numberOfGenerationsSpinner.setModel(numberOfGenerationsSpinnerDataModel);
+
+        String[] initializationMethods = new String[]{"Ramped and half", "Inicialización completa", "Inicialización creciente"};
+        DefaultComboBoxModel initializationComboBoxModel = new DefaultComboBoxModel(initializationMethods);
+        initializationComboBox.setModel(initializationComboBoxModel);
 
         String[] bloatingControlMethods = new String[]{"Método Tarpeian", "Penalización bien fundamentada"};
         DefaultComboBoxModel bloatinControlModel = new DefaultComboBoxModel(bloatingControlMethods);
@@ -238,6 +243,21 @@ public class App implements GeneticAlgorithmDelegate {
 //                break;
 //        }
 
+        InitializationMethod initializationMethod;
+        switch (initializationComboBox.getSelectedIndex()) {
+            case 0:
+                initializationMethod = InitializationMethod.RAMPED_HALF;
+                break;
+            case 1:
+                initializationMethod = InitializationMethod.COMPLETA;
+                break;
+            case 2:
+                initializationMethod = InitializationMethod.CRECIENTE;
+                break;
+            default:
+                throw new RuntimeException("Método no implementado");
+        }
+
         ControlBloating controlBloating;
         switch (bloatingControlMethodComboBox.getSelectedIndex()) {
             case 0:
@@ -255,7 +275,7 @@ public class App implements GeneticAlgorithmDelegate {
         }
 
         configuration = new Configuration(functions, terminalList,0, populationSize, numberOfGenerations, crossoverValue, mutationValue, eliteValue, maxDepth, multiplexorTestValue);
-        GeneticProblem geneticAlgorithm = new GeneticProblem(configuration, this, selectionAlgorithm, mutationAlgorithm, crossoverAlgorithm, controlBloating);
+        GeneticProblem geneticAlgorithm = new GeneticProblem(configuration, this, initializationMethod, selectionAlgorithm, mutationAlgorithm, crossoverAlgorithm, controlBloating);
 
         initChartPanel();
         geneticAlgorithm.start();
