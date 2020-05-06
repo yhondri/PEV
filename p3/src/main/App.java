@@ -41,6 +41,7 @@ public class App implements GeneticAlgorithmDelegate {
     private JComboBox bloatingControlMethodComboBox;
     private JPanel bloatingControlJPanel;
     private JComboBox initializationComboBox;
+    private JComboBox multiplexorComboBox;
     //endregion UI
 
     private List<Pair<String, Integer>> functions;
@@ -67,25 +68,9 @@ public class App implements GeneticAlgorithmDelegate {
     }
 
     public App() {
-        initData();
         setupView();
         initChartPanel();
         setupListeners();
-    }
-
-    private void initData() {
-        functions = new ArrayList<>();
-        functions.add(new Pair<>("AND", 2));
-        functions.add(new Pair<>("OR", 2));
-        functions.add(new Pair<>("NOT", 1));
-
-        terminalList = new ArrayList<>(6);
-        terminalList.add("A0");
-        terminalList.add("A1");
-        terminalList.add("D0");
-        terminalList.add("D1");
-        terminalList.add("D2");
-        terminalList.add("D3");
     }
 
     private void setupView() {
@@ -96,6 +81,10 @@ public class App implements GeneticAlgorithmDelegate {
         populationSizeSpinner.setModel(populationSpinnerDataModel);
         SpinnerNumberModel numberOfGenerationsSpinnerDataModel = new SpinnerNumberModel(300, 20, 10000, 1);
         numberOfGenerationsSpinner.setModel(numberOfGenerationsSpinnerDataModel);
+
+        String[] multiplexorProblems = new String[]{"6 terminales", "11 terminales"};
+        DefaultComboBoxModel multiplexorProblemsComboBoxModel = new DefaultComboBoxModel(multiplexorProblems);
+        multiplexorComboBox.setModel(multiplexorProblemsComboBoxModel);
 
         String[] initializationMethods = new String[]{"Ramped and half", "Inicialización completa", "Inicialización creciente"};
         DefaultComboBoxModel initializationComboBoxModel = new DefaultComboBoxModel(initializationMethods);
@@ -170,6 +159,8 @@ public class App implements GeneticAlgorithmDelegate {
     }
 
     private void setupAlgorithm() {
+        initDataFunctionsData();
+
         int populationSize = (int) populationSizeSpinner.getValue();
         int numberOfGenerations = (int) numberOfGenerationsSpinner.getValue();
         double crossoverValue = (double) crossoverValueSpinner.getValue();
@@ -279,6 +270,31 @@ public class App implements GeneticAlgorithmDelegate {
 
         initChartPanel();
         geneticAlgorithm.start();
+    }
+
+
+    private void initDataFunctionsData() {
+        functions = new ArrayList<>();
+        functions.add(new Pair<>("AND", 2));
+        functions.add(new Pair<>("OR", 2));
+        functions.add(new Pair<>("NOT", 1));
+
+        terminalList = new ArrayList<>(6);
+        terminalList.add("A0");
+        terminalList.add("A1");
+        if (multiplexorComboBox.getSelectedIndex() == 1) {
+            terminalList.add("A2");
+        }
+        terminalList.add("D0");
+        terminalList.add("D1");
+        terminalList.add("D2");
+        terminalList.add("D3");
+        if (multiplexorComboBox.getSelectedIndex() == 1) {
+            terminalList.add("A4");
+            terminalList.add("A5");
+            terminalList.add("A6");
+            terminalList.add("A7");
+        }
     }
 
     // region GeneticAlgorithmDelegate
