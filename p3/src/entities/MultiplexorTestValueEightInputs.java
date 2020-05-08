@@ -977,7 +977,7 @@ public class MultiplexorTestValueEightInputs implements MultiplexorTestValue {
         testValuesMap.put("D5", false);
         testValuesMap.put("D6", false);
         testValuesMap.put("D7", true);
-        testValue = new TestValue(testValuesMap,true);
+        testValue = new TestValue(testValuesMap,false);
         testValues.add(testValue);
 
         //111
@@ -992,7 +992,7 @@ public class MultiplexorTestValueEightInputs implements MultiplexorTestValue {
         testValuesMap.put("D5", false);
         testValuesMap.put("D6", false);
         testValuesMap.put("D7", true);
-        testValue = new TestValue(testValuesMap,false);
+        testValue = new TestValue(testValuesMap,true);
         testValues.add(testValue);
         //endregion D7
     }

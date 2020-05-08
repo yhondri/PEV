@@ -363,7 +363,7 @@ public class GeneticProblem extends Thread {
         for (TestValue testValue : configuration.getMultiplexorTestValue().getTestValues()) {
             Boolean result = evaluateTreeNode(treeNode, testValue.getValuesMap());
             if (result != testValue.getResult()) {
-                fitness += 10;
+                fitness += 30;
             }
         }
         return fitness;
