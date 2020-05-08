@@ -65,21 +65,21 @@ public class TreeNode implements Comparable<TreeNode>  {
         return totalHeight;
     }
 
-    public int getDepth() {
-        if (isLeaf()) {
-            return 1;
-        }
-
-        int depth = 0;
-        for (TreeNode child: children) {
-            depth = max(depth, child.getDepth());
-            if (depth > maxDepth) {
-                return maxDepth;
-            }
-        }
-
-        return depth + 1;
-    }
+//    public int getDepth() {
+//        if (isLeaf()) {
+//            return 1;
+//        }
+//
+//        int depth = 0;
+//        for (TreeNode child: children) {
+//            depth = max(depth, child.getDepth());
+//            if (depth > maxDepth) {
+//                return maxDepth;
+//            }
+//        }
+//
+//        return depth + 1;
+//    }
 
     /**
      * Verifica si el nodo es una hoja, es decir, si no tiene nodos hijos.

@@ -8,8 +8,8 @@ import helper.Pair;
 import mutation.*;
 import org.math.plot.Plot2DPanel;
 import org.math.plot.plots.LinePlot;
-import selection.RouletteSelection;
-import selection.SelectionAlgorithm;
+import selection.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -174,16 +174,16 @@ public class App implements GeneticAlgorithmDelegate {
                 selectionAlgorithm = new RouletteSelection();
                 break;
             case 1:
-//                selectionAlgorithm = new TournamentSelection();
+                selectionAlgorithm = new TournamentSelection();
                 break;
             case 2:
-//                selectionAlgorithm = new UniversalStochastic();
+                selectionAlgorithm = new UniversalStochastic();
                 break;
             case 3:
-//                selectionAlgorithm = new TruncationSelection();
+                selectionAlgorithm = new TruncationSelection();
                 break;
             case 4:
-//                selectionAlgorithm = new RemainsSelection();
+                selectionAlgorithm = new RemainsSelection();
                 break;
             default:
                 break;
