@@ -25,7 +25,6 @@ public class MultiplexorTestValueEightInputs implements MultiplexorTestValue {
         testValuesMap.put("D5", false);
         testValuesMap.put("D6", false);
         testValuesMap.put("D7", false);
-        
         testValue = new TestValue(testValuesMap,true);
         testValues.add(testValue);
 
@@ -40,7 +39,6 @@ public class MultiplexorTestValueEightInputs implements MultiplexorTestValue {
         testValuesMap.put("D5", false);
         testValuesMap.put("D6", false);
         testValuesMap.put("D7", false);
-        
         testValue = new TestValue(testValuesMap,false);
         testValues.add(testValue);
 
@@ -55,7 +53,6 @@ public class MultiplexorTestValueEightInputs implements MultiplexorTestValue {
         testValuesMap.put("D5", false);
         testValuesMap.put("D6", false);
         testValuesMap.put("D7", false);
-        
         testValue = new TestValue(testValuesMap,false);
         testValues.add(testValue);
 
@@ -70,7 +67,6 @@ public class MultiplexorTestValueEightInputs implements MultiplexorTestValue {
         testValuesMap.put("D5", false);
         testValuesMap.put("D6", false);
         testValuesMap.put("D7", false);
-        
         testValue = new TestValue(testValuesMap,false);
         testValues.add(testValue);
 
@@ -85,7 +81,6 @@ public class MultiplexorTestValueEightInputs implements MultiplexorTestValue {
         testValuesMap.put("D5", false);
         testValuesMap.put("D6", false);
         testValuesMap.put("D7", false);
-        
         testValue = new TestValue(testValuesMap,false);
         testValues.add(testValue);
 
@@ -100,7 +95,6 @@ public class MultiplexorTestValueEightInputs implements MultiplexorTestValue {
         testValuesMap.put("D5", false);
         testValuesMap.put("D6", false);
         testValuesMap.put("D7", false);
-        
         testValue = new TestValue(testValuesMap,false);
         testValues.add(testValue);
 
@@ -115,7 +109,6 @@ public class MultiplexorTestValueEightInputs implements MultiplexorTestValue {
         testValuesMap.put("D5", false);
         testValuesMap.put("D6", false);
         testValuesMap.put("D7", false);
-        
         testValue = new TestValue(testValuesMap,false);
         testValues.add(testValue);
 
@@ -130,7 +123,6 @@ public class MultiplexorTestValueEightInputs implements MultiplexorTestValue {
         testValuesMap.put("D5", false);
         testValuesMap.put("D6", false);
         testValuesMap.put("D7", false);
-        
         testValue = new TestValue(testValuesMap,false);
         testValues.add(testValue);
         //endregion D0

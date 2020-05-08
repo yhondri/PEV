@@ -53,7 +53,10 @@ public class GeneticProblem extends Thread {
         }
 
         List<Solution> solutions = new ArrayList<>();
-        Solution solution = evaluatePopulation(population, 0, 0);
+        Pair<Solution, List<TreeNode>> result = evaluatePopulation(population, 0, 0);
+        Solution solution = result.getKey();
+        population = result.getValue();
+
         solution.setAbsoluteBest(solution.getBestFitness());
         solutions.add(solution);
         delegate.didEvaluateGeneration(0, solution);
@@ -65,7 +68,10 @@ public class GeneticProblem extends Thread {
             int numberOfcrossovers = crossPopulation(population);
             int numberOfMutations = mutatePopulation(population);
             addElite(population, eliteList);
-            solution = evaluatePopulation(population, numberOfcrossovers, numberOfMutations);
+            result = evaluatePopulation(population, numberOfcrossovers, numberOfMutations);
+            solution = result.getKey();
+            population = result.getValue();
+
             if (!isBetterFitness(solution.getAbsoluteBest(), absBest)) {
                 solution.setAbsoluteBest(absBest);
             }
@@ -178,11 +184,11 @@ public class GeneticProblem extends Thread {
         return treeNode;
     }
 
-    private Solution evaluatePopulation(List<TreeNode> population, int numberOfCrossover, int numberOfMutations) {
+    private Pair<Solution, List<TreeNode>> evaluatePopulation(List<TreeNode> population, int numberOfCrossover, int numberOfMutations) {
         Solution solution = new Solution();
 
         if (population.size() == 0) {
-            return solution;
+            return new Pair<>(solution, population);
         }
 
         double totalFitness = 0;
@@ -193,7 +199,7 @@ public class GeneticProblem extends Thread {
         }
 
         //Control bloating
-        controlBloating(population);
+        population = controlBloating(population);
 
         population = sortPopulation(population);
         TreeNode bestTreeNode = population.get(population.size() - 1);
@@ -211,7 +217,7 @@ public class GeneticProblem extends Thread {
             population.get(i).setGrade(population.get(i).getFitness() / totalFitness);
         }
 
-        return solution;
+        return new Pair<>(solution, population);
     }
 
     private List<TreeNode> sortPopulation(List<TreeNode> population) {

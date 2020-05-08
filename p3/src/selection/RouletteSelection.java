@@ -25,6 +25,7 @@ public class RouletteSelection implements SelectionAlgorithm {
 		while (index >= 0 && trial > population.get(index).getAcumulatedFitness()) {
 			index--;
 		}
+		index = (index < 0) ? 0 : index;
 		return population.get(index).getCopy();
 	}
 }
