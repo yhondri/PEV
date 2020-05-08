@@ -283,7 +283,7 @@ public class App implements GeneticAlgorithmDelegate {
         functions.add(new Pair<>("OR", 2));
         functions.add(new Pair<>("NOT", 1));
 
-        terminalList = new ArrayList<>(6);
+        terminalList = new ArrayList<>();
         terminalList.add("A0");
         terminalList.add("A1");
         if (multiplexorComboBox.getSelectedIndex() == 1) {

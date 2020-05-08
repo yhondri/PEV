@@ -137,7 +137,7 @@ public class GeneticProblem extends Thread {
         } else {
             int terminalIndex = Utils.getRandom(configuration.getNumberOfTerminals(), 0);
             String terminal = configuration.getTerminalAtIndex(terminalIndex);
-            treeNode = new TreeNode(terminal, maxDepth);
+            treeNode = new TreeNode(terminal, configuration.getMaxDepth());
         }
         return treeNode;
     }
@@ -369,7 +369,7 @@ public class GeneticProblem extends Thread {
         for (TestValue testValue : configuration.getMultiplexorTestValue().getTestValues()) {
             Boolean result = evaluateTreeNode(treeNode, testValue.getValuesMap());
             if (result != testValue.getResult()) {
-                fitness += 30;
+                fitness += 10;
             }
         }
         return fitness;
@@ -388,7 +388,6 @@ public class GeneticProblem extends Thread {
      * Not -> 1 argumento.
      * AND - OR -> 2 argumentos.
      * IF -> 3 argumentos (XYZ). Primero se evalua X, si X es true, evaluamos Y, si Y es false, evaluamos Z.
-     *
      * @param treeNode El nodo a evaluar.
      * @param values   Mapa de los valores del multiplexor contra los que se va a evaluar la función.
      * @return El resultado de la evaluación.
