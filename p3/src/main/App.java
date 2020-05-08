@@ -259,7 +259,12 @@ public class App implements GeneticAlgorithmDelegate {
                 break;
         }
 
-        MultiplexorTestValue multiplexorTestValue = new MultiplexorTestValueSixInputs();
+        MultiplexorTestValue multiplexorTestValue;
+        if (multiplexorComboBox.getSelectedIndex() == 0) {
+            multiplexorTestValue = new MultiplexorTestValueSixInputs();
+        } else {
+            multiplexorTestValue = new MultiplexorTestValueEightInputs();
+        }
 
         if (useIfFunctionCheckbox.isSelected()) {
             functions.add(new Pair<>("IF", 3));
@@ -271,7 +276,6 @@ public class App implements GeneticAlgorithmDelegate {
         initChartPanel();
         geneticAlgorithm.start();
     }
-
 
     private void initDataFunctionsData() {
         functions = new ArrayList<>();
@@ -290,10 +294,10 @@ public class App implements GeneticAlgorithmDelegate {
         terminalList.add("D2");
         terminalList.add("D3");
         if (multiplexorComboBox.getSelectedIndex() == 1) {
-            terminalList.add("A4");
-            terminalList.add("A5");
-            terminalList.add("A6");
-            terminalList.add("A7");
+            terminalList.add("D4");
+            terminalList.add("D5");
+            terminalList.add("D6");
+            terminalList.add("D7");
         }
     }
 

@@ -35,6 +35,7 @@ public class GeneticProblem extends Thread {
     @Override
     public void run() {
         super.run();
+        delegate.onStarSearch();
 
         List<TreeNode> population;
         switch (initializationMethod) {
@@ -365,7 +366,6 @@ public class GeneticProblem extends Thread {
                 fitness += 10;
             }
         }
-
         return fitness;
     }
 
@@ -389,21 +389,22 @@ public class GeneticProblem extends Thread {
      */
     private Boolean evaluateFunctionTreeNode(TreeNode treeNode, Map<String, Boolean> values) {
         Boolean firstNode = evaluateTreeNode(treeNode.getNodeAtIndex(0), values);
-        if (Function.NOT == Function.valueOf(treeNode.getKey())) {
+        Function treeNodeFunction = Function.valueOf(treeNode.getKey());
+        if (Function.NOT == treeNodeFunction) {
             return !firstNode;
         }
 
         Boolean secondNode = evaluateTreeNode(treeNode.getNodeAtIndex(1), values);
-        if (Function.AND == Function.valueOf(treeNode.getKey())) {
+        if (Function.AND == treeNodeFunction) {
             return firstNode && secondNode;
         }
 
-        if (Function.OR == Function.valueOf(treeNode.getKey())) {
+        if (Function.OR == treeNodeFunction) {
             return firstNode || secondNode;
         }
 
         Boolean thirdNode = evaluateTreeNode(treeNode.getNodeAtIndex(2), values);
-        if (Function.IF == Function.valueOf(treeNode.getKey())) {
+        if (Function.IF == treeNodeFunction) {
             if (firstNode) {
                 return secondNode;
             } else {
