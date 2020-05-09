@@ -286,12 +286,11 @@ public class GeneticProblem extends Thread {
      * @return Población modificada tras aplicar el control de bloating.
      */
     private List<TreeNode> executeTarpeianBloatingControl(List<TreeNode> population, double averageSize, int n) {
-        double probability = 1 / n;
         List<TreeNode> resultPopulation = new ArrayList<>(population.size());
 
         for (TreeNode treeNode : population) {
             if ((treeNode.getHeight() > averageSize)) {
-                if (Utils.random.nextDouble() < probability) {
+                if (Utils.random.nextInt() %n == 0) {
                     treeNode.setFitness(Integer.MAX_VALUE);
                 }
             }
