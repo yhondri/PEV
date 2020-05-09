@@ -1,7 +1,5 @@
 package entities;
 
-import static java.lang.Integer.max;
-
 public class TreeNode implements Comparable<TreeNode>  {
     //Padre del nodo
     private TreeNode parent;

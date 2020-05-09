@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MultiplexorTestValueEightInputs implements MultiplexorTestValue {
+public class MultiplexorTestValueElevenInputs implements MultiplexorTestValue {
     private List<TestValue> testValues;
-    public MultiplexorTestValueEightInputs(List<List<Boolean>> data) {
+    public MultiplexorTestValueElevenInputs(List<List<Boolean>> data) {
         testValues = new ArrayList<>();
         for (List<Boolean> row : data) {
             Map<String, Boolean> testValuesMap = new HashMap<>();

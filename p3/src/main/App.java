@@ -174,7 +174,7 @@ public class App implements GeneticAlgorithmDelegate {
                     multiplexorTestValue = new MultiplexorTestValueSixInputs(data);
                 } else {
                     multiplexorProblem = MultiplexorProblem.ELEVEN_INPUTS;
-                    multiplexorTestValue = new MultiplexorTestValueEightInputs(data);
+                    multiplexorTestValue = new MultiplexorTestValueElevenInputs(data);
                 }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
