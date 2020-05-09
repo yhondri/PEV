@@ -22,179 +22,20 @@ public class MultiplexorTestValueSixInputs implements MultiplexorTestValue {
      *  1  1  X  X  X  0 | 0
      *  1  1  X  X  X  1 | 1
      */
-    public MultiplexorTestValueSixInputs() {
+    public MultiplexorTestValueSixInputs(List<List<Boolean>> data) {
         testValues = new ArrayList<>();
-        TestValue testValue;
-
-        //region D0
-        Map<String, Boolean> testValuesMap = new HashMap<>();
-        testValuesMap.put("A0", false);
-        testValuesMap.put("A1", false);
-        testValuesMap.put("D0", true);
-        testValuesMap.put("D1", false);
-        testValuesMap.put("D2", false);
-        testValuesMap.put("D3", false);
-        testValue = new TestValue(testValuesMap,true);
-        testValues.add(testValue);
-
-        testValuesMap = new HashMap<>();
-        testValuesMap.put("A0", false);
-        testValuesMap.put("A1", true);
-        testValuesMap.put("D0", true);
-        testValuesMap.put("D1", false);
-        testValuesMap.put("D2", false);
-        testValuesMap.put("D3", false);
-        testValue = new TestValue(testValuesMap,false);
-        testValues.add(testValue);
-
-        testValuesMap = new HashMap<>();
-        testValuesMap.put("A0", true);
-        testValuesMap.put("A1", false);
-        testValuesMap.put("D0", true);
-        testValuesMap.put("D1", false);
-        testValuesMap.put("D2", false);
-        testValuesMap.put("D3", false);
-        testValue = new TestValue(testValuesMap,false);
-        testValues.add(testValue);
-
-        testValuesMap = new HashMap<>();
-        testValuesMap.put("A0", true);
-        testValuesMap.put("A1", true);
-        testValuesMap.put("D0", true);
-        testValuesMap.put("D1", false);
-        testValuesMap.put("D2", false);
-        testValuesMap.put("D3", false);
-        testValue = new TestValue(testValuesMap,false);
-        testValues.add(testValue);
-        //endregion D0
-
-        //region D1
-        testValuesMap = new HashMap<>();
-        testValuesMap.put("A0", false);
-        testValuesMap.put("A1", false);
-        testValuesMap.put("D0", false);
-        testValuesMap.put("D1", true);
-        testValuesMap.put("D2", false);
-        testValuesMap.put("D3", false);
-        testValue = new TestValue(testValuesMap,false);
-        testValues.add(testValue);
-
-        testValuesMap = new HashMap<>();
-        testValuesMap.put("A0", false);
-        testValuesMap.put("A1", true);
-        testValuesMap.put("D0", false);
-        testValuesMap.put("D1", true);
-        testValuesMap.put("D2", false);
-        testValuesMap.put("D3", false);
-        testValue = new TestValue(testValuesMap,true);
-        testValues.add(testValue);
-
-        testValuesMap = new HashMap<>();
-        testValuesMap.put("A0", true);
-        testValuesMap.put("A1", false);
-        testValuesMap.put("D0", false);
-        testValuesMap.put("D1", true);
-        testValuesMap.put("D2", false);
-        testValuesMap.put("D3", false);
-        testValue = new TestValue(testValuesMap,false);
-        testValues.add(testValue);
-
-        testValuesMap = new HashMap<>();
-        testValuesMap.put("A0", true);
-        testValuesMap.put("A1", true);
-        testValuesMap.put("D0", false);
-        testValuesMap.put("D1", true);
-        testValuesMap.put("D2", false);
-        testValuesMap.put("D3", false);
-        testValue = new TestValue(testValuesMap,false);
-        testValues.add(testValue);
-        //endregion D1
-
-        //region D2
-        testValuesMap = new HashMap<>();
-        testValuesMap.put("A0", false);
-        testValuesMap.put("A1", false);
-        testValuesMap.put("D0", false);
-        testValuesMap.put("D1", false);
-        testValuesMap.put("D2", true);
-        testValuesMap.put("D3", false);
-        testValue = new TestValue(testValuesMap,false);
-        testValues.add(testValue);
-
-        testValuesMap = new HashMap<>();
-        testValuesMap.put("A0", false);
-        testValuesMap.put("A1", true);
-        testValuesMap.put("D0", false);
-        testValuesMap.put("D1", false);
-        testValuesMap.put("D2", true);
-        testValuesMap.put("D3", false);
-        testValue = new TestValue(testValuesMap,false);
-        testValues.add(testValue);
-
-        testValuesMap = new HashMap<>();
-        testValuesMap.put("A0", true);
-        testValuesMap.put("A1", false);
-        testValuesMap.put("D0", false);
-        testValuesMap.put("D1", false);
-        testValuesMap.put("D2", true);
-        testValuesMap.put("D3", false);
-        testValue = new TestValue(testValuesMap,true);
-        testValues.add(testValue);
-
-        testValuesMap = new HashMap<>();
-        testValuesMap.put("A0", true);
-        testValuesMap.put("A1", true);
-        testValuesMap.put("D0", false);
-        testValuesMap.put("D1", false);
-        testValuesMap.put("D2", true);
-        testValuesMap.put("D3", false);
-        testValue = new TestValue(testValuesMap,false);
-        testValues.add(testValue);
-        //endregion D2
-
-        //region D3
-        testValuesMap = new HashMap<>();
-        testValuesMap.put("A0", false);
-        testValuesMap.put("A1", false);
-        testValuesMap.put("D0", false);
-        testValuesMap.put("D1", false);
-        testValuesMap.put("D2", false);
-        testValuesMap.put("D3", true);
-        testValue = new TestValue(testValuesMap,false);
-        testValues.add(testValue);
-
-        testValuesMap = new HashMap<>();
-        testValuesMap.put("A0", false);
-        testValuesMap.put("A1", true);
-        testValuesMap.put("D0", false);
-        testValuesMap.put("D1", false);
-        testValuesMap.put("D2", false);
-        testValuesMap.put("D3", true);
-        testValue = new TestValue(testValuesMap,false);
-        testValues.add(testValue);
-
-        testValuesMap = new HashMap<>();
-        testValuesMap.put("A0", true);
-        testValuesMap.put("A1", false);
-        testValuesMap.put("D0", false);
-        testValuesMap.put("D1", false);
-        testValuesMap.put("D2", false);
-        testValuesMap.put("D3", true);
-        testValue = new TestValue(testValuesMap,false);
-        testValues.add(testValue);
-
-        testValuesMap = new HashMap<>();
-        testValuesMap.put("A0", true);
-        testValuesMap.put("A1", true);
-        testValuesMap.put("D0", false);
-        testValuesMap.put("D1", false);
-        testValuesMap.put("D2", false);
-        testValuesMap.put("D3", true);
-        testValue = new TestValue(testValuesMap,true);
-        testValues.add(testValue);
-        //endregion D3
+        for (List<Boolean> row : data) {
+            Map<String, Boolean> testValuesMap = new HashMap<>();
+            testValuesMap.put("A0", row.get(0));
+            testValuesMap.put("A1", row.get(1));
+            testValuesMap.put("D0", row.get(2));
+            testValuesMap.put("D1", row.get(3));
+            testValuesMap.put("D2", row.get(4));
+            testValuesMap.put("D3", row.get(5));
+            TestValue testValue = new TestValue(testValuesMap, row.get(6));
+            testValues.add(testValue);
+        }
     }
-
     public List<TestValue> getTestValues() {
         return testValues;
     }

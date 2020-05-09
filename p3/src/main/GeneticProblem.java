@@ -4,10 +4,8 @@ import crossover.CrossoverAlgorithm;
 import entities.*;
 import helper.Pair;
 import helper.Utils;
-//import javafx.util.Pair;
 import mutation.MutationAlgorithm;
 import selection.SelectionAlgorithm;
-
 import java.util.*;
 
 public class GeneticProblem extends Thread {
@@ -208,7 +206,8 @@ public class GeneticProblem extends Thread {
         solution.setWorstFitness(population.get(0).getFitness());
         solution.setAbsoluteBest(bestTreeNode.getFitness());
 
-        solution.setAbsoluteBestRepresentation(bestTreeNode.getRepresentation());
+        String absoluteBestRepresentation = String.format("Representation: %s\nBestFitness: %s", bestTreeNode.getRepresentation(), bestTreeNode.getFitness());
+        solution.setAbsoluteBestRepresentation(absoluteBestRepresentation);
 
         double acumulatedFitness = 0;
         for (int i = population.size() - 1; i >= 0; i--) {
@@ -366,6 +365,9 @@ public class GeneticProblem extends Thread {
 
     private double evaluateTreeNode(TreeNode treeNode) {
         double fitness = treeNode.getHeight() * k;
+        if (treeNode.getHeight() == 1) {
+
+        }
         for (TestValue testValue : configuration.getMultiplexorTestValue().getTestValues()) {
             Boolean result = evaluateTreeNode(treeNode, testValue.getValuesMap());
             if (result != testValue.getResult()) {

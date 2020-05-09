@@ -4,6 +4,7 @@ import crossover.CrossoverAlgorithm;
 import crossover.OperadorDeCruce;
 import entities.*;
 //import javafx.util.Pair;
+import helper.DataFileReader;
 import helper.Pair;
 import mutation.*;
 import org.math.plot.Plot2DPanel;
@@ -12,8 +13,9 @@ import selection.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class App implements GeneticAlgorithmDelegate {
@@ -41,7 +43,7 @@ public class App implements GeneticAlgorithmDelegate {
     private JComboBox bloatingControlMethodComboBox;
     private JPanel bloatingControlJPanel;
     private JComboBox initializationComboBox;
-    private JComboBox multiplexorComboBox;
+    private JButton fileChooserButton;
     //endregion UI
 
     private List<Pair<String, Integer>> functions;
@@ -56,6 +58,8 @@ public class App implements GeneticAlgorithmDelegate {
     private ArrayList<double[]> averageArrayList;
     private ArrayList<double[]> worseArrayList;
     private ArrayList<double[]> absoluteBestArrayList;
+    private MultiplexorTestValue multiplexorTestValue;
+    private MultiplexorProblem multiplexorProblem;
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("App");
@@ -81,10 +85,6 @@ public class App implements GeneticAlgorithmDelegate {
         populationSizeSpinner.setModel(populationSpinnerDataModel);
         SpinnerNumberModel numberOfGenerationsSpinnerDataModel = new SpinnerNumberModel(300, 20, 10000, 1);
         numberOfGenerationsSpinner.setModel(numberOfGenerationsSpinnerDataModel);
-
-        String[] multiplexorProblems = new String[]{"6 terminales", "11 terminales"};
-        DefaultComboBoxModel multiplexorProblemsComboBoxModel = new DefaultComboBoxModel(multiplexorProblems);
-        multiplexorComboBox.setModel(multiplexorProblemsComboBoxModel);
 
         String[] initializationMethods = new String[]{"Ramped and half", "Inicialización completa", "Inicialización creciente"};
         DefaultComboBoxModel initializationComboBoxModel = new DefaultComboBoxModel(initializationMethods);
@@ -156,6 +156,30 @@ public class App implements GeneticAlgorithmDelegate {
             this.initChartPanel();
             this.plot2DPanel.doLayout();
         });
+
+        fileChooserButton.addActionListener(e -> onChooseGameAttributes());
+    }
+
+    private void onChooseGameAttributes() {
+        JFileChooser jFileChooser = new JFileChooser();
+        int option = jFileChooser.showOpenDialog(panelMain);
+
+        if (option == JFileChooser.APPROVE_OPTION) {
+            File file = jFileChooser.getSelectedFile();
+
+            try {
+                List<List<Boolean>> data =  new DataFileReader().readFile(file);
+                if (file.getName().contains("6")) {
+                    multiplexorProblem = MultiplexorProblem.SIX_INPUTS;
+                    multiplexorTestValue = new MultiplexorTestValueSixInputs(data);
+                } else {
+                    multiplexorProblem = MultiplexorProblem.ELEVEN_INPUTS;
+                    multiplexorTestValue = new MultiplexorTestValueEightInputs(data);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void setupAlgorithm() {
@@ -259,12 +283,11 @@ public class App implements GeneticAlgorithmDelegate {
                 break;
         }
 
-        MultiplexorTestValue multiplexorTestValue;
-        if (multiplexorComboBox.getSelectedIndex() == 0) {
-            multiplexorTestValue = new MultiplexorTestValueSixInputs();
-        } else {
-            multiplexorTestValue = new MultiplexorTestValueEightInputs();
-        }
+//        if (multiplexorComboBox.getSelectedIndex() == 0) {
+//            multiplexorTestValue = new MultiplexorTestValueSixInputs();
+//        } else {
+//            multiplexorTestValue = new MultiplexorTestValueEightInputs();
+//        }
 
         if (useIfFunctionCheckbox.isSelected()) {
             functions.add(new Pair<>("IF", 3));
@@ -286,14 +309,14 @@ public class App implements GeneticAlgorithmDelegate {
         terminalList = new ArrayList<>();
         terminalList.add("A0");
         terminalList.add("A1");
-        if (multiplexorComboBox.getSelectedIndex() == 1) {
+        if (multiplexorProblem == MultiplexorProblem.ELEVEN_INPUTS) {
             terminalList.add("A2");
         }
         terminalList.add("D0");
         terminalList.add("D1");
         terminalList.add("D2");
         terminalList.add("D3");
-        if (multiplexorComboBox.getSelectedIndex() == 1) {
+        if (multiplexorProblem == MultiplexorProblem.ELEVEN_INPUTS) {
             terminalList.add("D4");
             terminalList.add("D5");
             terminalList.add("D6");
