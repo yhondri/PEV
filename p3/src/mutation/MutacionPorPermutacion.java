@@ -35,7 +35,7 @@ public class MutacionPorPermutacion implements MutationAlgorithm{
 
     /**
      * Calcula el número de hojas que tiene el árbol.
-     * @param treeNode Árbol a explorar.
+     * @param treeNode Arbol a explorar.
      * @return Número de hojas que contiene el árbol.*/
     private int getLeafCardinal(TreeNode treeNode) {
         if(treeNode.isLeaf())

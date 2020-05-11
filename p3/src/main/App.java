@@ -282,7 +282,7 @@ public class App implements GeneticAlgorithmDelegate {
                 controlBloating = ControlBloating.METODO_TARPEIAN;
                 break;
             default:
-                controlBloating = ControlBloating.PENALIZACIÓN_BIEN_FUNDAMENTADA;
+                controlBloating = ControlBloating.PENALIZACION_BIEN_FUNDAMENTADA;
                 break;
         }
 
@@ -511,9 +511,6 @@ public class App implements GeneticAlgorithmDelegate {
         panelMain.add(chartPanel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
     }
 
-    /**
-     * @noinspection ALL
-     */
     public JComponent $$$getRootComponent$$$() {
         return panelMain;
     }
