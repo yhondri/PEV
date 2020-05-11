@@ -10,8 +10,10 @@ public class MutacionPorPermutacion implements MutationAlgorithm{
 
     @Override
     public TreeNode mutate(TreeNode treeNode) {
-        TreeNode selected = getBranch(treeNode, Utils.getRandom(treeNode.getHeight() - getLeafCardinal(treeNode), 0));
-        reorderChildren(treeNode);
+        int numBranches = treeNode.getHeight() - getLeafCardinal(treeNode);
+        if(numBranches < 1) return treeNode;
+        TreeNode selected = getBranch(treeNode, Utils.getRandom(numBranches, 0));
+        reorderChildren(selected);
         return treeNode;
     }
 
@@ -24,7 +26,7 @@ public class MutacionPorPermutacion implements MutationAlgorithm{
         TreeNode auxiliar;
         TreeNode[] newChildren = new TreeNode[treeNode.getChildren().length];
         auxiliar = treeNode.getChildren()[treeNode.getChildren().length - 1];
-        for(int i = treeNode.getChildren().length; i > 0; i--){
+        for(int i = treeNode.getChildren().length - 1; i > 0; i--){
             newChildren[i] = treeNode.getChildren()[i-1];
         }
         newChildren[0] = auxiliar;

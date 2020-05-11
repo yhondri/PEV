@@ -20,6 +20,7 @@ public class MutacionFuncionalSimple implements MutationAlgorithm {
     @Override
     public TreeNode mutate(TreeNode treeNode) {
         int numBranches = treeNode.getHeight() - getLeafCardinal(treeNode);
+        if(numBranches < 1) return treeNode;
         int selectedBranchNode = Utils.getRandom(numBranches, 0);
         TreeNode branchToMutate = getBranch(treeNode, selectedBranchNode);
         int arity = branchToMutate.getChildren().length;

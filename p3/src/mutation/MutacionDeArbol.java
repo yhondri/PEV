@@ -21,7 +21,7 @@ public class MutacionDeArbol implements MutationAlgorithm{
 
     @Override
     public TreeNode mutate(TreeNode treeNode) {
-        TreeNode aMutar = treeNode.getNodeAtIndex(Utils.getRandom(treeNode.getHeight(),0));
+        TreeNode aMutar = getNodeAtIndex(treeNode, Utils.getRandom(treeNode.getHeight(),0));
         if(aMutar.getParent() == null)
             return randomizeTree(maxDepth);
         else{
@@ -56,5 +56,18 @@ public class MutacionDeArbol implements MutationAlgorithm{
         if(treeNode.getParent() == null)
             return 0;
         return 1 + calcDepthTo(treeNode.getParent());
+    }
+
+    private TreeNode getNodeAtIndex(TreeNode root, int index){
+        if(index == 0)
+            return root;
+        if(root.isLeaf()) return null;
+        int i = 1;
+        TreeNode ret = getNodeAtIndex(root.getChildren()[0], index - 1);
+        while(i < root.getChildren().length && ret == null){
+            ret = getNodeAtIndex(root.getChildren()[1], index - 1 - root.getChildren()[i - 1].getHeight());
+            i++;
+        }
+        return ret;
     }
 }
