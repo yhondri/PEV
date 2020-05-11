@@ -58,6 +58,12 @@ public class MutacionDeArbol implements MutationAlgorithm{
         return 1 + calcDepthTo(treeNode.getParent());
     }
 
+    /**
+     * Busca el nodo i-ésimo en preorden de un arbol dado
+     * @param root árbol del que se va a sacar el nodo.
+     * @param index índice del nodo a seleccionar
+     * @return devuelve el nodo buscado, o null en el caso en el que el
+     * índice supere el número de nodos del árbol*/
     private TreeNode getNodeAtIndex(TreeNode root, int index){
         if(index == 0)
             return root;
