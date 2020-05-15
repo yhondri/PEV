@@ -15,7 +15,7 @@ public class GeneticProblem extends Thread {
     private final Random random = new Random();
     private final GeneticAlgorithmDelegate delegate;
     private final CrossoverAlgorithm crossoverAlgorithm;
-    //Control del Bloating, k para penalizaión bien fundamentada (página 42 T7).
+    //Control del Bloating, k para penalizaion bien fundamentada (pagina 42 T7).
     private static final double k = 0.25;
     private ControlBloating controlBloating;
     private InitializationMethod initializationMethod;
@@ -47,7 +47,7 @@ public class GeneticProblem extends Thread {
                 population = getInitialPopulationByFullInitialization();
                 break;
             default:
-                throw new RuntimeException("Método no implementado");
+                throw new RuntimeException("Metodo no implementado");
         }
 
         List<Solution> solutions = new ArrayList<>();
@@ -117,11 +117,11 @@ public class GeneticProblem extends Thread {
     }
 
     /**
-     * Tomamos nodos del conjunto de funciones hasta que llegamos a una profundidad máxima.
-     * A partir de esta profundidad se sotman los símbolos del conjunto de terminales.
+     * Tomamos nodos del conjunto de funciones hasta que llegamos a una profundidad maxima.
+     * A partir de esta profundidad se sotman los simbolos del conjunto de terminales.
      * @param depth    profundidad del nodo a crear.
-     * @param maxDepth profundidad máxima del subárbol.
-     * @return Devuelve un nuevo nodo que puede ser un nodo función o terminal.
+     * @param maxDepth profundidad maxima del subarbol.
+     * @return Devuelve un nuevo nodo que puede ser un nodo funcion o terminal.
      */
     private TreeNode getTreeNodeByFullInitialization(int depth, int maxDepth) {
         TreeNode treeNode;
@@ -152,11 +152,11 @@ public class GeneticProblem extends Thread {
     }
 
     /**
-     * Creamos nodos de la función hasta llegar a una profundidad máxima definida. Una vez alcanzada la profundidad máxima
-     * solo tomamos los símbolos de la lista de términales.
+     * Creamos nodos de la funcion hasta llegar a una profundidad maxima definida. Una vez alcanzada la profundidad maxima
+     * solo tomamos los simbolos de la lista de terminales.
      * @param depth    Profundidad actual del nodo.
-     * @param maxDepth Profundidad máxima del nodo.
-     * @return Devuelve un nuevo nodo que puede ser un nodo función o terminal.
+     * @param maxDepth Profundidad maxima del nodo.
+     * @return Devuelve un nuevo nodo que puede ser un nodo funcion o terminal.
      */
     private TreeNode getTreeNodeByGrowInitialization(int depth, int maxDepth) {
         TreeNode treeNode;
@@ -168,7 +168,7 @@ public class GeneticProblem extends Thread {
             } else {
                 Pair<String, Integer> functionPair = configuration.getFunctionAtIndex(functionIndex);
                 treeNode = new TreeNode(functionPair.getKey(), functionPair.getValue(), configuration.getMaxDepth());
-                //Obtenemos el número de terminales necesarios para la función.
+                //Obtenemos el numero de terminales necesarios para la funcion.
                 for (int i = 0; i < functionPair.getValue(); i++) {
                     TreeNode childrenNode = getTreeNodeByGrowInitialization(depth + 1, maxDepth);
                     treeNode.addNodeAt(i, childrenNode);
@@ -225,10 +225,10 @@ public class GeneticProblem extends Thread {
     }
 
     /**
-     * Cruza los individuos de una poblacción para producir individuos que combinan característiccas de los progenitores.
+     * Cruza los individuos de una poblaccion para producir individuos que combinan caracteristiccas de los progenitores.
      *
      * @param population Los individuos a cruzar.
-     * @return Devuelve el número de curces que se han producido.
+     * @return Devuelve el numero de curces que se han producido.
      */
     private int crossPopulation(List<TreeNode> population) {
         List<Integer> selectedForCrossoverList = new ArrayList<>();
@@ -261,10 +261,10 @@ public class GeneticProblem extends Thread {
     }
 
     /**
-     * Ejecuta sobre la población pasada por parámetros el control de bloating seleccionado.
+     * Ejecuta sobre la poblacion pasada por parametros el control de bloating seleccionado.
      *
-     * @param population Población sobre la que se va a ejecutar el control de bloating.
-     * @return Población modificada tras aplicar el control de bloating.
+     * @param population Poblacion sobre la que se va a ejecutar el control de bloating.
+     * @return Poblacion modificada tras aplicar el control de bloating.
      */
     private List<TreeNode> controlBloating(List<TreeNode> population) {
         double averageFitness = calculateAverageFitness(population);
@@ -278,12 +278,12 @@ public class GeneticProblem extends Thread {
     }
 
     /**
-     * Aplica el control de bloating por el método Tarpeian sobre una población dada.
+     * Aplica el control de bloating por el metodo Tarpeian sobre una poblacion dada.
      *
-     * @param population  Población sobre la que se va a aplicar el control de bloating.
-     * @param averageSize Tamaño medio de la población.
-     * @param n           Número n necesario para calcular la probabilidad de aplicar el control de bloating.
-     * @return Población modificada tras aplicar el control de bloating.
+     * @param population  Poblacion sobre la que se va a aplicar el control de bloating.
+     * @param averageSize Tamaño medio de la poblacion.
+     * @param n           Numero n necesario para calcular la probabilidad de aplicar el control de bloating.
+     * @return Poblacion modificada tras aplicar el control de bloating.
      */
     private List<TreeNode> executeTarpeianBloatingControl(List<TreeNode> population, double averageSize, int n) {
         double probability = 1 / n;
@@ -302,12 +302,12 @@ public class GeneticProblem extends Thread {
     }
 
     /**
-     * Aplica el control de bloating por el método Penalización bien fundamentada en la población pasada por parámetro.
+     * Aplica el control de bloating por el metodo Penalizacion bien fundamentada en la poblacion pasada por parametro.
      *
-     * @param population     Población sobre la que se va a aplicar el control de bloating.
-     * @param averageSize    Tamaño medio de la población.
-     * @param averageFitness Media del fitness de la población pasada por parámetro.
-     * @return Población modificada tras aplicar el control de bloating.
+     * @param population     Poblacion sobre la que se va a aplicar el control de bloating.
+     * @param averageSize    Tamaño medio de la poblacion.
+     * @param averageFitness Media del fitness de la poblacion pasada por parametro.
+     * @return Poblacion modificada tras aplicar el control de bloating.
      */
     private List<TreeNode> executePenaltyBloatingControl(List<TreeNode> population, double averageSize, double averageFitness) {
         List<TreeNode> resultPopulation = new ArrayList<>(population.size());
@@ -336,10 +336,10 @@ public class GeneticProblem extends Thread {
     }
 
     /**
-     * Calcula el fitness medio sobre la población pasada por parámetro.
+     * Calcula el fitness medio sobre la poblacion pasada por parametro.
      *
-     * @param population Población sobre la que se va a realizar el cálculo.
-     * @return El fitness medio de la población.
+     * @param population Poblacion sobre la que se va a realizar el calculo.
+     * @return El fitness medio de la poblacion.
      */
     private double calculateAverageFitness(List<TreeNode> population) {
         double averageFitness = 0;
@@ -350,10 +350,10 @@ public class GeneticProblem extends Thread {
     }
 
     /**
-     * Calcula el tamaño medio de los individuos la población pasada por parámetro.
+     * Calcula el tamaño medio de los individuos la poblacion pasada por parametro.
      *
-     * @param population Población sobre la que se va a realizar el cálculo.
-     * @return El tamaño medio de los individuos de la población.
+     * @param population Poblacion sobre la que se va a realizar el calculo.
+     * @return El tamaño medio de los individuos de la poblacion.
      */
     private double calculateAverageSize(List<TreeNode> population) {
         double averageSize = 0;
@@ -385,14 +385,14 @@ public class GeneticProblem extends Thread {
     }
 
     /**
-     * Evalua el nodo pasado por parámetro según su valor.
-     * Según la función se recibe uno o dos argumentos.
+     * Evalua el nodo pasado por parametro segun su valor.
+     * Segun la funcion se recibe uno o dos argumentos.
      * Not -> 1 argumento.
      * AND - OR -> 2 argumentos.
      * IF -> 3 argumentos (XYZ). Primero se evalua X, si X es true, evaluamos Y, si Y es false, evaluamos Z.
      * @param treeNode El nodo a evaluar.
-     * @param values   Mapa de los valores del multiplexor contra los que se va a evaluar la función.
-     * @return El resultado de la evaluación.
+     * @param values   Mapa de los valores del multiplexor contra los que se va a evaluar la funcion.
+     * @return El resultado de la evaluacion.
      */
     private Boolean evaluateFunctionTreeNode(TreeNode treeNode, Map<String, Boolean> values) {
         Boolean firstNode = evaluateTreeNode(treeNode.getNodeAtIndex(0), values);
@@ -422,10 +422,10 @@ public class GeneticProblem extends Thread {
     }
 
     /**
-     * Se aplica una pequeña modificación en uno o mas genes de un individuo.
+     * Se aplica una pequeña modificacion en uno o mas genes de un individuo.
      *
      * @param population Los individuos a mutar.
-     * @return Devuelve el número de mutaciones que se han producido.
+     * @return Devuelve el numero de mutaciones que se han producido.
      */
     private int mutatePopulation(List<TreeNode> population) {
         int numberOfMutation = 0;

@@ -4,7 +4,7 @@ import entities.TreeNode;
 import helper.Utils;
 
 /**
- * Selecciona un nodo función al azar del árbol y realiza una permutación de los hijos
+ * Selecciona un nodo funcion al azar del arbol y realiza una permutacion de los hijos
  * de ese nodo.*/
 public class MutacionPorPermutacion implements MutationAlgorithm{
 
@@ -18,7 +18,7 @@ public class MutacionPorPermutacion implements MutationAlgorithm{
     }
 
     /**
-     * Realiza una permutación cíclica de los hijos de un nodo función dado.
+     * Realiza una permutacion ciclica de los hijos de un nodo funcion dado.
      * @param treeNode nodo cuyos hijos van a ser reordenados.*/
     private void reorderChildren(TreeNode treeNode) {
         if(treeNode.getChildren().length == 1)
@@ -34,9 +34,9 @@ public class MutacionPorPermutacion implements MutationAlgorithm{
     }
 
     /**
-     * Calcula el número de hojas que tiene el árbol.
+     * Calcula el numero de hojas que tiene el arbol.
      * @param treeNode Arbol a explorar.
-     * @return Número de hojas que contiene el árbol.*/
+     * @return Numero de hojas que contiene el arbol.*/
     private int getLeafCardinal(TreeNode treeNode) {
         if(treeNode.isLeaf())
             return 1;
@@ -48,11 +48,11 @@ public class MutacionPorPermutacion implements MutationAlgorithm{
     }
 
     /**
-     * Recorre el árbol hasta encontrar el nodo rama en la posición seleccionada. Los nodos del
-     * árbol se recorren en preorden.
-     * @param treeNode la raíz del árbol.
-     * @param sel la posición del nodo dentro del árbol. Debe ser menor estricto que el número de nodos rama.
-     * @return Devuelve el nodo buscado o null en el caso de que la raíz del árbol sea una hoja.*/
+     * Recorre el arbol hasta encontrar el nodo rama en la posicion seleccionada. Los nodos del
+     * arbol se recorren en preorden.
+     * @param treeNode la raiz del arbol.
+     * @param sel la posicion del nodo dentro del arbol. Debe ser menor estricto que el numero de nodos rama.
+     * @return Devuelve el nodo buscado o null en el caso de que la raiz del arbol sea una hoja.*/
     private TreeNode getBranch(TreeNode treeNode, int sel) {
         TreeNode ret = null;
         int i = 0, prevCardinal = 1;

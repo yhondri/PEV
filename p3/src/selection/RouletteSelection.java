@@ -19,7 +19,7 @@ public class RouletteSelection implements SelectionAlgorithm {
 		return selectedPopulation;
     }
 
-	//Tenemos que recorrer desde el final hacía el inicio de la lista.
+	//Tenemos que recorrer desde el final hacia el inicio de la lista.
 	private TreeNode getChromosomeFromPopulation(List<TreeNode> population, double trial) {
 		int index = population.size() - 1;
 		while (index >= 0 && trial > population.get(index).getAcumulatedFitness()) {

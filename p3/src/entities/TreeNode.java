@@ -7,9 +7,9 @@ public class TreeNode implements Comparable<TreeNode>  {
     private String key;
     //Hijos del nodo
     private TreeNode[] children;
-    //Profundidad máxima del nodo.
+    //Profundidad maxima del nodo.
     private int maxDepth;
-    //Número de argumentos que necesita una función.
+    //Numero de argumentos que necesita una funcion.
     private int functionNumberOfValues;
     private int indexInParent = -1;
     private double fitness;
@@ -81,7 +81,7 @@ public class TreeNode implements Comparable<TreeNode>  {
 
     /**
      * Verifica si el nodo es una hoja, es decir, si no tiene nodos hijos.
-     * @return Devuelve sí, si el nodo tiene hijos, no en caso ccontrario.
+     * @return Devuelve si, si el nodo tiene hijos, no en caso ccontrario.
      */
     public boolean isLeaf() {
         return (subtreeHeight() == 0);
@@ -157,7 +157,7 @@ public class TreeNode implements Comparable<TreeNode>  {
     /**
      * From Java documentation: However, This is true for the simple cases.
      * If you need to concatenate inside the loop, it is always suggested to use  StringBuilder.
-     * @return La representación del TreeNode.
+     * @return La representacion del TreeNode.
      */
     public String getRepresentation() {
         if (isLeaf()) {

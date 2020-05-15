@@ -8,8 +8,8 @@ public interface GeneticAlgorithmDelegate {
     void onEndSearch(Solution solution);
 
     /**
-     * Deshabilita los elementos de ejecución de la UI para evitar el colapso de la aplicación al ejecutar el problema
-     * mientras se está ejecuntado otro.
+     * Deshabilita los elementos de ejecucion de la UI para evitar el colapso de la aplicacion al ejecutar el problema
+     * mientras se esta ejecuntado otro.
      * @param enabled Define si los elementos tienen que estar habilitados o deshabilitados.
      */
     void areButtonsEnabled(boolean enabled);

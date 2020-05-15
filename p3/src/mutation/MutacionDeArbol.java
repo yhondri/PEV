@@ -7,7 +7,7 @@ import helper.Utils;
 import java.util.List;
 
 /**
- * Selecciona un nodo al azar del árbol y crea un árbol aleatorio a partir de él.*/
+ * Selecciona un nodo al azar del arbol y crea un arbol aleatorio a partir de el.*/
 public class MutacionDeArbol implements MutationAlgorithm{
     private final List<Pair<String, Integer>> functions;
     private final List<String> terminals;
@@ -31,9 +31,9 @@ public class MutacionDeArbol implements MutationAlgorithm{
     }
 
     /**
-     * Dada una profundidad máxima, se crea un árbol cuya profundidad estará entre 1 y dicha profundidad máxima
-     * @param depth profundidad máxima del árbol.
-     * @return árbol de profundidad n, 1 <= n <= depth.*/
+     * Dada una profundidad maxima, se crea un arbol cuya profundidad estara entre 1 y dicha profundidad maxima
+     * @param depth profundidad maxima del arbol.
+     * @return arbol de profundidad n, 1 <= n <= depth.*/
     private TreeNode randomizeTree(int depth) {
         int selection = Utils.getRandom(terminals.size()+functions.size(), 0);
         if(selection < terminals.size() || depth == 1)
@@ -49,9 +49,9 @@ public class MutacionDeArbol implements MutationAlgorithm{
     }
 
     /**
-     * Calcula la distancia desde este nodo hasta la raíz del árbol.
-     * @param treeNode Nodo desde el cual se va a realizar el cálculo.
-     * @return la distancia desde este nodo hasta la raíz del árbol.*/
+     * Calcula la distancia desde este nodo hasta la raiz del arbol.
+     * @param treeNode Nodo desde el cual se va a realizar el calculo.
+     * @return la distancia desde este nodo hasta la raiz del arbol.*/
     private int calcDepthTo(TreeNode treeNode){
         if(treeNode.getParent() == null)
             return 0;
@@ -59,11 +59,11 @@ public class MutacionDeArbol implements MutationAlgorithm{
     }
 
     /**
-     * Busca el nodo i-ésimo en preorden de un arbol dado
-     * @param root árbol del que se va a sacar el nodo.
-     * @param index índice del nodo a seleccionar
+     * Busca el nodo i-esimo en preorden de un arbol dado
+     * @param root arbol del que se va a sacar el nodo.
+     * @param index indice del nodo a seleccionar
      * @return devuelve el nodo buscado, o null en el caso en el que el
-     * índice supere el número de nodos del árbol*/
+     * indice supere el numero de nodos del arbol*/
     private TreeNode getNodeAtIndex(TreeNode root, int index){
         if(index == 0)
             return root;

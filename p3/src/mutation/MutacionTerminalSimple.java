@@ -6,8 +6,8 @@ import helper.Utils;
 import java.util.List;
 
 /**
- * Seleccciona al azar un símbolo teminal dentro del individuo, y se sustituye por otro diferente dentro
- * del conjunto de de símbolos de terminales posibles.
+ * Seleccciona al azar un simbolo teminal dentro del individuo, y se sustituye por otro diferente dentro
+ * del conjunto de de simbolos de terminales posibles.
  */
 public class MutacionTerminalSimple implements MutationAlgorithm {
     private List<String> terminalList;
@@ -28,7 +28,7 @@ public class MutacionTerminalSimple implements MutationAlgorithm {
     /**
      * Los terminales son hojas.
      * @param treeNode El nodo del que se va a extraer la hoja.
-     * @return La hoja extraída.
+     * @return La hoja extraida.
      */
     private TreeNode getLeaf(TreeNode treeNode) {
         if (treeNode.isLeaf()) {

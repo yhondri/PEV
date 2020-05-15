@@ -26,7 +26,7 @@
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Tamaño de población"/>
+              <text value="Tamaño de poblacion"/>
             </properties>
           </component>
           <component id="89a00" class="javax.swing.JLabel" binding="numberOfGenerationsLabel">
@@ -34,7 +34,7 @@
               <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Número de generaciones"/>
+              <text value="Numero de generaciones"/>
             </properties>
           </component>
           <component id="f101f" class="javax.swing.JLabel" binding="selectionAlgorithmLabel">
@@ -42,7 +42,7 @@
               <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Selección"/>
+              <text value="Seleccion"/>
             </properties>
           </component>
           <component id="d7b37" class="javax.swing.JComboBox" binding="selectionAlgorithmComboBox">
@@ -111,7 +111,7 @@
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Tipo de mutación"/>
+                      <text value="Tipo de mutacion"/>
                     </properties>
                   </component>
                   <vspacer id="17fc4">
@@ -150,7 +150,7 @@
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Mutación"/>
+                      <text value="Mutacion"/>
                     </properties>
                   </component>
                   <component id="e4aa4" class="javax.swing.JSpinner" binding="mutationPercentSpinner">
@@ -176,7 +176,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Élite %"/>
+                  <text value="elite %"/>
                 </properties>
               </component>
               <vspacer id="3ac62">
@@ -256,7 +256,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="¿Utilizar la función IF?"/>
+                  <text value="¿Utilizar la funcion IF?"/>
                 </properties>
               </component>
             </children>
@@ -274,7 +274,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Profundidad máxima"/>
+                  <text value="Profundidad maxima"/>
                 </properties>
               </component>
               <component id="5c626" class="javax.swing.JSpinner" binding="maxDepthSpinner">
@@ -298,7 +298,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Método de control de Bloating"/>
+                  <text value="Metodo de control de Bloating"/>
                 </properties>
               </component>
               <hspacer id="3a150">
@@ -332,7 +332,7 @@
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Método de inicialización"/>
+                  <text value="Metodo de inicializacion"/>
                 </properties>
               </component>
               <component id="2b09" class="javax.swing.JComboBox" binding="initializationComboBox">

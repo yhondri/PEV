@@ -89,11 +89,11 @@ public class App implements GeneticAlgorithmDelegate {
         SpinnerNumberModel numberOfGenerationsSpinnerDataModel = new SpinnerNumberModel(300, 20, 10000, 1);
         numberOfGenerationsSpinner.setModel(numberOfGenerationsSpinnerDataModel);
 
-        String[] initializationMethods = new String[]{"Ramped and half", "Inicialización completa", "Inicialización creciente"};
+        String[] initializationMethods = new String[]{"Ramped and half", "Inicializacion completa", "Inicializacion creciente"};
         DefaultComboBoxModel initializationComboBoxModel = new DefaultComboBoxModel(initializationMethods);
         initializationComboBox.setModel(initializationComboBoxModel);
 
-        String[] bloatingControlMethods = new String[]{"Método Tarpeian", "Penalización bien fundamentada"};
+        String[] bloatingControlMethods = new String[]{"Metodo Tarpeian", "Penalizacion bien fundamentada"};
         DefaultComboBoxModel bloatinControlModel = new DefaultComboBoxModel(bloatingControlMethods);
         bloatingControlMethodComboBox.setModel(bloatinControlModel);
 
@@ -106,7 +106,7 @@ public class App implements GeneticAlgorithmDelegate {
         crossoverSpinnerTextField.setEditable(false);
         crossoverSpinnerTextField.setBackground(Color.white);
 
-        String[] mutationAlgorithms = new String[]{"Mutación terminal simple", "Mutación funcional simple", "Mutación de árbol", "Mutación por permutación"};
+        String[] mutationAlgorithms = new String[]{"Mutacion terminal simple", "Mutacion funcional simple", "Mutacion de arbol", "Mutacion por permutacion"};
         DefaultComboBoxModel mutationModel = new DefaultComboBoxModel(mutationAlgorithms);
         mutationComboBox.setModel(mutationModel);
         SpinnerNumberModel mutationSpinnerDataModel = new SpinnerNumberModel(0.05, 0.0, 1, 0.01);
@@ -273,7 +273,7 @@ public class App implements GeneticAlgorithmDelegate {
                 initializationMethod = InitializationMethod.CRECIENTE;
                 break;
             default:
-                throw new RuntimeException("Método no implementado");
+                throw new RuntimeException("Metodo no implementado");
         }
 
         ControlBloating controlBloating;
@@ -388,13 +388,13 @@ public class App implements GeneticAlgorithmDelegate {
         panel1.setLayout(new GridLayoutManager(17, 1, new Insets(0, 0, 0, 0), -1, -1));
         panelMain.add(panel1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         populationSizeLabel = new JLabel();
-        populationSizeLabel.setText("Tamaño de población");
+        populationSizeLabel.setText("Tamaño de poblacion");
         panel1.add(populationSizeLabel, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         numberOfGenerationsLabel = new JLabel();
-        numberOfGenerationsLabel.setText("Número de generaciones");
+        numberOfGenerationsLabel.setText("Numero de generaciones");
         panel1.add(numberOfGenerationsLabel, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         selectionAlgorithmLabel = new JLabel();
-        selectionAlgorithmLabel.setText("Selección");
+        selectionAlgorithmLabel.setText("Seleccion");
         panel1.add(selectionAlgorithmLabel, new GridConstraints(9, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         selectionAlgorithmComboBox = new JComboBox();
         panel1.add(selectionAlgorithmComboBox, new GridConstraints(10, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -418,7 +418,7 @@ public class App implements GeneticAlgorithmDelegate {
         panel3.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
         mutationPanel.add(panel3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label2 = new JLabel();
-        label2.setText("Tipo de mutación");
+        label2.setText("Tipo de mutacion");
         panel3.add(label2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer3 = new Spacer();
         panel3.add(spacer3, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
@@ -432,7 +432,7 @@ public class App implements GeneticAlgorithmDelegate {
         final Spacer spacer5 = new Spacer();
         panel4.add(spacer5, new GridConstraints(1, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JLabel label3 = new JLabel();
-        label3.setText("Mutación");
+        label3.setText("Mutacion");
         panel4.add(label3, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         mutationPercentSpinner = new JSpinner();
         panel4.add(mutationPercentSpinner, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -440,7 +440,7 @@ public class App implements GeneticAlgorithmDelegate {
         elitePanel.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(elitePanel, new GridConstraints(13, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label4 = new JLabel();
-        label4.setText("Élite %");
+        label4.setText("elite %");
         elitePanel.add(label4, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer6 = new Spacer();
         elitePanel.add(spacer6, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
@@ -467,13 +467,13 @@ public class App implements GeneticAlgorithmDelegate {
         panel6.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel6, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         useIfFunctionCheckbox = new JCheckBox();
-        useIfFunctionCheckbox.setText("¿Utilizar la función IF?");
+        useIfFunctionCheckbox.setText("¿Utilizar la funcion IF?");
         panel6.add(useIfFunctionCheckbox, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel7 = new JPanel();
         panel7.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel7, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label5 = new JLabel();
-        label5.setText("Profundidad máxima");
+        label5.setText("Profundidad maxima");
         panel7.add(label5, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         maxDepthSpinner = new JSpinner();
         panel7.add(maxDepthSpinner, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -481,7 +481,7 @@ public class App implements GeneticAlgorithmDelegate {
         bloatingControlJPanel.setLayout(new GridLayoutManager(3, 2, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(bloatingControlJPanel, new GridConstraints(8, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label6 = new JLabel();
-        label6.setText("Método de control de Bloating");
+        label6.setText("Metodo de control de Bloating");
         bloatingControlJPanel.add(label6, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer8 = new Spacer();
         bloatingControlJPanel.add(spacer8, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
@@ -493,7 +493,7 @@ public class App implements GeneticAlgorithmDelegate {
         panel8.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel8, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label7 = new JLabel();
-        label7.setText("Método de inicialización");
+        label7.setText("Metodo de inicializacion");
         panel8.add(label7, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         initializationComboBox = new JComboBox();
         panel8.add(initializationComboBox, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
