@@ -47,6 +47,7 @@ public class App implements GeneticAlgorithmDelegate {
     private JPanel bloatingControlJPanel;
     private JComboBox initializationComboBox;
     private JButton fileChooserButton;
+    private JComboBox selectProblemComboBox;
     //endregion UI
 
     private List<Pair<String, Integer>> functions;
@@ -88,6 +89,10 @@ public class App implements GeneticAlgorithmDelegate {
         populationSizeSpinner.setModel(populationSpinnerDataModel);
         SpinnerNumberModel numberOfGenerationsSpinnerDataModel = new SpinnerNumberModel(300, 20, 10000, 1);
         numberOfGenerationsSpinner.setModel(numberOfGenerationsSpinnerDataModel);
+
+        String[] problems = new String[]{"Multiplexor 6 entradas", "Multiplexor 11 entradas"};
+        DefaultComboBoxModel problemsComboBoxModel = new DefaultComboBoxModel(problems);
+        selectProblemComboBox.setModel(problemsComboBoxModel);
 
         String[] initializationMethods = new String[]{"Ramped and half", "Inicializacion completa", "Inicializacion creciente"};
         DefaultComboBoxModel initializationComboBoxModel = new DefaultComboBoxModel(initializationMethods);
@@ -159,33 +164,55 @@ public class App implements GeneticAlgorithmDelegate {
             this.initChartPanel();
             this.plot2DPanel.doLayout();
         });
-
-        fileChooserButton.addActionListener(e -> onChooseGameAttributes());
     }
 
-    private void onChooseGameAttributes() {
-        JFileChooser jFileChooser = new JFileChooser();
-        int option = jFileChooser.showOpenDialog(panelMain);
-
-        if (option == JFileChooser.APPROVE_OPTION) {
-            File file = jFileChooser.getSelectedFile();
-
-            try {
-                List<List<Boolean>> data = new DataFileReader().readFile(file);
-                if (file.getName().contains("6")) {
-                    multiplexorProblem = MultiplexorProblem.SIX_INPUTS;
-                    multiplexorTestValue = new MultiplexorTestValueSixInputs(data);
-                } else {
-                    multiplexorProblem = MultiplexorProblem.ELEVEN_INPUTS;
-                    multiplexorTestValue = new MultiplexorTestValueElevenInputs(data);
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+//    private void onChooseGameAttributes() {
+//        JFileChooser jFileChooser = new JFileChooser();
+//        int option = jFileChooser.showOpenDialog(panelMain);
+//
+//        if (option == JFileChooser.APPROVE_OPTION) {
+//            File file = jFileChooser.getSelectedFile();
+//
+//            try {
+//                List<List<Boolean>> data = new DataFileReader().readFile(file);
+//                if (file.getName().contains("6")) {
+//                    multiplexorProblem = MultiplexorProblem.SIX_INPUTS;
+//                    multiplexorTestValue = new MultiplexorTestValueSixInputs(data);
+//                } else {
+//                    multiplexorProblem = MultiplexorProblem.ELEVEN_INPUTS;
+//                    multiplexorTestValue = new MultiplexorTestValueElevenInputs(data);
+//                }
+//            } catch (FileNotFoundException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
 
     private void setupAlgorithm() {
+        String fileName = null;
+        switch (selectionAlgorithmComboBox.getSelectedIndex()) {
+            case 0:
+                multiplexorProblem = MultiplexorProblem.SIX_INPUTS;
+                fileName = "multiplexor_6_entradas.txt";
+                break;
+            case 1:
+                multiplexorProblem = MultiplexorProblem.ELEVEN_INPUTS;
+                fileName = "multiplexor_11_entradas.txt";
+                break;
+        }
+        List<List<Boolean>> data = null;
+        try {
+            data = new DataFileReader().readFile(fileName);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+       if (multiplexorProblem == MultiplexorProblem.SIX_INPUTS) {
+           multiplexorTestValue = new MultiplexorTestValueSixInputs(data);
+       } else {
+           multiplexorTestValue = new MultiplexorTestValueElevenInputs(data);
+       }
+
         initDataFunctionsData();
 
         int populationSize = (int) populationSizeSpinner.getValue();
@@ -501,16 +528,18 @@ public class App implements GeneticAlgorithmDelegate {
         panel9.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         panel1.add(panel9, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label8 = new JLabel();
-        label8.setText("Elige un fichero problema");
+        label8.setText("Selecciona un problema");
         panel9.add(label8, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        fileChooserButton = new JButton();
-        fileChooserButton.setText("Seleccionar fichero");
-        panel9.add(fileChooserButton, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        selectProblemComboBox = new JComboBox();
+        panel9.add(selectProblemComboBox, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         chartPanel = new JPanel();
         chartPanel.setLayout(new BorderLayout(0, 0));
         panelMain.add(chartPanel, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
     }
 
+    /**
+     * @noinspection ALL
+     */
     public JComponent $$$getRootComponent$$$() {
         return panelMain;
     }

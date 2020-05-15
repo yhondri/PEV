@@ -2,14 +2,16 @@ package helper;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class DataFileReader {
-    public static List<List<Boolean>> readFile(File file) throws FileNotFoundException {
+    public static List<List<Boolean>> readFile(String fileName) throws FileNotFoundException {
+        InputStream fileInputStream = new ResourceHelper().getFileInputStream(fileName);
         // Read input file
-        Scanner input = new Scanner(file);
+        Scanner input = new Scanner(fileInputStream);
         // This should be here to get size of array before getting each array
         List<List<Boolean>> data = new ArrayList<>();
         int numberOfRows = 0;
