@@ -48,8 +48,8 @@ public class OperadorDeCruce implements CrossoverAlgorithm {
         }
 
         TreeNode selectedNode = null;
-        for (int i = 0; i < treeNode.getChildren().length && selectedNode == null; i++) {
-            selectedNode = getRandomFunctionNode(treeNode.getChildren()[i], crossOverProbability);
+        while (selectedNode == null) {
+            selectedNode = getRandomFunctionNode(treeNode, crossOverProbability);
         }
 
         return selectedNode;

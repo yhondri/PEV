@@ -16,7 +16,7 @@ public class GeneticProblem extends Thread {
     private final GeneticAlgorithmDelegate delegate;
     private final CrossoverAlgorithm crossoverAlgorithm;
     //Control del Bloating, k para penalizaion bien fundamentada (pagina 42 T7).
-    private static final double k = 0.25;
+    private static final double k = 0.4;
     private ControlBloating controlBloating;
     private InitializationMethod initializationMethod;
 
@@ -47,8 +47,26 @@ public class GeneticProblem extends Thread {
                 population = getInitialPopulationByFullInitialization();
                 break;
             default:
-                throw new RuntimeException("Metodo no implementado");
+                throw new RuntimeException("Método no implementado");
         }
+
+
+   /*     TreeNode treeNode1 = new TreeNode("IF", 7);
+        TreeNode[] children1 = new TreeNode[]{new TreeNode("A1", 7), new TreeNode("A0", 7), new TreeNode("A0", 7)};
+        treeNode1.setChildren(children1);
+
+        TreeNode treeNode2 = new TreeNode("IF", 7);
+        TreeNode[] children2 = new TreeNode[]{new TreeNode("A1", 7), new TreeNode("D3", 7), new TreeNode("D2", 7)};
+        treeNode2.setChildren(children2);
+
+        TreeNode treeNodeParent = new TreeNode("AND", 7);
+        treeNodeParent.setChildren(new TreeNode[]{treeNode1, treeNode2});
+
+        population = new ArrayList<>();
+        for (int i = 0; i < configuration.getPopulationSize(); i++) {
+            population.add(treeNodeParent);
+        }*/
+
 
         List<Solution> solutions = new ArrayList<>();
         Pair<Solution, List<TreeNode>> result = evaluatePopulation(population, 0, 0);
@@ -221,6 +239,7 @@ public class GeneticProblem extends Thread {
 
     private List<TreeNode> sortPopulation(List<TreeNode> population) {
         Collections.sort(population, Collections.reverseOrder());
+        TreeNode best = population.get(population.size()-1);
         return population;
     }
 
@@ -364,16 +383,26 @@ public class GeneticProblem extends Thread {
     }
 
     private double evaluateTreeNode(TreeNode treeNode) {
-        double fitness = treeNode.getHeight() * k;
-        if (treeNode.getHeight() == 1) {
-
+        if (treeNode.getHeight() > configuration.getMaxDepth()) {
+            int height = treeNode.getHeight();
+//            treeNode = getTreeNodeByGrowInitialization(0, configuration.getMaxDepth());
         }
+
+        double fitness = treeNode.getHeight() * k;
+        List<TestValue> testValues = configuration.getMultiplexorTestValue().getTestValues();
         for (TestValue testValue : configuration.getMultiplexorTestValue().getTestValues()) {
             Boolean result = evaluateTreeNode(treeNode, testValue.getValuesMap());
             if (result != testValue.getResult()) {
-                fitness += 10;
+                fitness += 20;
             }
         }
+
+       /* if (fitness == 180) {
+            System.out.println("Stop");
+        }else if (fitness == 161.75) {
+            System.out.println("Stop");
+        }*/
+
         return fitness;
     }
 
@@ -397,6 +426,7 @@ public class GeneticProblem extends Thread {
     private Boolean evaluateFunctionTreeNode(TreeNode treeNode, Map<String, Boolean> values) {
         Boolean firstNode = evaluateTreeNode(treeNode.getNodeAtIndex(0), values);
         Function treeNodeFunction = Function.valueOf(treeNode.getKey());
+
         if (Function.NOT == treeNodeFunction) {
             return !firstNode;
         }

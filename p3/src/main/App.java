@@ -82,7 +82,7 @@ public class App implements GeneticAlgorithmDelegate {
     }
 
     private void setupView() {
-        SpinnerNumberModel maxDepthDataModel = new SpinnerNumberModel(3, 1, 100, 1);
+        SpinnerNumberModel maxDepthDataModel = new SpinnerNumberModel(7, 1, 100, 1);
         maxDepthSpinner.setModel(maxDepthDataModel);
 
         SpinnerNumberModel populationSpinnerDataModel = new SpinnerNumberModel(3000, 20, 10000, 1);
