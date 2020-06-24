@@ -83,10 +83,10 @@ public class App implements GeneticAlgorithmDelegate {
     }
 
     private void setupView() {
-        SpinnerNumberModel maxDepthDataModel = new SpinnerNumberModel(7, 1, 100, 1);
+        SpinnerNumberModel maxDepthDataModel = new SpinnerNumberModel(4, 1, 100, 1);
         maxDepthSpinner.setModel(maxDepthDataModel);
 
-        SpinnerNumberModel populationSpinnerDataModel = new SpinnerNumberModel(3000, 20, 10000, 1);
+        SpinnerNumberModel populationSpinnerDataModel = new SpinnerNumberModel(2000, 20, 10000, 1);
         populationSizeSpinner.setModel(populationSpinnerDataModel);
         SpinnerNumberModel numberOfGenerationsSpinnerDataModel = new SpinnerNumberModel(300, 20, 10000, 1);
         numberOfGenerationsSpinner.setModel(numberOfGenerationsSpinnerDataModel);
@@ -99,11 +99,11 @@ public class App implements GeneticAlgorithmDelegate {
         DefaultComboBoxModel initializationComboBoxModel = new DefaultComboBoxModel(initializationMethods);
         initializationComboBox.setModel(initializationComboBoxModel);
 
-        String[] bloatingControlMethods = new String[]{"Metodo Tarpeian", "Penalizacion bien fundamentada"};
+        String[] bloatingControlMethods = new String[]{"Penalizacion bien fundamentada", "Metodo Tarpeian"};
         DefaultComboBoxModel bloatinControlModel = new DefaultComboBoxModel(bloatingControlMethods);
         bloatingControlMethodComboBox.setModel(bloatinControlModel);
 
-        String[] selectionAlgorithms = new String[]{"Ruleta", "Torneo", "E. Universal", "Truncamiento", "Restos"};
+        String[] selectionAlgorithms = new String[]{"Truncamiento", "Ruleta", "Torneo", "E. Universal", "Restos"};
         DefaultComboBoxModel selectionModel = new DefaultComboBoxModel(selectionAlgorithms);
         selectionAlgorithmComboBox.setModel(selectionModel);
         SpinnerNumberModel crossoverSpinnerDataModel = new SpinnerNumberModel(0.6, 0.0, 100.0, 0.01);
@@ -121,7 +121,7 @@ public class App implements GeneticAlgorithmDelegate {
         mutationSpinnerTextField.setEditable(false);
         mutationSpinnerTextField.setBackground(Color.white);
 
-        SpinnerNumberModel eliteSpinnerDataModel = new SpinnerNumberModel(0.02, 0.0, 1, 0.01);
+        SpinnerNumberModel eliteSpinnerDataModel = new SpinnerNumberModel(0.04, 0.0, 1, 0.01);
         eliteSpinner.setModel(eliteSpinnerDataModel);
         JFormattedTextField eliteSpinnerTextField = ((JSpinner.DefaultEditor) eliteSpinner.getEditor()).getTextField();
         eliteSpinnerTextField.setEditable(false);
@@ -228,16 +228,16 @@ public class App implements GeneticAlgorithmDelegate {
         SelectionAlgorithm selectionAlgorithm = null;
         switch (selectionAlgorithmComboBox.getSelectedIndex()) {
             case 0:
-                selectionAlgorithm = new RouletteSelection();
+                selectionAlgorithm = new TruncationSelection();
                 break;
             case 1:
-                selectionAlgorithm = new TournamentSelection();
+                selectionAlgorithm = new RouletteSelection();
                 break;
             case 2:
-                selectionAlgorithm = new UniversalStochastic();
+                selectionAlgorithm = new TournamentSelection();
                 break;
             case 3:
-                selectionAlgorithm = new TruncationSelection();
+                selectionAlgorithm = new UniversalStochastic();
                 break;
             case 4:
                 selectionAlgorithm = new RemainsSelection();
@@ -309,10 +309,10 @@ public class App implements GeneticAlgorithmDelegate {
         ControlBloating controlBloating;
         switch (bloatingControlMethodComboBox.getSelectedIndex()) {
             case 0:
-                controlBloating = ControlBloating.METODO_TARPEIAN;
+                controlBloating = ControlBloating.PENALIZACION_BIEN_FUNDAMENTADA;
                 break;
             default:
-                controlBloating = ControlBloating.PENALIZACION_BIEN_FUNDAMENTADA;
+                controlBloating = ControlBloating.METODO_TARPEIAN;
                 break;
         }
 
