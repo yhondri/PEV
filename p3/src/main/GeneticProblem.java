@@ -88,8 +88,8 @@ public class GeneticProblem extends Thread {
             solution = result.getKey();
             population = result.getValue();
 
-            if (!isBetterFitness(solution.getAbsoluteBest(), absBest)) {
-                solution.setAbsoluteBest(absBest);
+            if (isBetterFitness(absBest, solution.getAbsoluteBest())) {
+                solution.setAbsoluteBest(solution.getAbsoluteBest());
             }
             absBest = solution.getAbsoluteBest();
             solutions.add(solution);
@@ -100,8 +100,8 @@ public class GeneticProblem extends Thread {
         delegate.areButtonsEnabled(true);
     }
 
-    private boolean isBetterFitness(double absoluteBest, double absBest) {
-        return absoluteBest <= absBest;
+    private boolean isBetterFitness(double currentAbsoluteBest, double newAbsoluteBest) {
+        return currentAbsoluteBest <= newAbsoluteBest;
     }
 
     private List<TreeNode> rampedAndHalfInitialization() {
@@ -238,8 +238,7 @@ public class GeneticProblem extends Thread {
     }
 
     private List<TreeNode> sortPopulation(List<TreeNode> population) {
-        Collections.sort(population, Collections.reverseOrder());
-        TreeNode best = population.get(population.size()-1);
+        Collections.sort(population);
         return population;
     }
 
@@ -388,12 +387,12 @@ public class GeneticProblem extends Thread {
 //            treeNode = getTreeNodeByGrowInitialization(0, configuration.getMaxDepth());
         }
 
-        double fitness = treeNode.getHeight() * k;
+        double fitness = 0;
         List<TestValue> testValues = configuration.getMultiplexorTestValue().getTestValues();
         for (TestValue testValue : configuration.getMultiplexorTestValue().getTestValues()) {
             Boolean result = evaluateTreeNode(treeNode, testValue.getValuesMap());
-            if (result != testValue.getResult()) {
-                fitness += 20;
+            if (result == testValue.getResult()) {
+                fitness += 1;
             }
         }
 

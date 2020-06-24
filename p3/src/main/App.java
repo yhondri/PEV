@@ -15,6 +15,7 @@ import org.math.plot.plots.LinePlot;
 import selection.*;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -125,6 +126,8 @@ public class App implements GeneticAlgorithmDelegate {
         JFormattedTextField eliteSpinnerTextField = ((JSpinner.DefaultEditor) eliteSpinner.getEditor()).getTextField();
         eliteSpinnerTextField.setEditable(false);
         eliteSpinnerTextField.setBackground(Color.white);
+
+        absoluteBestJTextPane.setEditable(false);
     }
 
     private void initChartPanel() {
@@ -190,7 +193,7 @@ public class App implements GeneticAlgorithmDelegate {
 
     private void setupAlgorithm() {
         String fileName = null;
-        switch (selectionAlgorithmComboBox.getSelectedIndex()) {
+        switch (selectProblemComboBox.getSelectedIndex()) {
             case 0:
                 multiplexorProblem = MultiplexorProblem.SIX_INPUTS;
                 fileName = "multiplexor_6_entradas.txt";
@@ -207,11 +210,11 @@ public class App implements GeneticAlgorithmDelegate {
             e.printStackTrace();
         }
 
-       if (multiplexorProblem == MultiplexorProblem.SIX_INPUTS) {
-           multiplexorTestValue = new MultiplexorTestValueSixInputs(data);
-       } else {
-           multiplexorTestValue = new MultiplexorTestValueElevenInputs(data);
-       }
+        if (multiplexorProblem == MultiplexorProblem.SIX_INPUTS) {
+            multiplexorTestValue = new MultiplexorTestValueSixInputs(data);
+        } else {
+            multiplexorTestValue = new MultiplexorTestValueElevenInputs(data);
+        }
 
         initDataFunctionsData();
 

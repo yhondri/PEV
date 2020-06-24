@@ -22,7 +22,7 @@ public class MutacionDeArbol implements MutationAlgorithm{
     @Override
     public TreeNode mutate(TreeNode treeNode) {
         TreeNode aMutar = getNodeAtIndex(treeNode, Utils.getRandom(treeNode.getHeight(),0));
-        if(aMutar.getParent() == null)
+        if(aMutar == null || aMutar.getParent() == null)
             return randomizeTree(maxDepth);
         else{
             aMutar.getParent().getChildren()[aMutar.getIndexInParent()] = randomizeTree(maxDepth - calcDepthTo(aMutar));
