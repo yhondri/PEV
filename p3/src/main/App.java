@@ -83,10 +83,10 @@ public class App implements GeneticAlgorithmDelegate {
     }
 
     private void setupView() {
-        SpinnerNumberModel maxDepthDataModel = new SpinnerNumberModel(4, 1, 100, 1);
+        SpinnerNumberModel maxDepthDataModel = new SpinnerNumberModel(3, 1, 100, 1);
         maxDepthSpinner.setModel(maxDepthDataModel);
 
-        SpinnerNumberModel populationSpinnerDataModel = new SpinnerNumberModel(2000, 20, 10000, 1);
+        SpinnerNumberModel populationSpinnerDataModel = new SpinnerNumberModel(300, 20, 10000, 1);
         populationSizeSpinner.setModel(populationSpinnerDataModel);
         SpinnerNumberModel numberOfGenerationsSpinnerDataModel = new SpinnerNumberModel(300, 20, 10000, 1);
         numberOfGenerationsSpinner.setModel(numberOfGenerationsSpinnerDataModel);
@@ -99,7 +99,7 @@ public class App implements GeneticAlgorithmDelegate {
         DefaultComboBoxModel initializationComboBoxModel = new DefaultComboBoxModel(initializationMethods);
         initializationComboBox.setModel(initializationComboBoxModel);
 
-        String[] bloatingControlMethods = new String[]{"Penalizacion bien fundamentada", "Metodo Tarpeian"};
+        String[] bloatingControlMethods = new String[]{"Metodo Tarpeian", "Penalizacion bien fundamentada"};
         DefaultComboBoxModel bloatinControlModel = new DefaultComboBoxModel(bloatingControlMethods);
         bloatingControlMethodComboBox.setModel(bloatinControlModel);
 
@@ -309,10 +309,10 @@ public class App implements GeneticAlgorithmDelegate {
         ControlBloating controlBloating;
         switch (bloatingControlMethodComboBox.getSelectedIndex()) {
             case 0:
-                controlBloating = ControlBloating.PENALIZACION_BIEN_FUNDAMENTADA;
+                controlBloating = ControlBloating.METODO_TARPEIAN;
                 break;
             default:
-                controlBloating = ControlBloating.METODO_TARPEIAN;
+                controlBloating = ControlBloating.PENALIZACION_BIEN_FUNDAMENTADA;
                 break;
         }
 

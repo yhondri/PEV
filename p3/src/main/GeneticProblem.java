@@ -68,35 +68,44 @@ public class GeneticProblem extends Thread {
         }*/
 
 
-        List<Solution> solutions = new ArrayList<>();
+        //List<Solution> solutions = new ArrayList<>();
         Pair<Solution, List<TreeNode>> result = evaluatePopulation(population, 0, 0);
-        Solution solution = result.getKey();
+        Solution absoluteBestSolution = result.getKey();
         population = result.getValue();
 
-        solution.setAbsoluteBest(solution.getBestFitness());
-        solutions.add(solution);
-        delegate.didEvaluateGeneration(0, solution);
+        absoluteBestSolution.setAbsoluteBest(absoluteBestSolution.getBestFitness());
+        //solutions.add(absoluteBestSolution);
+        delegate.didEvaluateGeneration(0, absoluteBestSolution);
 
-        double absBest = solution.getAbsoluteBest();
+        /*Solution absoluteBestSolution = new Solution();
+        double absBest = solution.getAbsoluteBest();*/
+        Solution currentSolution;
         for (int i = 1; i < configuration.getNumberOfGenerations(); i++) {
             List<TreeNode> eliteList = getElite(population);
             population = selectionAlgorithm.selectPopulation(population);
             int numberOfcrossovers = crossPopulation(population);
             int numberOfMutations = mutatePopulation(population);
             addElite(population, eliteList);
+
+
+
+            //Control bloating
+            population = controlBloating(population);
+
             result = evaluatePopulation(population, numberOfcrossovers, numberOfMutations);
-            solution = result.getKey();
+            currentSolution = result.getKey();
             population = result.getValue();
 
-            if (isBetterFitness(absBest, solution.getAbsoluteBest())) {
-                solution.setAbsoluteBest(solution.getAbsoluteBest());
+            if (absoluteBestSolution.getBestFitness() < currentSolution.getBestFitness()) {
+                absoluteBestSolution = currentSolution;
             }
-            absBest = solution.getAbsoluteBest();
-            solutions.add(solution);
-            delegate.didEvaluateGeneration(i, solution);
+            currentSolution.setAbsoluteBest(absoluteBestSolution.getAbsoluteBest());
+            currentSolution.setAbsoluteBestRepresentation(absoluteBestSolution.getAbsoluteBestRepresentation());
+            //solutions.add(currentSolution);
+            delegate.didEvaluateGeneration(i, currentSolution);
         }
 
-        delegate.onEndSearch(solution);
+        delegate.onEndSearch(absoluteBestSolution);
         delegate.areButtonsEnabled(true);
     }
 
@@ -214,9 +223,6 @@ public class GeneticProblem extends Thread {
             totalFitness += fitness;
         }
 
-        //Control bloating
-        population = controlBloating(population);
-
         population = sortPopulation(population);
         TreeNode bestTreeNode = population.get(population.size() - 1);
         solution.setAverageFitness(totalFitness / configuration.getPopulationSize());
@@ -304,19 +310,21 @@ public class GeneticProblem extends Thread {
      * @return Poblacion modificada tras aplicar el control de bloating.
      */
     private List<TreeNode> executeTarpeianBloatingControl(List<TreeNode> population, double averageSize, int n) {
-        double probability = 1 / n;
-        List<TreeNode> resultPopulation = new ArrayList<>(population.size());
+        double probability = 1.0 / n;
+        int treeMaxDepth = configuration.getPopulationSize() / configuration.getMaxDepth();
 
-        for (TreeNode treeNode : population) {
+        for (int i = 0; i < population.size(); i++) {
+            int subTreeMaxDepth = (i / treeMaxDepth) + 1;
+            TreeNode treeNode = population.get(i);
             if ((treeNode.getHeight() > averageSize)) {
-                if (Utils.random.nextDouble() < probability && Utils.random.nextInt() %n ==0) {
-                    treeNode.setFitness(Integer.MAX_VALUE);
+                if (Utils.random.nextDouble() < probability) {
+                    TreeNode newTreeNode =  getTreeNodeByFullInitialization(0, subTreeMaxDepth);
+                    population.set(i, newTreeNode);
                 }
             }
-            resultPopulation.add(treeNode);
         }
 
-        return resultPopulation;
+        return population;
     }
 
     /**
