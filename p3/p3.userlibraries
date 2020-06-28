@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <eclipse-userlibraries>
   <library name="forms_rt">
-    <archive path="F:/Documentos/G15P1/p3/lib/forms_rt.jar" />
-    <archive path="F:/Documentos/G15P1/p3/lib/jama-1.0.3.jar" />
-    <archive path="F:/Documentos/G15P1/p3/lib/JMathArray-1.0.jar" />
-    <archive path="F:/Documentos/G15P1/p3/lib/JMathIO-1.0.jar" />
-    <archive path="F:/Documentos/G15P1/p3/lib/JMathPlot-1.0.1.jar" />
+    <archive path="/Users/yhondri/Documents/universidad/pev/p3/lib/forms_rt.jar" />
+    <archive path="/Users/yhondri/Documents/universidad/pev/p3/lib/jama-1.0.3.jar" />
+    <archive path="/Users/yhondri/Documents/universidad/pev/p3/lib/JMathArray-1.0.jar" />
+    <archive path="/Users/yhondri/Documents/universidad/pev/p3/lib/JMathIO-1.0.jar" />
+    <archive path="/Users/yhondri/Documents/universidad/pev/p3/lib/JMathPlot-1.0.1.jar" />
   </library>
 </eclipse-userlibraries>
 
