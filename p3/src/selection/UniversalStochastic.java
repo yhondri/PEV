@@ -10,7 +10,8 @@ public class UniversalStochastic implements SelectionAlgorithm {
 	@Override
 	public List selectPopulation(List population) {
 		List<TreeNode> selectedPopulation = new ArrayList<>();
-		double interval = ((double) 1 / population.size()), trialValue = Utils.random.nextDouble() / population.size();
+		double interval =  1.0 / population.size();
+		double trialValue = Utils.random.nextDouble() * interval;
 		for (int i = 0; i < population.size(); i++) {
 			TreeNode selectedChromosome = getChromosomeFromPopulation(population, trialValue);
 			selectedPopulation.add(selectedChromosome);
@@ -21,10 +22,13 @@ public class UniversalStochastic implements SelectionAlgorithm {
 	}
 
 	private TreeNode getChromosomeFromPopulation(List<TreeNode> population, double trial) {
-		int index = population.size() - 1;
-		while (index >= 0 && trial > population.get(index).getAcumulatedFitness()) {
-			index--;
+		int maxIndex = population.size() - 1;
+		int index = 0;
+
+		while (index < maxIndex && trial > population.get(index).getAcumulatedFitness()) {
+			index++;
 		}
+
 		return population.get(index).getCopy();
 	}
 

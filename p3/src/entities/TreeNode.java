@@ -14,6 +14,7 @@ public class TreeNode implements Comparable<TreeNode>  {
     private int indexInParent = -1;
     private double fitness;
     private double acumulatedFitness;
+    private double fitnessPrimo;
     private double grade;
 
     public TreeNode(String key, int functionNumberOfValues, int maxDepth) {
@@ -122,6 +123,14 @@ public class TreeNode implements Comparable<TreeNode>  {
 
     public double getAcumulatedFitness() {
         return acumulatedFitness;
+    }
+
+    public void setFitnessPrimo(double fitnessPrimo) {
+        this.fitnessPrimo = fitnessPrimo;
+    }
+
+    public double getFitnessPrimo() {
+        return fitnessPrimo;
     }
 
     public void setGrade(double grade) {

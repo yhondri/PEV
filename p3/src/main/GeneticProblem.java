@@ -50,35 +50,13 @@ public class GeneticProblem extends Thread {
                 throw new RuntimeException("Método no implementado");
         }
 
-
-   /*     TreeNode treeNode1 = new TreeNode("IF", 7);
-        TreeNode[] children1 = new TreeNode[]{new TreeNode("A1", 7), new TreeNode("A0", 7), new TreeNode("A0", 7)};
-        treeNode1.setChildren(children1);
-
-        TreeNode treeNode2 = new TreeNode("IF", 7);
-        TreeNode[] children2 = new TreeNode[]{new TreeNode("A1", 7), new TreeNode("D3", 7), new TreeNode("D2", 7)};
-        treeNode2.setChildren(children2);
-
-        TreeNode treeNodeParent = new TreeNode("AND", 7);
-        treeNodeParent.setChildren(new TreeNode[]{treeNode1, treeNode2});
-
-        population = new ArrayList<>();
-        for (int i = 0; i < configuration.getPopulationSize(); i++) {
-            population.add(treeNodeParent);
-        }*/
-
-
-        //List<Solution> solutions = new ArrayList<>();
         Pair<Solution, List<TreeNode>> result = evaluatePopulation(population, 0, 0);
         Solution absoluteBestSolution = result.getKey();
         population = result.getValue();
 
         absoluteBestSolution.setAbsoluteBest(absoluteBestSolution.getBestFitness());
-        //solutions.add(absoluteBestSolution);
         delegate.didEvaluateGeneration(0, absoluteBestSolution);
 
-        /*Solution absoluteBestSolution = new Solution();
-        double absBest = solution.getAbsoluteBest();*/
         Solution currentSolution;
         for (int i = 1; i < configuration.getNumberOfGenerations(); i++) {
             List<TreeNode> eliteList = getElite(population);
@@ -86,11 +64,6 @@ public class GeneticProblem extends Thread {
             int numberOfcrossovers = crossPopulation(population);
             int numberOfMutations = mutatePopulation(population);
             addElite(population, eliteList);
-
-
-
-            //Control bloating
-            population = controlBloating(population);
 
             result = evaluatePopulation(population, numberOfcrossovers, numberOfMutations);
             currentSolution = result.getKey();
@@ -101,16 +74,11 @@ public class GeneticProblem extends Thread {
             }
             currentSolution.setAbsoluteBest(absoluteBestSolution.getAbsoluteBest());
             currentSolution.setAbsoluteBestRepresentation(absoluteBestSolution.getAbsoluteBestRepresentation());
-            //solutions.add(currentSolution);
             delegate.didEvaluateGeneration(i, currentSolution);
         }
 
         delegate.onEndSearch(absoluteBestSolution);
         delegate.areButtonsEnabled(true);
-    }
-
-    private boolean isBetterFitness(double currentAbsoluteBest, double newAbsoluteBest) {
-        return currentAbsoluteBest <= newAbsoluteBest;
     }
 
     private List<TreeNode> rampedAndHalfInitialization() {
@@ -223,6 +191,8 @@ public class GeneticProblem extends Thread {
             totalFitness += fitness;
         }
 
+        controlBloating(population);
+
         population = sortPopulation(population);
         TreeNode bestTreeNode = population.get(population.size() - 1);
         solution.setAverageFitness(totalFitness / configuration.getPopulationSize());
@@ -291,12 +261,12 @@ public class GeneticProblem extends Thread {
      * @return Poblacion modificada tras aplicar el control de bloating.
      */
     private List<TreeNode> controlBloating(List<TreeNode> population) {
-        double averageFitness = calculateAverageFitness(population);
         double averageSize = calculateAverageSize(population);
         int n = 2;
         if (controlBloating == ControlBloating.METODO_TARPEIAN) {
             return executeTarpeianBloatingControl(population, averageSize, n);
         } else {
+            double averageFitness = calculateAverageFitness(population);
             return executePenaltyBloatingControl(population, averageSize, averageFitness);
         }
     }
@@ -311,19 +281,15 @@ public class GeneticProblem extends Thread {
      */
     private List<TreeNode> executeTarpeianBloatingControl(List<TreeNode> population, double averageSize, int n) {
         double probability = 1.0 / n;
-        int treeMaxDepth = configuration.getPopulationSize() / configuration.getMaxDepth();
-
         for (int i = 0; i < population.size(); i++) {
-            int subTreeMaxDepth = (i / treeMaxDepth) + 1;
             TreeNode treeNode = population.get(i);
             if ((treeNode.getHeight() > averageSize)) {
-                if (Utils.random.nextDouble() < probability) {
-                    TreeNode newTreeNode =  getTreeNodeByFullInitialization(0, subTreeMaxDepth);
-                    population.set(i, newTreeNode);
+                if (Utils.random.nextDouble() < probability) { //Si el progama no cumple la condición de ser un buen individuo, añadimos el menor fitness posible para que sea eliminado en la siguiente generación.
+                    treeNode.setFitness(0);
+                    population.set(i, treeNode);
                 }
             }
         }
-
         return population;
     }
 
@@ -353,9 +319,10 @@ public class GeneticProblem extends Thread {
         }
 
         for (TreeNode treeNode : population) {
-            double newFitness = treeNode.getFitness() - k * treeNode.getHeight();
-            treeNode.setFitness(newFitness);
-            resultPopulation.add(treeNode);
+            TreeNode copy = treeNode.getCopy();
+            double newFitness = copy.getFitness() - k * treeNode.getHeight();
+            treeNode.setFitnessPrimo((int)newFitness);
+            resultPopulation.add(copy);
         }
 
         return resultPopulation;
@@ -372,6 +339,7 @@ public class GeneticProblem extends Thread {
         for (TreeNode treeNode : population) {
             averageFitness += treeNode.getFitness();
         }
+        averageFitness = averageFitness/population.size();
         return averageFitness;
     }
 
